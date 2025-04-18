@@ -1,2 +1,2 @@
 # projectePokemonPVC
-porjecte joc Pokemon PvC
+projecte joc Pokemon PvC
