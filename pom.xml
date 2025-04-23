@@ -20,6 +20,20 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <mainClass>com.projecte.WebViewExample</mainClass>
+                    <arguments>
+                        <argument>--module-path</argument>
+                        <argument>${javafx.module.path}</argument>
+                        <argument>--add-modules</argument>
+                        <argument>javafx.controls,javafx.web</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.0</version>
@@ -64,6 +78,12 @@
             <artifactId>javafx-graphics</artifactId>
             <version>20</version>
         </dependency>  
+        <!-- Dependency for JavaFX WebView -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>20</version>
+        </dependency>
         <!-- Dependency for Java WebSocket -->
         <dependency>
             <groupId>org.java-websocket</groupId>
