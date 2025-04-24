@@ -7,4 +7,5 @@ import javafx.fxml.FXML;
 
 public class ControllerBattleResult {
     
+    
 }
