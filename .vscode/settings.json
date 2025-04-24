@@ -5,5 +5,5 @@
     "workbench.editorAssociations": {   
         "*.md": "vscode.markdown.preview.editor",
     },
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

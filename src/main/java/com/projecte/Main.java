@@ -1,6 +1,6 @@
 package com.projecte;
 
-import com.utils.*;
+import com.utils.UtilsViews;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     final int WINDOW_WIDTH = 600;
-    final int WINDOW_HEIGHT = 400;
+    final int WINDOW_HEIGHT = 450;
     final int MIN_WIDTH = 600;
     final int MIN_HEIGHT = 400;
 
@@ -23,6 +23,7 @@ public class Main extends Application {
         // Carrega la vista inicial des del fitxer FXML
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
         UtilsViews.addView(getClass(), "ViewStart", "/assets/viewStart.fxml");
+        UtilsViews.addView(getClass(), "ViewPokeSettings", "/assets/viewPokeSettings.fxml");
 
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
