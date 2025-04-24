@@ -5,61 +5,40 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="601.0" style="-fx-border-width: 3; -fx-border-color: black;" stylesheets="@pokemonView.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="600.0" style="-fx-border-width: 3; -fx-border-color: black;" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" layoutX="170.0" layoutY="8.0" prefHeight="92.0" prefWidth="284.0">
+      <ImageView fx:id="imgPokemon" fitHeight="96.0" fitWidth="148.0" layoutX="42.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="231.0" layoutY="17.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="53.0" text="Name: ">
+         <font>
+            <Font name="DejaVu Sans Bold" size="13.0" />
+         </font></Label>
+      <Label layoutX="231.0" layoutY="49.0" minHeight="-Infinity" minWidth="-Infinity" text="Nickname: ">
+         <font>
+            <Font name="DejaVu Sans Bold" size="13.0" />
+         </font></Label>
+      <Label layoutX="232.0" layoutY="78.0" minHeight="-Infinity" minWidth="-Infinity" text="Tipus: ">
+         <font>
+            <Font name="DejaVu Sans Bold" size="13.0" />
+         </font></Label>
+      <Button layoutX="510.0" layoutY="18.0" mnemonicParsing="false" onAction="#toViewPokeSettings" prefHeight="26.0" prefWidth="74.0" text="Settings" />
+      <Label fx:id="names" layoutX="288.0" layoutY="16.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="47.0" text="name" />
+      <Label fx:id="nickname" layoutX="316.0" layoutY="45.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="47.0" text="nick" />
+      <Label fx:id="type" layoutX="287.0" layoutY="74.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="47.0" text="type" />
+      <Pane layoutY="109.0" prefHeight="42.0" prefWidth="600.0" style="-fx-background-color: grey; -fx-border-color: black; -fx-border-width: 3;">
          <children>
-            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="86.0" spacing="171.0">
-               <children>
-                  <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="53.0" stylesheets="@pokemonView.css" text="Name: ">
-                     <font>
-                        <Font name="Noto Sans Bold" size="13.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="names" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="47.0" stylesheets="@pokemonView.css" text="name" />
-               </children>
-            </HBox>
-            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="150.0">
-               <children>
-                  <Label minHeight="-Infinity" minWidth="-Infinity" stylesheets="@pokemonView.css" text="Nickname: ">
-                     <font>
-                        <Font name="Noto Sans Bold" size="13.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="nickname" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="47.0" stylesheets="@pokemonView.css" text="nick" />
-               </children>
-            </HBox>
-            <HBox alignment="TOP_CENTER" prefHeight="69.0" prefWidth="118.0" spacing="181.0">
-               <children>
-                  <Label minHeight="-Infinity" minWidth="-Infinity" stylesheets="@pokemonView.css" text="Tipus: ">
-                     <font>
-                        <Font name="Noto Sans Bold" size="13.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="type" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="48.0" stylesheets="@pokemonView.css" text="type" />
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-      <ImageView fx:id="imgPokemon" fitHeight="76.0" fitWidth="142.0" layoutX="17.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-radius: 5;" />
-      <Button layoutX="476.0" layoutY="18.0" mnemonicParsing="false" onAction="#toViewPokeSettings" prefHeight="0.0" prefWidth="108.0" text="Settings" />
-      <Pane layoutY="109.0" prefHeight="42.0" prefWidth="600.0" style="-fx-background-color: grey; -fx-border-color: black; -fx-border-width: 3;" styleClass="pane" stylesheets="@pokemonView.css">
-         <children>
-            <ProgressBar fx:id="hpBar" layoutX="51.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="198.0" progress="0.58" styleClass="hp-bar" stylesheets="@pokemonView.css" />
-            <ProgressBar fx:id="staminaBar" layoutX="371.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="198.0" progress="0.49" styleClass="stamina-bar" stylesheets="@pokemonView.css" />
-            <Label layoutX="304.0" layoutY="11.0" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@pokemonView.css" text="Stamina">
+            <ProgressBar fx:id="hpBar" layoutX="51.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="198.0" progress="0.58" styleClass="hp-bar" stylesheets="@styleBar.css" />
+            <ProgressBar fx:id="staminaBar" layoutX="377.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="11.0" prefWidth="200.0" progress="0.65" styleClass="stamina-bar" stylesheets="@styleBar.css" />
+            <Label layoutX="305.0" layoutY="11.0" minHeight="-Infinity" minWidth="-Infinity" text="Stamina">
                <font>
-                  <Font name="Noto Sans Black" size="20.0" />
+                  <Font name="DejaVu Sans Bold" size="13.0" />
                </font>
             </Label>
-            <Label layoutX="18.0" layoutY="11.0" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@pokemonView.css" text="HP">
+            <Label layoutX="18.0" layoutY="11.0" minHeight="-Infinity" minWidth="-Infinity" text="HP">
                <font>
-                  <Font name="Noto Sans Black" size="13.0" />
+                  <Font name="DejaVu Sans Bold" size="13.0" />
                </font>
             </Label>
          </children>
