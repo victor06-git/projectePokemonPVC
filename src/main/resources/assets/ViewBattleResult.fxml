@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
@@ -15,7 +16,7 @@
   <children>
     <AnchorPane VBox.vgrow="ALWAYS">
       <children>
-        <VBox prefHeight="400.0" prefWidth="640.0" spacing="10.0" padding="10.0,10.0,10.0,10.0">
+        <VBox prefHeight="400.0" prefWidth="640.0" spacing="10.0" padding="10 10 10 10">
           <children>
 
             <!-- Top bar with Menu and Progress -->
