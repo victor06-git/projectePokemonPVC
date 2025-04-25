@@ -6,76 +6,92 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleResult" style="-fx-background-color: linear-gradient(to bottom, #f2f2f2, #cbe6ff);">
-  <children>
-    <AnchorPane VBox.vgrow="ALWAYS">
-      <children>
-        <VBox prefHeight="400.0" prefWidth="640.0" spacing="10.0" padding="10 10 10 10">
-          <children>
+<StackPane prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleResult">
 
-            <!-- Top bar with Menu and Progress -->
-            <HBox prefHeight="50.0" alignment="CENTER_LEFT" spacing="20">
-              <children>
-                <Button fx:id="btnMenu" text="Menu" style="-fx-background-color: #ffcb05; -fx-text-fill: #3b4cca; -fx-font-weight: bold;" prefWidth="80" prefHeight="30" />
-                <HBox alignment="CENTER_RIGHT" spacing="10" prefWidth="480.0">
-                  <children>
-                    <Label fx:id="LabelNivel" text="Nivel # :" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                    <ProgressBar fx:id="BarraProg" prefWidth="200.0" progress="0.0" style="-fx-accent: #3b4cca;" />
-                  </children>
-                </HBox>
-              </children>
-            </HBox>
+  <!-- Fons amb GIF -->
+  <ImageView fitHeight="400" fitWidth="640" preserveRatio="false">
+    <image>
+      <Image url="@../../../../data/pokemon.gif" />
+    </image>
+  </ImageView>
 
-            <!-- Title -->
-            <HBox alignment="CENTER">
-              <children>
-                <Label fx:id="tittle" text="RESUM" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #cc0000;" />
-              </children>
-            </HBox>
+  <!-- Contingut original al davant -->
+  <VBox prefHeight="400.0" prefWidth="640.0" style="-fx-background-color: rgba(255,255,255,0.85);">
+    <children>
+      <AnchorPane VBox.vgrow="ALWAYS">
+        <children>
+          <VBox prefHeight="400.0" prefWidth="640.0" spacing="10.0">
+            <padding>
+              <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+            <children>
 
-            <!-- Ganador -->
-            <HBox alignment="CENTER" spacing="10">
-              <children>
-                <Label fx:id="LabelGanador" text="Ganador :" style="-fx-font-size: 16px;" />
-                <TextField fx:id="Nomganador" promptText="nombre" prefWidth="300.0" />
-              </children>
-            </HBox>
+              <!-- Top bar -->
+              <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="20">
+                <children>
+                  <Button fx:id="btnMenu" prefHeight="30" prefWidth="80" style="-fx-background-color: #ffcb05; -fx-text-fill: #3b4cca; -fx-font-weight: bold;" text="Menu" />
+                  <HBox alignment="CENTER_RIGHT" prefWidth="480.0" spacing="10">
+                    <children>
+                      <Label fx:id="LabelNivel" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Nivel # :" />
+                      <ProgressBar fx:id="BarraProg" prefWidth="200.0" progress="0.0" style="-fx-accent: #3b4cca;" />
+                    </children>
+                  </HBox>
+                </children>
+              </HBox>
 
-            <!-- Nivel -->
-            <HBox alignment="CENTER" spacing="5">
-              <children>
-                <Label text="Nivel :" style="-fx-font-size: 14px;" />
-                <TextField promptText="actual" prefWidth="60.0" />
-                <Label text="/" style="-fx-font-size: 16px;" />
-                <TextField promptText="aumentat" prefWidth="60.0" />
-              </children>
-            </HBox>
+              <!-- Títol -->
+              <HBox alignment="CENTER">
+                <children>
+                  <Label fx:id="tittle" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #cc0000;" text="RESUM" />
+                </children>
+              </HBox>
 
-            <!-- Nuevos pokemons -->
-            <HBox alignment="CENTER" spacing="10">
-              <children>
-                <Label text="Nuevos pokemons :" style="-fx-font-size: 14px;" />
-                <TextField promptText="..." prefWidth="300.0" />
-              </children>
-            </HBox>
+              <!-- Ganador -->
+              <HBox alignment="CENTER" spacing="10">
+                <children>
+                  <Label fx:id="LabelGanador" style="-fx-font-size: 16px;" text="Ganador :" />
+                  <TextField fx:id="Nomganador" prefWidth="300.0" promptText="nombre" />
+                </children>
+              </HBox>
 
-            <!-- Items -->
-            <HBox alignment="CENTER" spacing="10">
-              <children>
-                <Label text="Items recogidos :" style="-fx-font-size: 14px;" />
-                <TextArea prefWidth="300.0" prefHeight="80.0" wrapText="true" promptText="Lista de ítems..." />
-              </children>
-            </HBox>
+              <!-- Nivel -->
+              <HBox alignment="CENTER" spacing="5">
+                <children>
+                  <Label style="-fx-font-size: 14px;" text="Nivel :" />
+                  <TextField prefWidth="60.0" promptText="actual" />
+                  <Label style="-fx-font-size: 16px;" text="/" />
+                  <TextField prefWidth="60.0" promptText="aumentat" />
+                </children>
+              </HBox>
 
-          </children>
-        </VBox>
-      </children>
-    </AnchorPane>
-  </children>
-</VBox>
+              <!-- Pokémons -->
+              <HBox alignment="CENTER" spacing="10">
+                <children>
+                  <Label style="-fx-font-size: 14px;" text="Nuevos pokemons :" />
+                  <TextField prefWidth="300.0" promptText="..." />
+                </children>
+              </HBox>
+
+              <!-- Ítems -->
+              <HBox alignment="CENTER" spacing="10">
+                <children>
+                  <Label style="-fx-font-size: 14px;" text="Items recogidos :" />
+                  <TextArea prefHeight="80.0" prefWidth="300.0" promptText="Lista de ítems..." wrapText="true" />
+                </children>
+              </HBox>
+
+            </children>
+          </VBox>
+        </children>
+      </AnchorPane>
+    </children>
+  </VBox>
+
+</StackPane>

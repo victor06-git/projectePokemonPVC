@@ -1,5 +1,6 @@
 com/projecte/ControllerPokeSettings.class
 com/projecte/ControllerStart.class
+com/projecte/ControllerBattleResult.class
 com/projecte/Main.class
 com/utils/UtilsViews.class
 com/projecte/ControllerMenu.class
