@@ -15,7 +15,7 @@
   <children>
     <AnchorPane VBox.vgrow="ALWAYS">
       <children>
-        <VBox prefHeight="400.0" prefWidth="640.0" spacing="10.0" padding="10">
+        <VBox prefHeight="400.0" prefWidth="640.0" spacing="10.0" padding="10.0,10.0,10.0,10.0">
           <children>
 
             <!-- Top bar with Menu and Progress -->
