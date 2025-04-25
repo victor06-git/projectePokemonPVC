@@ -1,107 +1,88 @@
+/* ===== RESET GENERAL (ESTILO 8-BIT) ===== */
 .root {
-    -fx-background-color: linear-gradient(#f8f8f8, #d3d3d3);
-    -fx-background-radius: 15;
-    -fx-border-radius: 15;
-    -fx-border-color: #ff0000;
-    -fx-border-width: 3;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 15, 0, 0, 0);
-    -fx-padding: 10;
+    -fx-background-color: #404040; /* Gris oscuro como fondo de "arcade" */
+    -fx-border-color: #ff0000; /* Borde rojo como máquina recreativa */
+    -fx-border-width: 4px;
+    -fx-effect: dropshadow(three-pass-box, #000000, 15, 0, 0, 0);
 }
 
+/* Elimina todas las propiedades CSS estándar (sin -fx-) */
+* {
+    -fx-text-fill: #ffffff;
+}
+
+/* ===== CONTENEDORES ===== */
 .pane {
-    -fx-background-color: linear-gradient(to right, #ff0000, #ffffff, #ff0000);
-    -fx-border-color: #000000;
-    -fx-border-width: 2;
-    -fx-border-radius: 0 0 10 10;
-    -fx-background-radius: 0 0 10 10;
-    -fx-padding: 10;
+    -fx-background-color: #222222;
+    -fx-border-color: #ff0000 #880000 #880000 #ff0000;
+    -fx-border-width: 4px;
+    -fx-padding: 10px;
+    -fx-effect: innershadow(three-pass-box, #000000, 5, 0, 0, 0);
 }
 
+/* ===== BARRAS ===== */
 .hp-bar .bar {
-    -fx-background-color: linear-gradient(to right, #0dff00, #62ff5a); 
-    -fx-background-insets: 0;
-    -fx-background-radius: 8;
-    -fx-padding: 0.3em;
-    -fx-effect: dropshadow(gaussian, rgba(13, 255, 0, 0.8), 10, 0, 0, 0);
-    -fx-border-color: #ffffff;
-    -fx-border-width: 1;
-    -fx-border-radius: 8;
-    -fx-animation: glow 1.5s infinite alternate;
+    -fx-background-color: linear-gradient(to right, #007e31, #75ff6e);
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-background-radius: 0;
+    -fx-effect: innershadow(three-pass-box, #000000, 3, 0, 0, 0);
 }
 
 .hp-bar .track {
-    -fx-background-color: white;
-    -fx-background-radius: 8;
-    -fx-background-insets: 0;
-    -fx-border-color: #404040;
-    -fx-border-width: 1;
-    -fx-border-radius: 8;
+    -fx-background-color: #000000;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 1px;
 }
 
 .stamina-bar .bar {
-    -fx-background-color: linear-gradient(to right, #00d9ff, #77ebff); 
-    -fx-background-insets: 0;
-    -fx-background-radius: 8;
-    -fx-padding: 0.3em;
-    -fx-effect: dropshadow(gaussian, rgba(0, 217, 255, 0.8), 10, 0, 0, 0);
-    -fx-border-color: #ffffff;
-    -fx-border-width: 1;
-    -fx-border-radius: 8;
-    -fx-animation: glow 1.5s infinite alternate;
+    -fx-background-color: linear-gradient(to right, #018480, #60ffff);
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-background-radius: 0;
+    -fx-effect: innershadow(three-pass-box, #000000, 3, 0, 0, 0);
 }
 
 .stamina-bar .track {
-    -fx-background-color: white;
-    -fx-background-radius: 8;
-    -fx-background-insets: 0;
-    -fx-border-color: #404040;
-    -fx-border-width: 1;
-    -fx-border-radius: 8;
+    -fx-background-color: #000000;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 1px;
 }
 
+/* ===== TEXTO ===== */
 .label {
-    -fx-text-fill: #333333;
-    -fx-font-size: 14px;
-}
-
-#names, #nickname, #type {
-    -fx-font-weight: bold;
-    -fx-text-fill: #ff0000;
-    -fx-font-size: 16px;
-    -fx-effect: dropshadow(one-pass-box, rgba(255, 255, 255, 0.8), 1, 0, 0, 1);
-}
-
-.button {
-    -fx-background-color: 
-        linear-gradient(#ff0000, #d32f2f),
-        linear-gradient(#ff4444, #d32f2f),
-        linear-gradient(#ff6666, #d32f2f),
-        linear-gradient(#ff0000 0%, #d32f2f 50%, #b71c1c 100%);
-    -fx-background-insets: 0, 1, 2, 3;
-    -fx-background-radius: 5, 4, 3, 2;
-    -fx-padding: 7 20 7 20;
     -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 6, 0, 0, 1);
+    -fx-effect: dropshadow(one-pass-box, #000000, 2, 0, 0, 0);
 }
 
-.button:hover {
-    -fx-background-color: 
-        linear-gradient(#ff4444, #d32f2f),
-        linear-gradient(#ff0000, #d32f2f),
-        linear-gradient(#ff6666, #d32f2f),
-        linear-gradient(#ff0000 0%, #d32f2f 50%, #b71c1c 100%);
+.labelResults {
+    -fx-text-fill: #ffcc00;
+    -fx-effect: dropshadow(one-pass-box, #000000, 3, 0, 0, 0);
+}
+
+/* ===== BOTONES ===== */
+.button {
+    -fx-background-color: #ff0000;
+    -fx-border-color: #000000 #880000 #880000 #000000;
+    -fx-border-width: 3px;
+    -fx-text-fill: #ffffff;
     -fx-cursor: hand;
 }
 
+.button:hover {
+    -fx-background-color: #ff3333;
+}
+
+.button:pressed {
+    -fx-background-color: #880000;
+    -fx-border-color: #880000 #000000 #000000 #880000;
+    -fx-translate-y: 1px;
+}
+
+/* ===== IMAGENES ===== */
 .image-view {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 4, 4);
-    -fx-border-color: #ff0000;  
-    -fx-border-width: 3;
-    -fx-border-radius: 10;
-    -fx-background-color: linear-gradient(white, #f0f0f0);
-    -fx-background-radius: 10;
-    -fx-background-insets: 3;
-    -fx-padding: 5;
+    -fx-effect: dropshadow(three-pass-box, #000000, 8, 0, 0, 0);
+    -fx-border-color: #ffffff #888888 #888888 #ffffff;
+    -fx-border-width: 4px;
+    -fx-background-color: #000000;
 }
