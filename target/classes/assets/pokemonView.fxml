@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="601.0" stylesheets="@pokemonView.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerPokemonView">
    <children>
@@ -17,25 +18,46 @@
          <children>
             <HBox prefHeight="100.0" prefWidth="86.0" spacing="140.0">
                <children>
-                  <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="70.0" stylesheets="@pokemonView.css" text="Name: " />
-                  <Label fx:id="labelName" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="47.0" styleClass="labelResults" stylesheets="@pokemonView.css" text="name" />
+                  <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="70.0" stylesheets="@pokemonView.css" text="Name: ">
+                     <font>
+                        <Font name="Silkscreen Regular" size="13.0" />
+                     </font></Label>
+                  <Label fx:id="labelName" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="47.0" styleClass="labelResults" stylesheets="@pokemonView.css" text="name">
+                     <font>
+                        <Font name="Silkscreen Regular" size="13.0" />
+                     </font></Label>
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="110.0">
                <children>
-                  <Label minHeight="-Infinity" minWidth="-Infinity" stylesheets="@pokemonView.css" text="Nickname: " />
-                  <Label fx:id="labelNickname" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="47.0" styleClass="labelResults" stylesheets="@pokemonView.css" text="nick" />
+                  <Label minHeight="-Infinity" minWidth="-Infinity" stylesheets="@pokemonView.css" text="Nickname: ">
+                     <font>
+                        <Font name="Silkscreen Regular" size="13.0" />
+                     </font></Label>
+                  <Label fx:id="labelNickname" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="47.0" styleClass="labelResults" stylesheets="@pokemonView.css" text="nick">
+                     <font>
+                        <Font name="Silkscreen Regular" size="13.0" />
+                     </font></Label>
                </children>
             </HBox>
             <HBox prefHeight="69.0" prefWidth="118.0" spacing="137.0">
                <children>
-                  <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="11.0" prefWidth="71.0" stylesheets="@pokemonView.css" text="Tipus: " />
-                  <Label fx:id="labelType" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="45.0" styleClass="labelResults" stylesheets="@pokemonView.css" text="type" />
+                  <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="71.0" stylesheets="@pokemonView.css" text="Tipus: ">
+                     <font>
+                        <Font name="Silkscreen Regular" size="13.0" />
+                     </font></Label>
+                  <Label fx:id="labelType" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="45.0" styleClass="labelResults" stylesheets="@pokemonView.css" text="type">
+                     <font>
+                        <Font name="Silkscreen Regular" size="13.0" />
+                     </font></Label>
                </children>
             </HBox>
          </children>
       </VBox>
-      <Button layoutX="476.0" layoutY="18.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="108.0" stylesheets="@pokemonView.css" text="Settings" />
+      <Button layoutX="476.0" layoutY="18.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="108.0" stylesheets="@pokemonView.css" text="Settings">
+         <font>
+            <Font name="Silkscreen Regular" size="13.0" />
+         </font></Button>
       <VBox alignment="CENTER" layoutX="11.0" layoutY="2.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="107.0" prefWidth="142.0" spacing="2.0" stylesheets="@pokemonView.css">
          <children>
             <ImageView fx:id="imgPokemon" fitHeight="74.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-radius: 5;">
@@ -45,8 +67,14 @@
             </ImageView>
             <HBox alignment="TOP_CENTER" prefHeight="13.0" prefWidth="134.0">
                <children>
-                  <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="45.0" stylesheets="@pokemonView.css" text="lvl:" />
-                  <Label fx:id="labelLevel" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="58.0" styleClass="labelResults" stylesheets="@pokemonView.css" text="level" />
+                  <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="45.0" stylesheets="@pokemonView.css" text="lvl:">
+                     <font>
+                        <Font name="Silkscreen Regular" size="13.0" />
+                     </font></Label>
+                  <Label fx:id="labelLevel" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="58.0" styleClass="labelResults" stylesheets="@pokemonView.css" text="level">
+                     <font>
+                        <Font name="Silkscreen Regular" size="13.0" />
+                     </font></Label>
                </children>
             </HBox>
          </children>
@@ -58,8 +86,14 @@
          <children>
             <ProgressBar fx:id="hpBar" layoutX="51.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="198.0" progress="0.58" styleClass="hp-bar" stylesheets="@pokemonView.css" />
             <ProgressBar fx:id="staminaBar" layoutX="371.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="198.0" progress="0.49" styleClass="stamina-bar" stylesheets="@pokemonView.css" />
-            <Label layoutX="295.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" styleClass="s" stylesheets="@pokemonView.css" text="Stamina" textFill="WHITE" />
-            <Label layoutX="18.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@pokemonView.css" text="HP" textFill="WHITE" />
+            <Label layoutX="291.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" styleClass="s" stylesheets="@pokemonView.css" text="Stamina" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen Regular" size="13.0" />
+               </font></Label>
+            <Label layoutX="18.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@pokemonView.css" text="HP" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen Regular" size="13.0" />
+               </font></Label>
          </children>
       </Pane>
    </children>

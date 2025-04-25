@@ -26,24 +26,23 @@ public class ControllerPokemonView {
     }
 
     private void loadFonts() {
+        Font pixelFont = Font.loadFont(getClass().getResource("/assets/fonts/PressStart2P-Regular.ttf").toExternalForm(), 10);
+
+        // Cargar fuentes desde archivos locales
         try {
-            // Cargar fuentes desde archivos locales
-            Font pressStart2P = Font.loadFont(getClass().getResourceAsStream("/assets/fonts/PressStart2P-Regular.ttf"), 12);
-            Font silkscreen = Font.loadFont(getClass().getResourceAsStream("/assets/fonts/Silkscreen-Regular.ttf"), 12);
-            
-            if (pressStart2P == null || silkscreen == null) {
-                System.err.println("Error: No se pudieron cargar las fuentes");
+            if (pixelFont != null) {
+            labelName.setFont(pixelFont);
+            labelNickname.setFont(pixelFont);
+            labelType.setFont(pixelFont);
+            labelLevel.setFont(pixelFont);
             } else {
-                // Aplicar la fuente a los labels
-                labelName.setFont(pressStart2P);
-                labelNickname.setFont(silkscreen);
-                labelType.setFont(silkscreen);
-                labelLevel.setFont(pressStart2P);
+            System.err.println("Error: No se pudo cargar la fuente pixel-font.ttf");
             }
         } catch (Exception e) {
             System.err.println("Error cargando fuentes:");
             e.printStackTrace();
         }
+        
     }
 
     private void applyStylesheet() {
