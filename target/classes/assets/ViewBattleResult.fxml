@@ -1,79 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.gluonhq.charm.glisten.control.TextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleResult">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleResult" style="-fx-background-color: linear-gradient(to bottom, #f2f2f2, #cbe6ff);">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-         <children>
-            <VBox prefHeight="400.0" prefWidth="640.0">
-               <children>
-                  <HBox prefHeight="50.0" prefWidth="640.0">
-                     <children>
-                        <Button fx:id="btnMenu" mnemonicParsing="false" text="Menu">
-                           <HBox.margin>
-                              <Insets left="25.0" top="15.0" />
-                           </HBox.margin>
-                        </Button>
-                        <HBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="296.0">
-                           <children>
-                              <Label fx:id="LabelNivel" prefHeight="18.0" prefWidth="59.0" text="Nivel # :" />
-                              <ProgressBar fx:id="BarraProg" prefHeight="20.0" prefWidth="204.0" progress="0.0">
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                              </ProgressBar>
-                           </children>
-                           <HBox.margin>
-                              <Insets left="250.0" />
-                           </HBox.margin>
-                           <padding>
-                              <Insets top="15.0" />
-                           </padding>
-                        </HBox>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="50.0" prefWidth="640.0">
-                     <children>
-                        <Label fx:id="tittle" text="RESUM">
-                           <HBox.margin>
-                              <Insets left="270.0" top="7.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="25.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="60.0" prefWidth="640.0">
-                     <children>
-                        <Label fx:id="LabelGanador" text="Ganador :">
-                           <HBox.margin>
-                              <Insets left="180.0" top="20.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="Nomganador" prefHeight="14.0" prefWidth="294.0">
-                           <HBox.margin>
-                              <Insets left="15.0" top="20.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children></HBox>
-                  <HBox prefHeight="60.0" prefWidth="640.0" />
-                  <HBox prefHeight="60.0" prefWidth="640.0" />
-                  <HBox prefHeight="117.0" prefWidth="640.0" />
-               </children>
-            </VBox>
-         </children></AnchorPane>
+    <AnchorPane VBox.vgrow="ALWAYS">
+      <children>
+        <VBox prefHeight="400.0" prefWidth="640.0" spacing="10.0" padding="10">
+          <children>
+
+            <!-- Top bar with Menu and Progress -->
+            <HBox prefHeight="50.0" alignment="CENTER_LEFT" spacing="20">
+              <children>
+                <Button fx:id="btnMenu" text="Menu" style="-fx-background-color: #ffcb05; -fx-text-fill: #3b4cca; -fx-font-weight: bold;" prefWidth="80" prefHeight="30" />
+                <HBox alignment="CENTER_RIGHT" spacing="10" prefWidth="480.0">
+                  <children>
+                    <Label fx:id="LabelNivel" text="Nivel # :" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+                    <ProgressBar fx:id="BarraProg" prefWidth="200.0" progress="0.0" style="-fx-accent: #3b4cca;" />
+                  </children>
+                </HBox>
+              </children>
+            </HBox>
+
+            <!-- Title -->
+            <HBox alignment="CENTER">
+              <children>
+                <Label fx:id="tittle" text="RESUM" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #cc0000;" />
+              </children>
+            </HBox>
+
+            <!-- Ganador -->
+            <HBox alignment="CENTER" spacing="10">
+              <children>
+                <Label fx:id="LabelGanador" text="Ganador :" style="-fx-font-size: 16px;" />
+                <TextField fx:id="Nomganador" promptText="nombre" prefWidth="300.0" />
+              </children>
+            </HBox>
+
+            <!-- Nivel -->
+            <HBox alignment="CENTER" spacing="5">
+              <children>
+                <Label text="Nivel :" style="-fx-font-size: 14px;" />
+                <TextField promptText="actual" prefWidth="60.0" />
+                <Label text="/" style="-fx-font-size: 16px;" />
+                <TextField promptText="aumentat" prefWidth="60.0" />
+              </children>
+            </HBox>
+
+            <!-- Nuevos pokemons -->
+            <HBox alignment="CENTER" spacing="10">
+              <children>
+                <Label text="Nuevos pokemons :" style="-fx-font-size: 14px;" />
+                <TextField promptText="..." prefWidth="300.0" />
+              </children>
+            </HBox>
+
+            <!-- Items -->
+            <HBox alignment="CENTER" spacing="10">
+              <children>
+                <Label text="Items recogidos :" style="-fx-font-size: 14px;" />
+                <TextArea prefWidth="300.0" prefHeight="80.0" wrapText="true" promptText="Lista de ítems..." />
+              </children>
+            </HBox>
+
+          </children>
+        </VBox>
+      </children>
+    </AnchorPane>
   </children>
 </VBox>
