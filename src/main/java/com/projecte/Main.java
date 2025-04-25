@@ -24,10 +24,9 @@ public class Main extends Application {
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
         UtilsViews.addView(getClass(), "ViewStart", "/assets/viewStart.fxml");
         UtilsViews.addView(getClass(), "ViewPokeSettings", "/assets/viewPokeSettings.fxml");
-        UtilsViews.addView(getClass(), "PokemonView", "/assets/pokemonView.fxml");
+        UtilsViews.addView(getClass(), "ViewBattleAttack", "/assets/viewBattleAttack.fxml");
 
-
-        UtilsViews.setView("PokemonView");
+        UtilsViews.setView("ViewBattleAttack");
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
         stage.setScene(scene);
