@@ -1,4 +1,5 @@
 package com.utils;
+
 import java.util.ArrayList;
 
 import javafx.animation.Interpolator;
@@ -17,23 +18,22 @@ public class UtilsViews {
     public static StackPane parentContainer = new StackPane();
     public static ArrayList<Object> controllers = new ArrayList<>();
 
-    // Add one view to the list
+    //Añadir vista
     public static void addView(Class<?> cls, String name, String path) throws Exception {
-        
-        boolean defaultView = false;
+        System.out.println("Intentando cargar: " + path);
+    
         FXMLLoader loader = new FXMLLoader(cls.getResource(path));
         Pane view = loader.load();
+    
+        System.out.println("Vista cargada: " + name);
+    
         ObservableList<Node> children = parentContainer.getChildren();
-
-        // First view is the default view
-        if (children.isEmpty()) {
-            defaultView = true;
-        }
-
+        boolean defaultView = children.isEmpty();
+        
         view.setId(name);
         view.setVisible(defaultView);
         view.setManaged(defaultView);
-
+        
         children.add(view);
         controllers.add(loader.getController());
     }
