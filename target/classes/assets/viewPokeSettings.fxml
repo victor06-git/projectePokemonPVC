@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.ImageView?>
@@ -10,38 +9,44 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@viewPokeSettings.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerPokeSettings">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@viewPokeSettings.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerPokeSettings">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox alignment="CENTER" prefHeight="86.0" prefWidth="595.0" />
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="2.0">
                      <children>
-                        <Label minHeight="50.0" prefHeight="50.0" prefWidth="476.0" styleClass="label-title" text="POKÉMON SETTINGS" textFill="#2a599a">
+                        <Label alignment="TOP_CENTER" contentDisplay="TOP" minHeight="50.0" prefHeight="93.0" prefWidth="580.0" styleClass="label-title" text="POKÉMON SETTINGS" textFill="#2a599a">
                            <font>
-                              <Font size="46.0" />
+                              <Font name="Noto Kufi Arabic ExtraBold" size="46.0" />
                            </font>
                         </Label>
-                        <Label fx:id="labelName" prefHeight="19.0" prefWidth="132.0" styleClass="label-name" text="Name">
+                        <Label fx:id="labelName" alignment="CENTER" prefHeight="25.0" prefWidth="228.0" styleClass="label-name" text="Name">
                            <VBox.margin>
                               <Insets top="15.0" />
                            </VBox.margin>
+                           <font>
+                              <Font name="Pokemon Pixel Font Regular" size="20.0" />
+                           </font>
                         </Label>
                         <ImageView fitHeight="171.0" fitWidth="193.0" pickOnBounds="true" preserveRatio="true" />
-                        <Label fx:id="nicknameLabel" prefHeight="23.0" prefWidth="128.0" text="NickName" />
+                        <Label fx:id="nicknameLabel" alignment="CENTER" prefHeight="22.0" prefWidth="245.0" stylesheets="@viewPokeSettings.css" text="NickName">
+                           <font>
+                              <Font name="Pokemon Pixel Font Regular" size="20.0" />
+                           </font></Label>
                         <Separator prefHeight="14.0" prefWidth="580.0" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label prefHeight="29.0" prefWidth="140.0" styleClass="label-potenciador" text="Potenciadors">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" styleClass="label-potenciador" text="Potenciadors">
                            <font>
-                              <Font size="20.0" />
+                              <Font name="Pokemon Pixel Font Regular" size="20.0" />
                            </font>
                         </Label>
-                        <HBox prefHeight="66.0" prefWidth="580.0" spacing="20.0" alignment="CENTER">
+                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="580.0" spacing="20.0">
                            <children>
                               <VBox alignment="CENTER" maxWidth="60.0" prefHeight="68.0" prefWidth="61.0">
                                  <children>
@@ -55,7 +60,10 @@
                               </VBox>
                               <VBox alignment="CENTER" prefHeight="68.0" prefWidth="75.0">
                                  <children>
-                                    <Label fx:id="numberAttack" prefHeight="18.0" prefWidth="61.0" styleClass="label-number" text="5" />
+                                    <Label fx:id="numberAttack" prefHeight="18.0" prefWidth="61.0" styleClass="label-number">
+                                       <font>
+                                          <Font name="Tahoma" size="13.0" />
+                                       </font></Label>
                                  </children>
                               </VBox>
                               <VBox alignment="CENTER" maxWidth="50.0" prefHeight="68.0" prefWidth="50.0">
@@ -70,7 +78,10 @@
                               </VBox>
                               <VBox alignment="CENTER" prefHeight="68.0" prefWidth="49.0">
                                  <children>
-                                    <Label fx:id="numberDeffense" styleClass="label-number" text="8" />
+                                    <Label fx:id="numberDeffense" styleClass="label-number">
+                                       <font>
+                                          <Font name="Tahoma" size="13.0" />
+                                       </font></Label>
                                  </children>
                               </VBox>
                               <VBox alignment="CENTER" prefHeight="68.0" prefWidth="100.0">
@@ -85,7 +96,10 @@
                               </VBox>
                               <VBox alignment="CENTER" prefHeight="68.0" prefWidth="63.0">
                                  <children>
-                                    <Label fx:id="numberBottleCap" styleClass="label-number" text="10" />
+                                    <Label fx:id="numberBottleCap" styleClass="label-number">
+                                       <font>
+                                          <Font name="Tahoma" size="13.0" />
+                                       </font></Label>
                                  </children>
                               </VBox>
                            </children>
