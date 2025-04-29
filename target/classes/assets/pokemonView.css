@@ -1,0 +1,88 @@
+/* ===== RESET GENERAL (ESTILO 8-BIT) ===== */
+.root {
+    -fx-background-color: #404040; /* Gris oscuro como fondo de "arcade" */
+    -fx-border-color: #ff0000; /* Borde rojo como máquina recreativa */
+    -fx-border-width: 4px;
+    -fx-effect: dropshadow(three-pass-box, #000000, 15, 0, 0, 0);
+}
+
+/* Elimina todas las propiedades CSS estándar (sin -fx-) */
+* {
+    -fx-text-fill: #ffffff;
+}
+
+/* ===== CONTENEDORES ===== */
+.pane {
+    -fx-background-color: #222222;
+    -fx-border-color: #ff0000 #880000 #880000 #ff0000;
+    -fx-border-width: 4px;
+    -fx-padding: 10px;
+    -fx-effect: innershadow(three-pass-box, #000000, 5, 0, 0, 0);
+}
+
+/* ===== BARRAS ===== */
+.hp-bar .bar {
+    -fx-background-color: linear-gradient(to right, #007e31, #75ff6e);
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-background-radius: 0;
+    -fx-effect: innershadow(three-pass-box, #000000, 3, 0, 0, 0);
+}
+
+.hp-bar .track {
+    -fx-background-color: #000000;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 1px;
+}
+
+.stamina-bar .bar {
+    -fx-background-color: linear-gradient(to right, #018480, #60ffff);
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-background-radius: 0;
+    -fx-effect: innershadow(three-pass-box, #000000, 3, 0, 0, 0);
+}
+
+.stamina-bar .track {
+    -fx-background-color: #000000;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 1px;
+}
+
+/* ===== TEXTO ===== */
+.label {
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(one-pass-box, #000000, 2, 0, 0, 0);
+}
+
+.labelResults {
+    -fx-text-fill: #ffcc00;
+    -fx-effect: dropshadow(one-pass-box, #000000, 3, 0, 0, 0);
+}
+
+/* ===== BOTONES ===== */
+.button {
+    -fx-background-color: #ff0000;
+    -fx-border-color: #000000 #880000 #880000 #000000;
+    -fx-border-width: 3px;
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #ff3333;
+}
+
+.button:pressed {
+    -fx-background-color: #880000;
+    -fx-border-color: #880000 #000000 #000000 #880000;
+    -fx-translate-y: 1px;
+}
+
+/* ===== IMAGENES ===== */
+.image-view {
+    -fx-effect: dropshadow(three-pass-box, #000000, 8, 0, 0, 0);
+    -fx-border-color: #ffffff #888888 #888888 #ffffff;
+    -fx-border-width: 4px;
+    -fx-background-color: #000000;
+}
