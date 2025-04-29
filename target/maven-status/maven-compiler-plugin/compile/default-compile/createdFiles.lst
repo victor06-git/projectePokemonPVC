@@ -6,4 +6,5 @@ com/projecte/ControllerManagement.class
 com/projecte/AppData.class
 com/projecte/ControllerBattleAttack.class
 com/projecte/ControllerStart.class
+com/projecte/ControllerBattleOptions.class
 com/projecte/ControllerPokemonView.class

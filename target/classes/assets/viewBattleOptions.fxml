@@ -1,75 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2b2b2b;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleAttack">
-
-    <!-- Fondo -->
-    <ImageView fx:id="backgroundImage" fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
-
-    <!-- Panel de Pokémon Enemigo -->
-    <VBox layoutX="423.0" layoutY="30.0" spacing="2.5">
-        <Label fx:id="computerPokemonLabel" style="-fx-text-fill: white; -fx-font-weight: bold;" text="Charizard Lv15" />
-        <HBox spacing="5">
-            <Label style="-fx-text-fill: white;" text="HP:" />
-            <ProgressBar fx:id="enemyHpBar" prefWidth="100" progress="0.6" style="-fx-accent: green;" />
-         <Label fx:id="hpComputer" text="70/100" textFill="WHITE" />
-        </HBox>
-        <HBox spacing="5">
-            <Label style="-fx-text-fill: white;" text="ST:" />
-            <ProgressBar fx:id="enemyStaminaBar" prefWidth="100" progress="0.5" style="-fx-accent: blue;" />
-         <Label fx:id="estamineComputer" text="55/100" textFill="WHITE" />
-        </HBox>
-    </VBox>
+<?import javafx.scene.text.Font?>
 
 
-    <!-- Panel de Pokémon del Jugador -->
-    <VBox layoutX="31.0" layoutY="124.0" spacing="2.5">
-        <Label fx:id="playerPokemonLabel" style="-fx-text-fill: white; -fx-font-weight: bold;" text="Moltres  Lv19" />
-        <HBox spacing="5">
-            <Label style="-fx-text-fill: white;" text="HP:" />
-            <ProgressBar fx:id="playerHpBar" prefWidth="100" progress="1.0" style="-fx-accent: green;" />
-         <Label fx:id="hpPlayer" text="100/100" textFill="WHITE" />
-        </HBox>
-        <HBox spacing="5">
-            <Label style="-fx-text-fill: white;" text="ST:" />
-            <ProgressBar fx:id="playerStaminaBar" prefWidth="100" progress="0.76" style="-fx-accent: blue;" />
-         <Label fx:id="estaminePlayer" text="100/100" textFill="WHITE" />
-        </HBox>
-    </VBox>
-
-    <!-- Pregunta al jugador -->
-    <Label layoutX="20.0" layoutY="310.0" style="-fx-text-fill: white; -fx-font-size: 14px;" text="OPCIONS:" />
-
-    <!-- Botones de acciones principales -->
-    <HBox layoutX="20.0" layoutY="340.0" spacing="10">
-        <Button fx:id="fightButton" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="ATACAR" />
-        <Button fx:id="runButton" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="RENDIRSE" />
-    </HBox>
-     <ImageView fx:id="playerPokemonImage" fitHeight="80.0" fitWidth="104.0" layoutX="54.0" layoutY="206.0" />
-     <ImageView fx:id="enemyPokemonImage" fitHeight="80.0" fitWidth="104.0" layoutX="442.0" layoutY="106.0" />
-
-
-    <!-- Panel de movimientos del Pokémon (abajo a la derecha) -->
-    <VBox fx:id="movePanel" alignment="CENTER" layoutX="417.0" layoutY="268.0" prefHeight="107.0" prefWidth="152.0" spacing="5" style="-fx-background-color: #1a1a1a; -fx-border-color: white; -fx-border-width: 2;" visible="true">
-        <Label fx:id="move1" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="➤  Quick Attack" />
-        <Label fx:id="move2" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Wing Slash" />
-        <Label fx:id="move3" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Gust" />
-        <Label fx:id="move4" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Focus Energy" />
-    </VBox>
-
-    <!-- Sección para información detallada del ataque seleccionado -->
-    <VBox fx:id="attackInfoPanel" layoutX="227.0" layoutY="135.0" prefHeight="107.0" prefWidth="200.0" spacing="5" style="-fx-background-color: #1a1a1a; -fx-border-color: white; -fx-border-width: 2;" visible="true">
-        <Label fx:id="attackNameLabel" style="-fx-text-fill: yellow; -fx-font-family: 'Courier New'; -fx-font-size: 14px;" text="Quick Attack" textFill="#d8eb09" />
-        <Label fx:id="attackTypeLabel" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 12px;" text="Tipo: Normal" />
-        <Label fx:id="attackDamageLabel" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 12px;" text="Daño: 40" />
-        <Label fx:id="attackDescriptionLabel" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 12px;" text="Descripción: Un ataque rápido que causa daño." wrapText="true" />
-    </VBox>
-
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="379.0" layoutY="66.0" prefHeight="228.0" prefWidth="167.0" spacing="5.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="48.0" prefWidth="96.0">
+               <children>
+                  <Label fx:id="previousMap" text="&lt;&lt;">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="63.0" text="MAPS" textAlignment="CENTER" />
+                  <Label fx:id="nextMap" text="&gt;&gt;">
+                     <font>
+                        <Font name="System Bold Italic" size="13.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <ImageView fx:id="imgSelectedMap" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="labelSelectedMap" text="Map name" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <HBox layoutX="42.0" layoutY="253.0" prefHeight="132.0" prefWidth="307.0" spacing="10.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+               <children>
+                  <ImageView fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
+                  <ChoiceBox fx:id="choicePokemon1" prefWidth="150.0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+               <children>
+                  <ImageView fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
+                  <ChoiceBox fx:id="choicePokemon2" prefWidth="150.0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+               <children>
+                  <ImageView fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
+                  <ChoiceBox fx:id="choicePokemon3" prefWidth="150.0" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <ImageView fx:id="imgArrowBack" fitHeight="36.0" fitWidth="54.0" layoutX="20.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
 </AnchorPane>
