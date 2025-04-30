@@ -1,4 +1,5 @@
 com/projecte/ControllerPokeSettings.class
+com/projecte/createBD.class
 com/projecte/ControllerBattleAttack$1.class
 com/projecte/Main.class
 com/utils/UtilsViews.class
