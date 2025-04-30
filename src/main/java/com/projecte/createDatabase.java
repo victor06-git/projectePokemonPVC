@@ -8,8 +8,10 @@ public class createDatabase {
     }
 
     public static void createTables() {
-        AppData db = AppData.getInstance();
 
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
+        
         // Primero eliminamos las tablas si existen (en orden inverso por dependencias)
         String dropTables = """
             DROP TABLE IF EXISTS ItemInventory;
@@ -88,10 +90,6 @@ public class createDatabase {
         """;
         db.update(dropTables);
         db.update(createTables);
-
-    }
-    public static void insertTables() { 
-         
 
     }
 
