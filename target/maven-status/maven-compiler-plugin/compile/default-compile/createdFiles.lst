@@ -1,3 +1,4 @@
+com/projecte/PokemonGame$1.class
 com/projecte/ControllerPokeSettings.class
 com/projecte/ControllerBattleAttack$1.class
 com/projecte/Main.class
@@ -5,6 +6,7 @@ com/utils/UtilsViews.class
 com/projecte/ControllerManagement.class
 com/projecte/AppData.class
 com/projecte/ControllerBattleAttack.class
+com/projecte/PokemonGame.class
 com/projecte/ControllerStart.class
 com/projecte/createDatabase.class
 com/projecte/ControllerBattleOptions.class
