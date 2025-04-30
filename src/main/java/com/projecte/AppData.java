@@ -37,7 +37,6 @@ public class AppData {
 
     /**
      * Estableix la connexió amb la base de dades SQLite.
-     * L'arxiu de la base de dades és "./data/exercici1400.sqlite".
      * Es desactiva l'autocommit per permetre el control manual de transaccions.
      */
     public void connect(String filePath) {
