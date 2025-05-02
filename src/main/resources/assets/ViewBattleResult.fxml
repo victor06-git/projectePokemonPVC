@@ -65,9 +65,9 @@
               <HBox alignment="CENTER" spacing="5">
                 <children>
                   <Label fx:id="LaNivel" style="-fx-font-size: 14px;" text="Nivel :" />
-                  <TextField fx:id="LabelLevel" prefWidth="60.0" promptText="actual" />
+                  <TextField fx:id="LabelLevel" prefHeight="25.0" prefWidth="122.0" promptText="actual" />
                   <Label style="-fx-font-size: 16px;" text="/" />
-                  <TextField fx:id="levelAumentat" prefWidth="60.0" promptText="aumentat" />
+                  <TextField fx:id="levelAumentat" prefHeight="25.0" prefWidth="120.0" promptText="aumentat" />
                 </children>
               </HBox>
 
