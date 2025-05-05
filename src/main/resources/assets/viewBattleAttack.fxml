@@ -18,7 +18,7 @@
         <Label fx:id="computerPokemonLabel" style="-fx-text-fill: white; -fx-font-weight: bold;" text="Charizard Lv15" />
         <HBox spacing="5">
             <Label style="-fx-text-fill: white;" text="HP:" />
-            <ProgressBar fx:id="enemyHpBar" prefWidth="100" progress="0.6" style="-fx-accent: green;" />
+            <ProgressBar fx:id="enemyHpBar" prefWidth="100" progress="0.55" style="-fx-accent: green;" />
          <Label fx:id="hpComputer" text="70/100" textFill="WHITE" />
         </HBox>
         <HBox spacing="5">
