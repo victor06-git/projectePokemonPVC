@@ -10,9 +10,9 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@viewResultAttack.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerAttackResult">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="roundLabel" alignment="TOP_LEFT" text="Round 2" textFill="RED">
+            <Label fx:id="roundLabel" text="Round 2" textFill="RED">
                <font>
                   <Font size="16.0" />
                </font>
@@ -22,105 +22,68 @@
                   <Font size="46.0" />
                </font>
             </Label>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
-                           <children>
-                              <VBox prefHeight="200.0" prefWidth="100.0">
-                                 <children>
-                                    <Label text="Primer Atac: " />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="51.0" prefWidth="76.0">
-                                 <children>
-                                    <Label text="Label" textAlignment="RIGHT" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
+                        <Label text="Primer Atac: ">
+                           <HBox.margin>
+                              <Insets left="100.0" />
+                           </HBox.margin></Label>
+                        <Label style="-fx-text-fill: black;" text="Label">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
                      </children>
-                  </VBox>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
-                           <children>
-                              <VBox prefHeight="52.0" prefWidth="100.0">
-                                 <children>
-                                    <Label prefHeight="20.0" prefWidth="113.0" text="Resultat atac:" />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="52.0" prefWidth="97.0">
-                                 <children>
-                                    <Label alignment="CENTER" text="Label" textAlignment="CENTER">
-                                       <VBox.margin>
-                                          <Insets left="11.0" />
-                                       </VBox.margin>
-                                    </Label>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
+                        <Label text="Resultat atac:">
+                           <HBox.margin>
+                              <Insets left="100.0" />
+                           </HBox.margin></Label>
+                        <Label style="-fx-text-fill: black;" text="Label" />
                      </children>
-                  </VBox>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
-                           <children>
-                              <VBox prefHeight="200.0" prefWidth="100.0">
-                                 <children>
-                                    <Label text="Stats noves: " />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="52.0" prefWidth="70.0">
-                                 <children>
-                                    <Label text="Label" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
+                        <Label text="Stats noves: ">
+                           <HBox.margin>
+                              <Insets left="100.0" />
+                           </HBox.margin></Label>
+                        <Label style="-fx-text-fill: black;" text="Label">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin></Label>
                      </children>
-                  </VBox>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
-                           <children>
-                              <VBox prefHeight="54.0" prefWidth="162.0">
-                                 <children>
-                                    <Label prefHeight="29.0" prefWidth="191.0" text="Vida pokemon contrari:" />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="54.0" prefWidth="158.0">
-                                 <children>
-                                    <Label text="Label" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
+                        <Label text="HP rival:">
+                           <HBox.margin>
+                              <Insets left="100.0" />
+                           </HBox.margin></Label>
+                        <Label style="-fx-text-fill: black;" text="Label">
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin></Label>
                      </children>
-                  </VBox>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
-                           <children>
-                              <VBox prefHeight="54.0" prefWidth="193.0">
-                                 <children>
-                                    <Label text="Estamina pokemon contrari:" />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="54.0" prefWidth="187.0">
-                                 <children>
-                                    <Label text="Label" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
+                        <Label text="Stamina rival:">
+                           <HBox.margin>
+                              <Insets left="100.0" />
+                           </HBox.margin></Label>
+                        <Label style="-fx-text-fill: black;" text="Label">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
                      </children>
-                  </VBox>
+                  </HBox>
                </children>
             </VBox>
-            <VBox alignment="CENTER_RIGHT" prefHeight="24.0" prefWidth="580.0">
+            <VBox alignment="CENTER" prefHeight="24.0" prefWidth="580.0">
                <children>
                   <Button fx:id="buttonContinue" mnemonicParsing="false" style="-fx-base: #4b9ae9;" text="Continuar">
                      <VBox.margin>
