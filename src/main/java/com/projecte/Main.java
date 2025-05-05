@@ -25,13 +25,15 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewStart", "/assets/viewStart.fxml");
         UtilsViews.addView(getClass(), "ViewPokeSettings", "/assets/viewPokeSettings.fxml");
         UtilsViews.addView(getClass(), "ViewBattleAttack", "/assets/viewBattleAttack.fxml");
-        UtilsViews.addView(getClass(), "ViewAttackResult", "/assets/viewAttackResult.fxml");
+        UtilsViews.addView(getClass(), "pokemonView", "/assets/pokemonView.fxml");
+        UtilsViews.addView(getClass(), "ViewBattleOptions", "/assets/viewBattleOptions.fxml");
 
-        UtilsViews.setView("ViewAttackResult");
+
+        UtilsViews.setView("ViewBattleOptions");
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
         stage.setScene(scene);
-        stage.setTitle("Pokémons PvC");
+        stage.setTitle("Pokémons PvP");
         stage.setMinWidth(MIN_WIDTH);
         stage.setWidth(WINDOW_WIDTH);
         stage.setMinHeight(MIN_HEIGHT);
