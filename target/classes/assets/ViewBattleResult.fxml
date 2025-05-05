@@ -65,7 +65,7 @@
               <HBox alignment="CENTER" spacing="5">
                 <children>
                   <Label fx:id="LaNivel" style="-fx-font-size: 14px;" text="Nivel :" />
-                  <TextField fx:id="LabelLevel" prefHeight="25.0" prefWidth="122.0" promptText="actual" />
+                  <TextField fx:id="LevelActual" prefHeight="25.0" prefWidth="122.0" promptText="actual" />
                   <Label style="-fx-font-size: 16px;" text="/" />
                   <TextField fx:id="levelAumentat" prefHeight="25.0" prefWidth="120.0" promptText="aumentat" />
                 </children>
@@ -75,7 +75,7 @@
               <HBox alignment="CENTER" spacing="10">
                 <children>
                   <Label fx:id="LabelNpokemons" style="-fx-font-size: 14px;" text="Nuevos pokemons :" />
-                  <TextField fx:id="NewsPokemons" prefWidth="300.0" promptText="..." />
+                  <TextField fx:id="NewsPokemons" prefWidth="300.0" promptText="News Pokemons" />
                 </children>
               </HBox>
 
