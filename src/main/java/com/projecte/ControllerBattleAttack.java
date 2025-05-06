@@ -3,6 +3,7 @@ package com.projecte;
 
 import java.io.File;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,6 +12,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 
 public class ControllerBattleAttack {
@@ -31,7 +33,7 @@ public class ControllerBattleAttack {
     private ImageView enemyPokemonImage, playerPokemonImage, backgroundImage;
     
     @FXML
-    private Label attackNameLabel, attackTypeLabel, attackDamageLabel, attackDescriptionLabel; // Nuevas etiquetas para la información del ataque
+    private Label attackNameLabel, attackTypeLabel, attackDamageLabel, attackDescriptionLabel; 
 
     private int currentSelection = 0;
 
@@ -110,7 +112,7 @@ public class ControllerBattleAttack {
         }
     }
 
-    private void updateAttackInfo(int index ) {
+    private void updateAttackInfo(int index) {
 
         String[] names = {"Quick Attack", "Wing Attack", "Gust", "Focus Energy"};
         String[] types = {"Normal", "Flying", "Flying", "Normal"};
@@ -130,12 +132,31 @@ public class ControllerBattleAttack {
 
     }
 
-
+    /**
+     * Function to handle the attack action.
+     * 
+     * @param selectedMove
+     */
     private void handleAttack(int selectedMove) {
         System.out.println("Using move: " + moves[selectedMove].getText());
+        //A partir d'escollir l'atac vull que quan es faci click al botó fightButton y afegeix una acció que cambi de color el botó quan es presiona, i vull que es mostri l'VBox info i que resetegi el color després d'un segon
+        fightButton.setOnAction(e -> {
+            System.out.println("Attack executed: " + moves[selectedMove].getText());
+            fightButton.setStyle("-fx-background-color: red;");
+
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.setOnFinished(event -> fightButton.setStyle(""));
+            pause.play();
+        });
+        
     }
 
-    
+    /**
+     * Function to load Pokémon images from the specified path.
+     * 
+     * @param imagePath The path to the image file.
+     * @param pokemon  The ImageView to display the Pokémon image.
+     */
     private void loadPokemonImages(String imagePath, ImageView pokemon) {
         try {
             File file = new File(imagePath);

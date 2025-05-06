@@ -101,10 +101,22 @@
       
           <!-- Panel de movimientos del Pokémon (abajo a la derecha) -->
           <VBox fx:id="movePanel" alignment="CENTER_RIGHT" layoutX="436.0" layoutY="237.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="115.0" prefWidth="150.0" spacing="2.0" style="-fx-background-color: #1a1a1a; -fx-border-color: white; -fx-border-width: 2;" visible="true">
-              <Label fx:id="move1" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="➤  Quick Attack" />
-              <Label fx:id="move2" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Wing Slash" />
-              <Label fx:id="move3" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Gust" />
-              <Label fx:id="move4" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Focus Energy" />
+              <Label fx:id="move1" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="➤  Quick Attack">
+               <font>
+                  <Font size="10.0" />
+               </font></Label>
+              <Label fx:id="move2" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Wing Slash">
+               <font>
+                  <Font size="10.0" />
+               </font></Label>
+              <Label fx:id="move3" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Gust">
+               <font>
+                  <Font size="10.0" />
+               </font></Label>
+              <Label fx:id="move4" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Focus Energy">
+               <font>
+                  <Font size="10.0" />
+               </font></Label>
             <padding>
                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
             </padding>
