@@ -3,7 +3,10 @@ package com.projecte;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.transform.Rotate;
 
 
 public class ControllerBattleAttack {
@@ -20,6 +23,8 @@ public class ControllerBattleAttack {
     private int currentSelection = 0;
 
     private Label[] moves;
+    @FXML
+    private ImageView playerPokemonImage;
 
     @FXML
     public void initialize() {
@@ -29,13 +34,18 @@ public class ControllerBattleAttack {
         Platform.runLater(() -> movePanel.requestFocus()); // Asegura que el panel tenga foco
     
         movePanel.setOnMouseClicked(e -> movePanel.requestFocus()); // Por si el usuario hace clic
-    
+        
+        // Get /data/pokemons/arcanine.jpg from data folder
+        // and set it to playerPokemonImage
+        playerPokemonImage.setImage(new Image("file:data/pokemons/arcanine.jpg"));
+        flipImage(playerPokemonImage);
+
         for (int i = 0; i < moves.length; i++) {
-            final int index = i;
-            moves[i].setOnMouseClicked(e -> {
-                currentSelection = index;
-                updateSelection();
-            });
+        final int index = i;
+        moves[i].setOnMouseClicked(e -> {
+            currentSelection = index;
+            updateSelection();
+        });
         }
     
         movePanel.setOnKeyPressed(event -> {
@@ -61,6 +71,17 @@ public class ControllerBattleAttack {
         });
     }
     
+
+    private void flipImage(ImageView imageView) {
+        double pivotX = imageView.getFitWidth()  / 2;
+        double pivotY = imageView.getFitHeight() / 2;
+        Rotate rotate = new Rotate(180,
+                            pivotX,    // centre X
+                            pivotY,    // centre Y
+                            90,         // profunditat Z
+                            Rotate.Y_AXIS);
+        imageView.getTransforms().add(rotate);
+    }
 
 
 

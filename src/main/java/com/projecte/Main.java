@@ -26,7 +26,7 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewBattleOptions", "/assets/viewBattleOptions.fxml");
 
 
-        UtilsViews.setView("ViewBattleOptions");
+        UtilsViews.setView("ViewBattleAttack");
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
         stage.setScene(scene);

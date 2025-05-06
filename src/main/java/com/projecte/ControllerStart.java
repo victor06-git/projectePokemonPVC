@@ -28,7 +28,7 @@ public class ControllerStart implements Initializable {
         
         if (file.exists()) {
             Image image = new Image(file.toURI().toString());
-            pokemonImage.setImage(image);
+            //pokemonImage.setImage(image);
         } else {
             System.out.println("Imagen no encontrada");
         }
