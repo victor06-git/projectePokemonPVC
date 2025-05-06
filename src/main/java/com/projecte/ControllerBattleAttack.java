@@ -1,18 +1,34 @@
 package com.projecte;
 
+
+import java.io.File;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 
 public class ControllerBattleAttack {
 
     @FXML 
-    private Label move1, move2, move3, move4, moveDescriptionLabel;
+    private Label move1, move2, move3, move4, moveDescriptionLabel, computerPokemonLabel, playerPokemonLabel;
 
     @FXML
     private VBox movePanel;
+
+    @FXML
+    private Button fightButton, runButton;
+
+    @FXML
+    private ProgressBar enemyHpBar, enemyStaminaBar, playerStaminaBar, playerHpBar;
+
+    @FXML
+    private ImageView enemyPokemonImage, playerPokemonImage, backgroundImage;
     
     @FXML
     private Label attackNameLabel, attackTypeLabel, attackDamageLabel, attackDescriptionLabel; // Nuevas etiquetas para la información del ataque
@@ -25,6 +41,12 @@ public class ControllerBattleAttack {
     public void initialize() {
         moves = new Label[]{move1, move2, move3, move4};
         updateSelection();
+
+        loadPokemonImages("data/pokemons/Articuno.gif", enemyPokemonImage);
+        loadPokemonImages("data/pokemons/Aerodactyl.gif", playerPokemonImage);  
+        loadPokemonImages("data/mapa/mapa2.jpg", backgroundImage);
+        
+        playerPokemonImage.setScaleX(-1); //Per cambiar la vista del PlayerPokemon
     
         Platform.runLater(() -> movePanel.requestFocus()); // Asegura que el panel tenga foco
     
@@ -60,10 +82,19 @@ public class ControllerBattleAttack {
             }
         });
     }
-    
 
+    @FXML
+    private ImageView mapImageView; // ImageView para el mapa
 
-
+    /**
+     * Método para cargar el mapa en el ImageView.
+     */
+    public void setMap() {
+        // Cargar la imagen del mapa desde la ruta proporcionada
+        String mapImage = getClass().getResource("data/mapa/mapa2.jpg").toExternalForm();
+        mapImageView.setImage(new Image(mapImage));
+    }
+        
 
     private void updateSelection() {
         for (int i = 0; i < moves.length; i++) {
@@ -101,9 +132,19 @@ public class ControllerBattleAttack {
 
 
     private void handleAttack(int selectedMove) {
-
         System.out.println("Using move: " + moves[selectedMove].getText());
+    }
 
+    
+    private void loadPokemonImages(String imagePath, ImageView pokemon) {
+        try {
+            File file = new File(imagePath);
+            Image image = new Image(file.toURI().toString());
+            pokemon.setImage(image);
+        } catch (NullPointerException e) {
+            System.err.println("Error loading image asset: " + imagePath);
+            e.printStackTrace();
+        }
     }
 
 }
