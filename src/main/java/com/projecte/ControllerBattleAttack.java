@@ -85,16 +85,13 @@ public class ControllerBattleAttack {
         });
     }
 
-    @FXML
-    private ImageView mapImageView; // ImageView para el mapa
-
     /**
      * Método para cargar el mapa en el ImageView.
      */
     public void setMap() {
         // Cargar la imagen del mapa desde la ruta proporcionada
         String mapImage = getClass().getResource("data/mapa/mapa2.jpg").toExternalForm();
-        mapImageView.setImage(new Image(mapImage));
+        backgroundImage.setImage(new Image(mapImage));
     }
         
 
@@ -139,15 +136,20 @@ public class ControllerBattleAttack {
      */
     private void handleAttack(int selectedMove) {
         System.out.println("Using move: " + moves[selectedMove].getText());
-        //A partir d'escollir l'atac vull que quan es faci click al botó fightButton y afegeix una acció que cambi de color el botó quan es presiona, i vull que es mostri l'VBox info i que resetegi el color després d'un segon
-        fightButton.setOnAction(e -> {
-            System.out.println("Attack executed: " + moves[selectedMove].getText());
-            fightButton.setStyle("-fx-background-color: red;");
 
-            PauseTransition pause = new PauseTransition(Duration.seconds(1));
-            pause.setOnFinished(event -> fightButton.setStyle(""));
-            pause.play();
-        });
+        // Cambiar el color del botón al presionarlo
+        fightButton.setStyle("-fx-background-color: red;");
+
+        // Actualizar el panel de información con los detalles del ataque seleccionado
+        updateAttackInfo(selectedMove);
+
+        // Mostrar el panel de información si está oculto
+        attackNameLabel.getParent().setVisible(true);
+
+        // Resetear el color del botón después de 1 segundo
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(event -> fightButton.setStyle(""));
+        pause.play();
         
     }
 

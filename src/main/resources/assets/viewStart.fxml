@@ -19,7 +19,7 @@
             </Label>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                <children>
-                  <ImageView fitHeight="200.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pokemonImage" fitHeight="200.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </VBox>
             <Button mnemonicParsing="false" style="-fx-base: #4b9ae9;" text="Open Game" onAction="#empezarJuego" />
