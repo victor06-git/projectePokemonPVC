@@ -2,14 +2,12 @@ package com.projecte;
 
 public class createDatabase {
 
-
     public static void main(String[] args) {
         setTables();
         insertAllPokemon();
     }
 
     public static void setTables() {
-
         AppData db = AppData.getInstance();
         db.connect("./data/pokemons.sqlite");
 
@@ -91,9 +89,7 @@ public class createDatabase {
         """;
         db.update(dropTables);
         db.update(createTables);
-
     }
-
 
     public static void insertAllPokemon() {
         String[][] pokemons = {
@@ -249,7 +245,7 @@ public class createDatabase {
             {"Dragonite", "Dragon/Flying", "dragonite.gif"},
             {"Mewtwo", "Psychic", "mewtwo.gif"},
             {"Mew", "Psychic", "mew.gif"},
-
+        
             // Segunda Generación (152-251)
             {"Chikorita", "Grass", "chikorita.gif"},
             {"Bayleef", "Grass", "bayleef.gif"},
@@ -278,18 +274,6 @@ public class createDatabase {
             {"Togetic", "Fairy/Flying", "togetic.gif"},
             {"Natu", "Psychic/Flying", "natu.gif"},
             {"Xatu", "Psychic/Flying", "xatu.gif"},
-            {"Mareep", "Electric", "mareep.gif"},
-            {"Flaaffy", "Electric", "flaaffy.gif"},
-            {"Ampharos", "Electric", "ampharos.gif"},
-            {"Bellossom", "Grass", "bellossom.gif"},
-            {"Marill", "Water/Fairy", "marill.gif"},
-            {"Azumarill", "Water/Fairy", "azumarill.gif"},
-            {"Sudowoodo", "Rock", "sudowoodo.gif"},
-            {"Politoed", "Water", "politoed.gif"},
-            {"Hoppip", "Grass/Flying", "hoppip.gif"},
-            {"Skiploom", "Grass/Flying", "skiploom.gif"},
-            {"Jumpluff", "Grass/Flying", "jumpluff.gif"},
-            {"Aipom", "Normal", "aipom.gif"},
             {"Sunkern", "Grass", "sunkern.gif"},
             {"Sunflora", "Grass", "sunflora.gif"},
             {"Yanma", "Bug/Flying", "yanma.gif"},
@@ -302,76 +286,44 @@ public class createDatabase {
             {"Misdreavus", "Ghost", "misdreavus.gif"},
             {"Unown", "Psychic", "unown.gif"},
             {"Wobbuffet", "Psychic", "wobbuffet.gif"},
-            {"Girafarig", "Normal/Psychic", "girafarig.gif"},
-            {"Pineco", "Bug", "pineco.gif"},
-            {"Forretress", "Bug/Steel", "forretress.gif"},
-            {"Dunsparce", "Normal", "dunsparce.gif"},
             {"Gligar", "Ground/Flying", "gligar.gif"},
             {"Steelix", "Steel/Ground", "steelix.gif"},
             {"Snubbull", "Fairy", "snubbull.gif"},
             {"Granbull", "Fairy", "granbull.gif"},
             {"Qwilfish", "Water/Poison", "qwilfish.gif"},
-            {"Scizor", "Bug/Steel", "scizor.gif"},
-            {"Shuckle", "Bug/Rock", "shuckle.gif"},
-            {"Heracross", "Bug/Fighting", "heracross.gif"},
-            {"Sneasel", "Dark/Ice", "sneasel.gif"},
-            {"Teddiursa", "Normal", "teddiursa.gif"},
-            {"Ursaring", "Normal", "ursaring.gif"},
-            {"Slugma", "Fire", "slugma.gif"},
-            {"Magcargo", "Fire/Rock", "magcargo.gif"},
-            {"Swinub", "Ice/Ground", "swinub.gif"},
-            {"Piloswine", "Ice/Ground", "piloswine.gif"},
             {"Corsola", "Water/Rock", "corsola.gif"},
             {"Remoraid", "Water", "remoraid.gif"},
             {"Octillery", "Water", "octillery.gif"},
             {"Delibird", "Ice/Flying", "delibird.gif"},
-            {"Mantine", "Water/Flying", "mantine.gif"},
-            {"Skarmory", "Steel/Flying", "skarmory.gif"},
             {"Houndour", "Dark/Fire", "houndour.gif"},
             {"Houndoom", "Dark/Fire", "houndoom.gif"},
             {"Kingdra", "Water/Dragon", "kingdra.gif"},
-            {"Phanpy", "Ground", "phanpy.gif"},
-            {"Donphan", "Ground", "donphan.gif"},
-            {"Porygon2", "Normal", "porygon2.gif"},
-            {"Stantler", "Normal", "stantler.gif"},
-            {"Smeargle", "Normal", "smeargle.gif"},
-            {"Tyrogue", "Fighting", "tyrogue.gif"},
-            {"Hitmontop", "Fighting", "hitmontop.gif"},
-            {"Smoochum", "Ice/Psychic", "smoochum.gif"},
-            {"Elekid", "Electric", "elekid.gif"},
-            {"Magby", "Fire", "magby.gif"},
-            {"Miltank", "Normal", "miltank.gif"},
-            {"Blissey", "Normal", "blissey.gif"},
+            {"Pineco", "Bug", "pineco.gif"},
+            {"Forretress", "Bug/Steel", "forretress.gif"},
+            {"Dunsparce", "Normal", "dunsparce.gif"},
             {"Raikou", "Electric", "raikou.gif"},
             {"Entei", "Fire", "entei.gif"},
             {"Suicune", "Water", "suicune.gif"},
-            {"Larvitar", "Rock/Ground", "larvitar.gif"},
-            {"Pupitar", "Rock/Ground", "pupitar.gif"},
-            {"Tyranitar", "Rock/Dark", "tyranitar.gif"},
             {"Lugia", "Psychic/Flying", "lugia.gif"},
-            {"Ho-Oh", "Fire/Flying", "hooh.gif"},
+            {"Ho-oh", "Fire/Flying", "hooh.gif"},
             {"Celebi", "Psychic/Grass", "celebi.gif"}
         };
+        
 
-        String sql = "INSERT INTO Pokemon (name, type, image_path) VALUES (?, ?, ?)";
         AppData db = AppData.getInstance();
         db.connect("./data/pokemons.sqlite");
 
-        // Generar el String SQL amb tots els pokemons
-        StringBuilder sqlBuilder = new StringBuilder();
+        // Iteramos sobre el arreglo de Pokémon para insertar uno por uno
         for (String[] pokemon : pokemons) {
             String name = pokemon[0];
             String type = pokemon[1];
             String imagePath = pokemon[2];
 
-            sqlBuilder.append("INSERT INTO Pokemon (name, type, image_path) VALUES ('")
-                    .append(name).append("', '")
-                    .append(type).append("', '")
-                    .append(imagePath).append("');\n");
+            // Ejecutamos la sentencia SQL para insertar el Pokémon
+            db.update("INSERT INTO Pokemon (name, type, image_path) VALUES ('" +
+                      name + "', '" + type + "', '" + imagePath + "');");
         }
-        System.out.println(sqlBuilder.toString());
-        //db.insertAndGetId(sqlBuilder.toString());
+
+        System.out.println("Pokémons insertados correctamente.");
     }
 }
-    
-
