@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox layoutX="379.0" layoutY="66.0" prefHeight="228.0" prefWidth="167.0" spacing="5.0">
@@ -40,19 +39,19 @@
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                <children>
-                  <ImageView fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgPokemon1" fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
                   <ChoiceBox fx:id="choicePokemon1" prefWidth="150.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                <children>
-                  <ImageView fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgPokemon2" fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
                   <ChoiceBox fx:id="choicePokemon2" prefWidth="150.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                <children>
-                  <ImageView fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgPokemon3" fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
                   <ChoiceBox fx:id="choicePokemon3" prefWidth="150.0" />
                </children>
             </VBox>
