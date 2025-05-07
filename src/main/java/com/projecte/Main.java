@@ -25,7 +25,7 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "pokemonView", "/assets/pokemonView.fxml");
         UtilsViews.addView(getClass(), "ViewBattleOptions", "/assets/viewBattleOptions.fxml");
 
-        UtilsViews.setView("ViewBattleAttack");
+        UtilsViews.setView("ViewBattleOptions");
 
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);

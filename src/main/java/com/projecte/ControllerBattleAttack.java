@@ -43,10 +43,6 @@ public class ControllerBattleAttack {
     public void initialize() {
         moves = new Label[]{move1, move2, move3, move4};
         updateSelection();
-
-        loadPokemonImages("data/pokemons/Hitmonchan.gif", enemyPokemonImage);
-        loadPokemonImages("data/pokemons/Mewtwo.gif", playerPokemonImage);  
-        loadPokemonImages("data/mapa/mapa2.jpg", backgroundImage);
         
         playerPokemonImage.setScaleX(-1); //Per cambiar la vista del PlayerPokemon
     
@@ -224,8 +220,15 @@ public class ControllerBattleAttack {
      * Método para establecer la imagen del Pokémon enemigo.
      * @param enemyPokemonImage
      */
-    public void setEnemyPokemonImage(ImageView enemyPokemonImage) {
-        this.enemyPokemonImage = enemyPokemonImage;
+    public void setEnemyPokemonImage(String imagePath) {
+        try {
+            File file = new File(imagePath);
+            Image image = new Image(file.toURI().toString());
+            enemyPokemonImage.setImage(image);
+        } catch (NullPointerException e) {
+            System.err.println("Error loading image asset: " + imagePath);
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -240,8 +243,15 @@ public class ControllerBattleAttack {
      * Método para establecer la imagen del Pokémon jugador.
      * @param playerPokemonImage
      */
-    public void setPlayerPokemonImage(ImageView playerPokemonImage) {
-        this.playerPokemonImage = playerPokemonImage;
+    public void setPlayerPokemonImage(String imagePath) {
+        try {
+            File file = new File(imagePath);
+            Image image = new Image(file.toURI().toString());
+            playerPokemonImage.setImage(image);
+        } catch (NullPointerException e) {
+            System.err.println("Error loading image asset: " + imagePath);
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -398,21 +408,21 @@ public class ControllerBattleAttack {
         
     }
 
-    /**
-     * Function to load Pokémon images from the specified path.
-     * 
-     * @param imagePath The path to the image file.
-     * @param pokemon  The ImageView to display the Pokémon image.
-     */
-    private void loadPokemonImages(String imagePath, ImageView pokemon) {
-        try {
-            File file = new File(imagePath);
-            Image image = new Image(file.toURI().toString());
-            pokemon.setImage(image);
-        } catch (NullPointerException e) {
-            System.err.println("Error loading image asset: " + imagePath);
-            e.printStackTrace();
-        }
-    }
+    // /**
+    //  * Function to load Pokémon images from the specified path.
+    //  * 
+    //  * @param imagePath The path to the image file.
+    //  * @param pokemon  The ImageView to display the Pokémon image.
+    //  */
+    // private void loadPokemonImages(String imagePath, ImageView pokemon) {
+    //     try {
+    //         File file = new File(imagePath);
+    //         Image image = new Image(file.toURI().toString());
+    //         pokemon.setImage(image);
+    //     } catch (NullPointerException e) {
+    //         System.err.println("Error loading image asset: " + imagePath);
+    //         e.printStackTrace();
+    //     }
+    // }
 
 }

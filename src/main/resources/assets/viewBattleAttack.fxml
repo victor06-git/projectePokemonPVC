@@ -15,10 +15,10 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2b2b2b;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleAttack"> <Pane layoutX="-1.0" layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="405.0" prefWidth="606.0"> <children>
-
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2b2b2b;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleAttack"> 
+   <Pane layoutX="-1.0" layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="405.0" prefWidth="606.0"> 
+      <children>
       <!-- Fondo -->
-
       <ImageView fx:id="backgroundImage" fitHeight="405.0" fitWidth="606.0" layoutX="-2.0" pickOnBounds="true" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="82.0" layoutY="32.0" stroke="BLACK" strokeType="INSIDE" width="254.0">
             <effect>
