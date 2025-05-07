@@ -44,8 +44,8 @@ public class ControllerBattleAttack {
         moves = new Label[]{move1, move2, move3, move4};
         updateSelection();
 
-        loadPokemonImages("data/pokemons/Articuno.gif", enemyPokemonImage);
-        loadPokemonImages("data/pokemons/Aerodactyl.gif", playerPokemonImage);  
+        loadPokemonImages("data/pokemons/Hitmonchan.gif", enemyPokemonImage);
+        loadPokemonImages("data/pokemons/Mewtwo.gif", playerPokemonImage);  
         loadPokemonImages("data/mapa/mapa2.jpg", backgroundImage);
         
         playerPokemonImage.setScaleX(-1); //Per cambiar la vista del PlayerPokemon
