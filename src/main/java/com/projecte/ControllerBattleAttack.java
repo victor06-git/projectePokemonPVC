@@ -85,6 +85,8 @@ public class ControllerBattleAttack {
         });
     }
 
+    
+
     /**
      * Método para cargar el mapa en el ImageView.
      */
@@ -136,9 +138,6 @@ public class ControllerBattleAttack {
      */
     private void handleAttack(int selectedMove) {
         System.out.println("Using move: " + moves[selectedMove].getText());
-
-        // Cambiar el color del botón al presionarlo
-        fightButton.setStyle("-fx-background-color: red;");
 
         // Actualizar el panel de información con los detalles del ataque seleccionado
         updateAttackInfo(selectedMove);
