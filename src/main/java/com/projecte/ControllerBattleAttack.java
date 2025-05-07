@@ -33,7 +33,7 @@ public class ControllerBattleAttack {
     private ImageView enemyPokemonImage, playerPokemonImage, backgroundImage;
     
     @FXML
-    private Label attackNameLabel, attackTypeLabel, attackDamageLabel, attackDescriptionLabel; 
+    private Label attackNameLabel, attackTypeLabel, attackDamageLabel, estaminaLabel; 
 
     private int currentSelection = 0;
 
@@ -84,19 +84,260 @@ public class ControllerBattleAttack {
             }
         });
     }
-
     
+    /**
+     * Método para establecer el texto del primer movimiento.
+     * @param moveText
+     */
+    public void setMove1(String moveText) {
+        move1.setText(moveText);
+    }
+    
+    /**
+     * Método para establecer el texto del segundo movimiento.
+     * @param moveText
+     */
+    public void setMove2(String moveText) {
+        move2.setText(moveText);
+    }
+
+    /**
+     * Método para establecer el texto del tercer movimiento.
+     * @param moveText
+     */
+    public void setMove3(String moveText) {
+        move3.setText(moveText);
+    }
+    
+    /**
+     * Método para establecer el texto del cuarto movimiento.
+     * @param moveText
+     */
+    public void setMove4(String moveText) {
+        move4.setText(moveText);
+    }
+
+    /**
+     * Método para obtener el texto del primer movimiento.
+     * @return Texto del primer movimiento.
+     */
+    public String getMove1() {
+        return move1.getText();
+    }
+
+    /**
+     * Método para obtener el texto del segundo movimiento.
+     * @return Texto del segundo movimiento.
+     */
+    public String getMove2() {
+        return move2.getText();
+    }
+
+    /**
+     * Método para obtener el texto del tercer movimiento.
+     * @return Texto del tercer movimiento.
+     */
+    public String getMove3() {
+        return move3.getText();
+    }
+    
+    /**
+     * Método para obtener el texto del cuarto movimiento.
+     * @return Texto del cuarto movimiento.
+     */
+    public String getMove4 () {
+        return move4.getText();
+    }
+
+    /**
+     * Método para obtener la barra de vida del enemigo.
+     * @return ProgressBar de la barra de vida del enemigo.
+     */
+    public ProgressBar getEnemyHpBar() {
+        return enemyHpBar;
+    }
+
+    /**
+     * Método para establecer la barra de vida del enemigo.
+     * @param enemyHpBar
+     */
+    public void setEnemyHpBar(ProgressBar enemyHpBar) {
+        this.enemyHpBar = enemyHpBar;
+    }
+
+    /**
+     * Método para obtener la barra de stamina del enemigo.
+     * @return ProgressBar de la barra de stamina del enemigo.
+     */
+    public ProgressBar getEnemyStaminaBar() {
+        return enemyStaminaBar;
+    }
+
+    /**
+     * Método para establecer la barra de stamina del enemigo.
+     * @param enemyStaminaBar
+     */
+    public void setEnemyStaminaBar(ProgressBar enemyStaminaBar) {
+        this.enemyStaminaBar = enemyStaminaBar;
+    }
+
+    /**
+     * Método para obtener la barra de stamina del jugador.
+     * @return ProgressBar de la barra de stamina del jugador.
+     */
+    public ProgressBar getPlayerStaminaBar() {
+        return playerStaminaBar;
+    }
+
+    /**
+     * Método para establecer la barra de stamina del jugador.
+     * @param playerStaminaBar
+     */
+    public void setPlayerStaminaBar(ProgressBar playerStaminaBar) {
+        this.playerStaminaBar = playerStaminaBar;
+    }
+
+    /**
+     * Método para obtener la barra de vida del jugador.
+     * @return ProgressBar de la barra de vida del jugador. 
+     */
+    public ProgressBar getPlayerHpBar() {
+        return playerHpBar;
+    }
+    /**
+     * Método para establecer la barra de vida del jugador.
+     * @param playerHpBar
+     */
+    public void setPlayerHpBar(ProgressBar playerHpBar) {
+        this.playerHpBar = playerHpBar;
+    }
+
+    /**
+     * Método para obtener la imagen del Pokémon enemigo.
+     * @return ImageView de la imagen del Pokémon enemigo.
+     */
+    public ImageView getEnemyPokemonImage() {
+        return enemyPokemonImage;
+    }
+
+    /**
+     * Método para establecer la imagen del Pokémon enemigo.
+     * @param enemyPokemonImage
+     */
+    public void setEnemyPokemonImage(ImageView enemyPokemonImage) {
+        this.enemyPokemonImage = enemyPokemonImage;
+    }
+
+    /**
+     * Metodo para conseguir la imagen del Pokémon jugador.
+     * @return ImageView de la imagen del Pokémon jugador.
+     */
+    public ImageView getPlayerPokemonImage() {
+        return playerPokemonImage;
+    }
+
+    /**
+     * Método para establecer la imagen del Pokémon jugador.
+     * @param playerPokemonImage
+     */
+    public void setPlayerPokemonImage(ImageView playerPokemonImage) {
+        this.playerPokemonImage = playerPokemonImage;
+    }
+    
+    /**
+     * Método para establecer la imagen del Pokémon jugador.
+     * @return ImageView de la imagen del background.
+     */
+    public ImageView getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    /**
+     * Método para establecer la imagen de fondo.
+     * @param backgroundImage
+     */
+    public void setBackgroundImage(ImageView backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
+
+    /**
+     * Método para obtener el nombre del ataque.
+     * @return Label que contiene el nombre del ataque.
+     */
+    public Label getAttackNameLabel() {
+        return attackNameLabel;
+    }
+
+
+    /**
+     * Método para establecer el nombre del ataque.
+     * @param attackNameLabel Label que contiene el nombre del ataque.
+     */
+    public void setAttackNameLabel(Label attackNameLabel) {
+        this.attackNameLabel = attackNameLabel;
+    }
+
+    /**
+     * Método para obtener el tipo de ataque.
+     * @return Label que contiene el tipo de ataque.
+     */
+    public Label getAttackTypeLabel() {
+        return attackTypeLabel;
+    }
+
+    /**
+     * Método para establecer el tipo de ataque.
+     * @param attackTypeLabel
+     */
+    public void setAttackTypeLabel(Label attackTypeLabel) {
+        this.attackTypeLabel = attackTypeLabel;
+    }
+
+    /**
+     * Método para obtener el daño del ataque.
+     * @return Label que contiene el daño del ataque.
+     */
+    public Label getAttackDamageLabel() {
+        return attackDamageLabel;
+    }
+
+    /**
+     * Método para establecer el daño del ataque.
+     * @param attackDamageLabel Label que contiene el daño del ataque.
+     */
+    public void setAttackDamageLabel(Label attackDamageLabel) {
+        this.attackDamageLabel = attackDamageLabel;
+    }
+
+    /**
+     * Método para obtener la estamina.
+     * @return Label que contiene la estamina.
+     */
+    public Label getEstaminaLabel() {
+        return estaminaLabel;
+    }
+
+    /**
+     * Método para establecer la estamina.
+     * @param estaminaLabel Label que contiene la estamina.
+     */
+    public void setEstaminaLabel(Label estaminaLabel) {
+        this.estaminaLabel = estaminaLabel;
+    }
 
     /**
      * Método para cargar el mapa en el ImageView.
+     * @param imagePath La ruta de la imagen del mapa.
      */
-    public void setMap() {
+    public void setMap(String imagePath) {
         // Cargar la imagen del mapa desde la ruta proporcionada
-        String mapImage = getClass().getResource("data/mapa/mapa2.jpg").toExternalForm();
+        String mapImage = getClass().getResource(imagePath).toExternalForm();
         backgroundImage.setImage(new Image(mapImage));
     }
         
-
+    /**
+     * Método para actualizar la selección de movimientos.
+     */
     private void updateSelection() {
         for (int i = 0; i < moves.length; i++) {
             String moveText = moves[i].getText().replaceAll("➤", "").trim(); // Limpiar cualquier flecha anterior
@@ -111,23 +352,28 @@ public class ControllerBattleAttack {
         }
     }
 
+    /**
+     * Método para actualizar la información del ataque.
+     * 
+     * @param index
+     */
     private void updateAttackInfo(int index) {
 
         String[] names = {"Quick Attack", "Wing Attack", "Gust", "Focus Energy"};
         String[] types = {"Normal", "Flying", "Flying", "Normal"};
-        String[] damages = {"40", "60", "50", "0"}; // 0 para Focus Energy ya que no causa daño
-        String[] descriptions = {
-            "A fast normal-type attack that always hits first.",
-            "A powerful slash with wings.",
-            "A gust of wind that may flinch the enemy.",
-            "Raises user's critical hit chance."
+        String[] damages = {"40", "60", "50", "20"}; 
+        String[] estaminas = {
+            "5",
+            "3",
+            "4",
+            "10"
         };
 
         // Actualiza el VBox con la información del ataque
         attackNameLabel.setText("➤ " + names[index]);
         attackTypeLabel.setText("Tipo: " + types[index]);
         attackDamageLabel.setText("Daño: " + damages[index]);
-        attackDescriptionLabel.setText("Descripción: " + descriptions[index]);
+        estaminaLabel.setText("Estamina: " + estaminas[index]);
 
     }
 

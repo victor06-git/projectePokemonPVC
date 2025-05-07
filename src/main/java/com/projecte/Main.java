@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     final int WINDOW_WIDTH = 600;
-    final int WINDOW_HEIGHT = 450;
+    final int WINDOW_HEIGHT = 440;
     final int MIN_WIDTH = 600;
     final int MIN_HEIGHT = 400;
 
