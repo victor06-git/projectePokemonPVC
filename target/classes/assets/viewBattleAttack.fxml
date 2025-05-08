@@ -50,11 +50,8 @@
       <!-- Botones de acciones principales -->
 
       <HBox alignment="CENTER" layoutX="394.0" layoutY="352.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="33.0" prefWidth="176.0" spacing="5.0">
-
-          <Button fx:id="fightButton" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="ATACAR" />
-
-          <Button fx:id="runButton" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="RENDIRSE" />
-
+          <Button fx:id="fightButton" onAction="#fightButtonAction" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="ATACAR" />
+          <Button fx:id="runButton" onAction="#runButtonAction" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="RENDIRSE" />
       </HBox>
 
   

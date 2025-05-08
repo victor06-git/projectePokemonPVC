@@ -3,6 +3,7 @@ package com.projecte;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -77,6 +78,7 @@ public class ControllerBattleAttack {
                 }
             }
         });
+        
     }
     
     /**
@@ -437,5 +439,32 @@ public class ControllerBattleAttack {
         pause.setOnFinished(event -> fightButton.setStyle(""));
         pause.play();
         
+    }
+
+    @FXML
+    public void fightButtonAction(ActionEvent event) {
+
+        fightButton.setStyle("-fx-background-color: red;");
+
+        handleAttack(currentSelection); // Mostrar el ataque seleccionado
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.setOnFinished(event2 -> {
+                fightButton.setStyle("-fx-background-color: #ffcc00; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0); -fx-font-weight: bold;");
+            }); // Resetear el estilo después de 1 segundo
+            pause.play();
+            System.out.println("Fight button clicked! Current move: " + moves[currentSelection].getText());
+    }
+
+    @FXML
+    public void runButtonAction(ActionEvent event) {
+        // Cambiar el estilo del botón al hacer clic
+        runButton.setStyle("-fx-background-color: blue;");
+        
+        // Resetear el estilo después de 1 segundo
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(event2 -> {
+            runButton.setStyle("-fx-background-color: #ffcc00; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0); -fx-font-weight: bold;");
+        });
+        pause.play();
     }
 }
