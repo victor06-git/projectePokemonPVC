@@ -13,6 +13,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 public class ControllerBattleOptions implements Initializable {
@@ -168,6 +169,24 @@ public class ControllerBattleOptions implements Initializable {
     public void toViewMenu() {
         // Change to the Menu view
         UtilsViews.setViewAnimating("ViewStart");
+    }
+
+    //Funció per canviar de vista
+    @FXML
+    public void toViewBattle(MouseEvent event) {
+        ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
+        ctrl.setEnemyHpBar(0.6);
+        ctrl.setMap("/assets/mapa/mapa2.jpg");
+        ctrl.setEstaminaComputer("100/200");
+        ctrl.setEstaminaPlayer("200/20");
+        ctrl.setHpPlayer("50/50");
+        ctrl.setHpComputer("100/50");
+        ctrl.setEnemyPokemonImage("/assets/pokemons/normal/005.gif");
+        ctrl.setPlayerPokemonImage("/assets/pokemons/back/020.gif");
+        ctrl.setEnemyStaminaBar(0.5);
+        ctrl.setPlayerHpBar(1.0);
+        ctrl.setPlayerStaminaBar(1.0);
+        UtilsViews.setViewAnimating("ViewBattleAttack");
     }
 
    
