@@ -3,246 +3,224 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <MenuBar prefHeight="40.0" prefWidth="600.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <AnchorPane prefHeight="388.0" prefWidth="600.0">
-         <children>
-            <HBox prefHeight="373.0" prefWidth="233.0">
-               <children>
-                  <VBox prefHeight="373.0" prefWidth="233.0">
-                     <children>
-                        <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="174.0" style="-fx-background-color: #FFD700;" text="Team Management" textFill="BLUE">
-                           <VBox.margin>
-                              <Insets left="35.0" top="50.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="Noto Serif Lao Bold" size="15.0" />
-                           </font>
-                        </Button>
-                        <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="Battle History" textFill="BLUE">
-                           <VBox.margin>
-                              <Insets left="35.0" top="25.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="Noto Serif Lao Bold" size="15.0" />
-                           </font>
-                        </Button>
-                        <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="New Battle" textFill="BLUE">
-                           <VBox.margin>
-                              <Insets left="35.0" top="25.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="Noto Serif Lao Bold" size="15.0" />
-                           </font>
-                        </Button>
-                        <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="Exit Game " textFill="BLUE">
-                           <VBox.margin>
-                              <Insets left="35.0" top="70.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="Noto Serif Lao Bold" size="15.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-            <HBox layoutX="235.0" prefHeight="379.0" prefWidth="366.0">
-               <children>
-                  <VBox prefHeight="379.0" prefWidth="365.0">
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="37.0" prefWidth="345.0" text="Game Stats">
-                           <font>
-                              <Font name="Noto Serif Lao Bold" size="18.0" />
-                           </font>
-                           <padding>
-                              <Insets left="25.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets left="15.0" top="15.0" />
-                           </VBox.margin>
-                        </Label>
-                        <HBox prefHeight="335.0" prefWidth="364.0">
-                           <children>
-                              <VBox prefHeight="335.0" prefWidth="131.0">
-                                 <children>
-                                    <HBox prefHeight="325.0" prefWidth="105.0">
-                                       <children>
-                                          <ImageView fitHeight="201.0" fitWidth="116.0" pickOnBounds="true" preserveRatio="true">
-                                             <HBox.margin>
-                                                <Insets left="7.0" top="45.0" />
-                                             </HBox.margin>
-                                          </ImageView>
-                                       </children>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+      prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #3d7dca;" 
+      xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    
+    <!-- Pixel-style border decoration -->
+    <Rectangle height="5" width="600" fill="#ffcb05"/>
+    <Rectangle height="5" width="600" fill="#cc0000"/>
+    
+    <AnchorPane prefHeight="390.0" prefWidth="600.0" style="-fx-background-color: #3d7dca;">
+        <children>
+            <!-- Left Menu Panel with pixel border -->
+            <VBox layoutX="10" layoutY="10" prefHeight="370.0" prefWidth="230.0" 
+                  style="-fx-background-color: #003a70; -fx-border-color: #ffcb05; -fx-border-width: 4;">
+                <padding>
+                    <Insets top="20" left="10" right="10" bottom="20"/>
+                </padding>
+                <children>
+                    <!-- Pixel-style buttons -->
+                    <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" 
+                            style="-fx-background-color: #ffcb05; -fx-border-color: #003a70; -fx-border-width: 3;"
+                            text="TEAM MANAGEMENT" textFill="#003a70">
+                        <font>
+                            <Font name="Pokemon GB" size="12.0" />
+                        </font>
+                        <VBox.margin>
+                            <Insets top="10" />
+                        </VBox.margin>
+                    </Button>
+                    
+                    <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" 
+                            style="-fx-background-color: #ffcb05; -fx-border-color: #003a70; -fx-border-width: 3;"
+                            text="BATTLE HISTORY" textFill="#003a70">
+                        <font>
+                            <Font name="Pokemon GB" size="12.0" />
+                        </font>
+                        <VBox.margin>
+                            <Insets top="10" />
+                        </VBox.margin>
+                    </Button>
+                    
+                    <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" 
+                            style="-fx-background-color: #ffcb05; -fx-border-color: #003a70; -fx-border-width: 3;"
+                            text="NEW BATTLE" textFill="#003a70">
+                        <font>
+                            <Font name="Pokemon GB" size="12.0" />
+                        </font>
+                        <VBox.margin>
+                            <Insets top="10" />
+                        </VBox.margin>
+                    </Button>
+                    
+                    <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" 
+                            style="-fx-background-color: #cc0000; -fx-border-color: #003a70; -fx-border-width: 3;"
+                            text="EXIT GAME" textFill="white">
+                        <font>
+                            <Font name="Pokemon GB" size="12.0" />
+                        </font>
+                        <VBox.margin>
+                            <Insets top="30" />
+                        </VBox.margin>
+                    </Button>
+                </children>
+            </VBox>
+            
+            <!-- Right Stats Panel with pixel border -->
+            <VBox layoutX="250" layoutY="10" prefHeight="370.0" prefWidth="340.0" 
+                  style="-fx-background-color: #003a70; -fx-border-color: #ffcb05; -fx-border-width: 4;">
+                <padding>
+                    <Insets top="20" left="20" right="20" bottom="20"/>
+                </padding>
+                <children>
+                    <!-- Title with Pokémon-style underline -->
+                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="300.0" 
+                           text="TRAINER PROFILE" textFill="#ffcb05">
+                        <font>
+                            <Font name="Pokemon GB" size="18.0" />
+                        </font>
+                        <padding>
+                            <Insets bottom="5"/>
+                        </padding>
+                        <VBox.margin>
+                            <Insets bottom="10"/>
+                        </VBox.margin>
+                    </Label>
+                    <Rectangle width="300" height="2" fill="#ffcb05"/>
+                    
+                    <!-- Content area -->
+                    <HBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="300.0" spacing="20">
+                        <children>
+                            <!-- Pokémon sprite display -->
+                            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="120.0">
+                                <children>
+                                    <ImageView fitHeight="120.0" fitWidth="120.0" preserveRatio="true">
+                                        <image>
+                                            <Image url="@../../../../data/pokemons/Pikachu.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Label text="PIKACHU" textFill="#ffcb05">
+                                        <font>
+                                            <Font name="Pokemon GB" size="12.0" />
+                                        </font>
+                                        <VBox.margin>
+                                            <Insets top="10"/>
+                                        </VBox.margin>
+                                    </Label>
+                                </children>
+                            </VBox>
+                            
+                            <!-- Stats display -->
+                            <VBox alignment="TOP_LEFT" prefHeight="300.0" prefWidth="180.0" spacing="5">
+                                <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5">
+                                        <children>
+                                            <Label text="LEVEL:" textFill="#ffcb05">
+                                                <font>
+                                                    <Font name="Pokemon GB" size="12.0" />
+                                                </font>
+                                            </Label>
+                                            <Label text="25" textFill="white">
+                                                <font>
+                                                    <Font name="Pokemon GB" size="12.0" />
+                                                </font>
+                                            </Label>
+                                        </children>
                                     </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="335.0" prefWidth="201.0">
-                                 <children>
-                                    <HBox prefHeight="50.0" prefWidth="201.0">
-                                       <children>
-                                          <Label alignment="CENTER" contentDisplay="CENTER" text="Level :">
-                                             <HBox.margin>
-                                                <Insets />
-                                             </HBox.margin>
-                                             <padding>
-                                                <Insets right="5.0" top="15.0" />
-                                             </padding>
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="LevelInfo">
-                                             <padding>
-                                                <Insets right="15.0" top="15.0" />
-                                             </padding>
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                       <VBox.margin>
-                                          <Insets top="20.0" />
-                                       </VBox.margin>
+                                    
+                                    <HBox alignment="CENTER_LEFT" spacing="5">
+                                        <children>
+                                            <Label text="POINTS:" textFill="#ffcb05">
+                                                <font>
+                                                    <Font name="Pokemon GB" size="12.0" />
+                                                </font>
+                                            </Label>
+                                            <Label text="12,450" textFill="white">
+                                                <font>
+                                                    <Font name="Pokemon GB" size="12.0" />
+                                                </font>
+                                            </Label>
+                                        </children>
                                     </HBox>
-                                    <HBox prefHeight="50.0" prefWidth="201.0">
-                                       <children>
-                                          <Label text="Points :">
-                                             <HBox.margin>
-                                                <Insets />
-                                             </HBox.margin>
-                                             <padding>
-                                                <Insets right="5.0" top="15.0" />
-                                             </padding>
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="PointsInfo">
-                                             <padding>
-                                                <Insets right="15.0" top="15.0" />
-                                             </padding>
-                                             <HBox.margin>
-                                                <Insets left="5.0" />
-                                             </HBox.margin>
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
+                                    
+                                    <HBox alignment="CENTER_LEFT" spacing="5">
+                                        <children>
+                                            <Label text="WINS:" textFill="#ffcb05">
+                                                <font>
+                                                    <Font name="Pokemon GB" size="12.0" />
+                                                </font>
+                                            </Label>
+                                            <Label text="38" textFill="white">
+                                                <font>
+                                                    <Font name="Pokemon GB" size="12.0" />
+                                                </font>
+                                            </Label>
+                                        </children>
                                     </HBox>
-                                    <HBox prefHeight="50.0" prefWidth="201.0">
-                                       <children>
-                                          <Label text="Battles won: ">
-                                             <padding>
-                                                <Insets right="5.0" top="15.0" />
-                                             </padding>
-                                             <HBox.margin>
-                                                <Insets />
-                                             </HBox.margin>
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="BWinfo">
-                                             <padding>
-                                                <Insets right="15.0" top="15.0" />
-                                             </padding>
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
+                                    
+                                    <HBox alignment="CENTER_LEFT" spacing="5">
+                                        <children>
+                                            <Label text="STREAK:" textFill="#ffcb05">
+                                                <font>
+                                                    <Font name="Pokemon GB" size="12.0" />
+                                                </font>
+                                            </Label>
+                                            <Label text="12" textFill="white">
+                                                <font>
+                                                    <Font name="Pokemon GB" size="12.0" />
+                                                </font>
+                                            </Label>
+                                        </children>
                                     </HBox>
-                                    <HBox prefHeight="50.0" prefWidth="201.0">
-                                       <children>
-                                          <Label text="Max consecutive wins:">
-                                             <HBox.margin>
-                                                <Insets />
-                                             </HBox.margin>
-                                             <padding>
-                                                <Insets top="15.0" />
-                                             </padding>
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="McwI">
-                                             <HBox.margin>
-                                                <Insets left="5.0" />
-                                             </HBox.margin>
-                                             <padding>
-                                                <Insets top="15.0" />
-                                             </padding>
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
+                                    
+                                    <HBox alignment="CENTER_LEFT" spacing="5">
+                                        <children>
+                                            <Label text="POKéDEX:" textFill="#ffcb05">
+                                                <font>
+                                                    <Font name="Pokemon GB" size="12.0" />
+                                                </font>
+                                            </Label>
+                                            <Label text="42/151" textFill="white">
+                                                <font>
+                                                    <Font name="Pokemon GB" size="12.0" />
+                                                </font>
+                                            </Label>
+                                        </children>
                                     </HBox>
-                                    <HBox prefHeight="50.0" prefWidth="201.0">
-                                       <children>
-                                          <Label text="Pokemons caught:">
-                                             <padding>
-                                                <Insets top="15.0" />
-                                             </padding>
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="PcInfo">
-                                             <HBox.margin>
-                                                <Insets left="5.0" />
-                                             </HBox.margin>
-                                             <padding>
-                                                <Insets top="15.0" />
-                                             </padding>
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </VBox>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-         </children>
-      </AnchorPane>
-   </children>
+                                    
+                                    <!-- Progress bar for next level -->
+                                    <VBox alignment="CENTER_LEFT" spacing="2" style="-fx-padding: 10 0 0 0;">
+                                        <children>
+                                            <Label text="NEXT LEVEL:" textFill="#ffcb05">
+                                                <font>
+                                                    <Font name="Pokemon GB" size="10.0" />
+                                                </font>
+                                            </Label>
+                                            <Rectangle width="160" height="12" fill="#1a1a1a">
+                                                <Rectangle width="120" height="10" fill="#ffcb05" 
+                                                          layoutX="2" layoutY="1"/>
+                                            </Rectangle>
+                                        </children>
+                                    </VBox>
+                                </children>
+                            </VBox>
+                        </children>
+                    </HBox>
+                </children>
+            </VBox>
+        </children>
+    </AnchorPane>
+    
+    <!-- Bottom pixel-style border decoration -->
+    <Rectangle height="5" width="600" fill="#cc0000"/>
+    <Rectangle height="5" width="600" fill="#ffcb05"/>
 </VBox>

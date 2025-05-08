@@ -24,6 +24,7 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewBattleAttack", "/assets/viewBattleAttack.fxml");
         UtilsViews.addView(getClass(), "pokemonView", "/assets/pokemonView.fxml");
         UtilsViews.addView(getClass(), "ViewBattleOptions", "/assets/viewBattleOptions.fxml");
+        UtilsViews.addView(getClass(), "ViewBattleResult", "/assets/viewBattleResult.fxml");
 
         UtilsViews.setView("ViewBattleAttack");
 
