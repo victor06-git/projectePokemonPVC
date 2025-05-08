@@ -15,10 +15,10 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2b2b2b;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleAttack"> <Pane layoutX="-1.0" layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="405.0" prefWidth="606.0"> <children>
-
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2b2b2b;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleAttack"> 
+   <Pane layoutX="-1.0" layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="405.0" prefWidth="606.0"> 
+      <children>
       <!-- Fondo -->
-
       <ImageView fx:id="backgroundImage" fitHeight="405.0" fitWidth="606.0" layoutX="-2.0" pickOnBounds="true" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="82.0" layoutY="32.0" stroke="BLACK" strokeType="INSIDE" width="254.0">
             <effect>
@@ -50,11 +50,8 @@
       <!-- Botones de acciones principales -->
 
       <HBox alignment="CENTER" layoutX="394.0" layoutY="352.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="33.0" prefWidth="176.0" spacing="5.0">
-
-          <Button fx:id="fightButton" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="ATACAR" />
-
-          <Button fx:id="runButton" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="RENDIRSE" />
-
+          <Button fx:id="fightButton" onAction="#fightButtonAction" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="ATACAR" />
+          <Button fx:id="runButton" onAction="#runButtonAction" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="RENDIRSE" />
       </HBox>
 
   
@@ -109,7 +106,7 @@
 
                   <!-- Panel de Pokémon Enemigo -->
 
-      <VBox alignment="CENTER" layoutX="38.0" layoutY="40.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="190.0" spacing="2.5">
+      <VBox alignment="CENTER" layoutX="38.0" layoutY="40.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="211.0" spacing="2.5">
 
           <Label fx:id="computerPokemonLabel" style="-fx-text-fill: black; -fx-font-weight: bold;" text="Charizard Lv15" />
 
@@ -119,7 +116,7 @@
 
               <ProgressBar fx:id="enemyHpBar" prefWidth="100" progress="0.6" style="-fx-accent: green;" />
 
-           <Label fx:id="hpComputer" text="70/100" textFill="BLACK" />
+           <Label fx:id="hpComputer" prefHeight="18.0" prefWidth="65.0" text="70/100" textFill="BLACK" />
 
           </HBox>
 
@@ -129,7 +126,7 @@
 
               <ProgressBar fx:id="enemyStaminaBar" prefWidth="100" progress="0.5" style="-fx-accent: blue;" />
 
-           <Label fx:id="estamineComputer" text="55/100" textFill="BLACK" />
+           <Label fx:id="estamineComputer" prefHeight="18.0" prefWidth="62.0" text="55/100" textFill="BLACK" />
 
           </HBox>
 
@@ -141,7 +138,7 @@
 
       <!-- Panel de Pokémon del Jugador -->
 
-      <VBox alignment="CENTER" layoutX="379.0" layoutY="275.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="190.0" spacing="2.5">
+      <VBox alignment="CENTER" layoutX="379.0" layoutY="275.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="211.0" spacing="2.5">
 
           <Label fx:id="playerPokemonLabel" style="-fx-text-fill: black; -fx-font-weight: bold;" text="Moltres  Lv19" />
 
@@ -151,7 +148,7 @@
 
               <ProgressBar fx:id="playerHpBar" prefWidth="100" progress="1.0" style="-fx-accent: green;" />
 
-           <Label fx:id="hpPlayer" text="100/100" textFill="BLACK" />
+           <Label fx:id="hpPlayer" prefHeight="18.0" prefWidth="59.0" text="100/100" textFill="BLACK" />
 
           </HBox>
 
@@ -161,7 +158,7 @@
 
               <ProgressBar fx:id="playerStaminaBar" prefWidth="100" progress="0.76" style="-fx-accent: blue;" />
 
-           <Label fx:id="estaminePlayer" text="100/100" textFill="BLACK" />
+           <Label fx:id="estaminePlayer" prefHeight="18.0" prefWidth="59.0" text="100/100" textFill="BLACK" />
 
           </HBox>
 
@@ -215,9 +212,9 @@
 
                   </VBox>
       
-      <ImageView fx:id="enemyPokemonImage" fitHeight="150.0" fitWidth="150.0" layoutX="347.0" layoutY="57.0" preserveRatio="true" />
+      <ImageView fx:id="enemyPokemonImage" fitHeight="150.0" fitWidth="150.0" layoutX="361.0" layoutY="65.0" preserveRatio="true" />
       
-      <ImageView fx:id="playerPokemonImage" fitHeight="150.0" fitWidth="150.0" layoutX="61.0" layoutY="142.0" preserveRatio="true" />
+      <ImageView fx:id="playerPokemonImage" fitHeight="150.0" fitWidth="150.0" layoutX="59.0" layoutY="146.0" preserveRatio="true" />
 
   </children>
 
