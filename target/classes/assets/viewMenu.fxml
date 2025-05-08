@@ -3,43 +3,21 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerMenu">
    <children>
-      <MenuBar prefHeight="40.0" prefWidth="600.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
       <AnchorPane prefHeight="388.0" prefWidth="600.0">
          <children>
             <HBox prefHeight="373.0" prefWidth="233.0">
                <children>
                   <VBox prefHeight="373.0" prefWidth="233.0">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="174.0" style="-fx-background-color: #FFD700;" text="Team Management" textFill="BLUE">
+                        <Button fx:id="managementButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="174.0" style="-fx-background-color: #FFD700;" text="Team Management" textFill="BLUE">
                            <VBox.margin>
                               <Insets left="35.0" top="50.0" />
                            </VBox.margin>
@@ -47,7 +25,7 @@
                               <Font name="Noto Serif Lao Bold" size="15.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="Battle History" textFill="BLUE">
+                        <Button fx:id="battleHistoryButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="Battle History" textFill="BLUE">
                            <VBox.margin>
                               <Insets left="35.0" top="25.0" />
                            </VBox.margin>
@@ -55,7 +33,7 @@
                               <Font name="Noto Serif Lao Bold" size="15.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="New Battle" textFill="BLUE">
+                        <Button fx:id="newBattleButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="New Battle" textFill="BLUE">
                            <VBox.margin>
                               <Insets left="35.0" top="25.0" />
                            </VBox.margin>
@@ -63,7 +41,7 @@
                               <Font name="Noto Serif Lao Bold" size="15.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="Exit Game " textFill="BLUE">
+                        <Button fx:id="exitButton" mnemonicParsing="false" onAction="#toViewStart" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="Exit Game " textFill="BLUE">
                            <VBox.margin>
                               <Insets left="35.0" top="70.0" />
                            </VBox.margin>
@@ -120,7 +98,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <Label text="LevelInfo">
+                                          <Label fx:id="levelInfoLabel" text="LevelInfo">
                                              <padding>
                                                 <Insets right="15.0" top="15.0" />
                                              </padding>
@@ -146,7 +124,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <Label text="PointsInfo">
+                                          <Label fx:id="pointsInfoLabel" text="PointsInfo">
                                              <padding>
                                                 <Insets right="15.0" top="15.0" />
                                              </padding>
@@ -172,7 +150,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <Label text="BWinfo">
+                                          <Label fx:id="battlesWonInfoLabel" text="BWinfo">
                                              <padding>
                                                 <Insets right="15.0" top="15.0" />
                                              </padding>
@@ -195,7 +173,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <Label text="McwI">
+                                          <Label fx:id="maxConsecutiveWinsInfoLabel" text="McwInfo">
                                              <HBox.margin>
                                                 <Insets left="5.0" />
                                              </HBox.margin>
@@ -218,7 +196,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <Label text="PcInfo">
+                                          <Label fx:id="pokemonsCaughtInfoLabel" text="PcInfo">
                                              <HBox.margin>
                                                 <Insets left="5.0" />
                                              </HBox.margin>
