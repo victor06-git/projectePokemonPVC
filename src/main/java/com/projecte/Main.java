@@ -7,9 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-// Fes anar l'exercici amb:
-// ./run.sh com.projecte.Main
-
 public class Main extends Application {
 
     final int WINDOW_WIDTH = 600;
@@ -20,36 +17,32 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        // Carrega la vista inicial des del fitxer FXML
+        // Carga vistas
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
         UtilsViews.addView(getClass(), "ViewStart", "/assets/viewStart.fxml");
         UtilsViews.addView(getClass(), "ViewPokeSettings", "/assets/viewPokeSettings.fxml");
-        UtilsViews.addView(getClass(), "ViewMenu", "/assets/viewMenu.fxml");
-        UtilsViews.addView(getClass(), "ViewBattleResult", "/assets/viewBattleResult.fxml");
+        UtilsViews.addView(getClass(), "ViewBattleAttack", "/assets/viewBattleAttack.fxml");
+        UtilsViews.addView(getClass(), "pokemonView", "/assets/pokemonView.fxml");
+        UtilsViews.addView(getClass(), "ViewBattleOptions", "/assets/viewBattleOptions.fxml");
+
+        UtilsViews.setView("ViewBattleAttack");
+
 
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
         stage.setScene(scene);
         stage.setTitle("Pokémons PvP");
         stage.setMinWidth(MIN_WIDTH);
-        stage.setWidth(WINDOW_WIDTH);
         stage.setMinHeight(MIN_HEIGHT);
+        stage.setWidth(WINDOW_WIDTH);
         stage.setHeight(WINDOW_HEIGHT);
         stage.show();
 
-        // Afegeix una icona només si no és un Mac
+        // Icono
         if (!System.getProperty("os.name").contains("Mac")) {
             Image icon = new Image("file:icons/icon.png");
             stage.getIcons().add(icon);
         }
-    }
-
-    // Aquesta funció es crida quan es tanca l'aplicació
-    @Override
-    public void stop() throws Exception {
-        AppData db = AppData.getInstance();
-        db.close();
-        super.stop();
     }
 
     public static void main(String[] args) {

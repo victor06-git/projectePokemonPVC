@@ -1,6 +1,11 @@
 package com.projecte;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,7 +37,6 @@ public class AppData {
 
     /**
      * Estableix la connexió amb la base de dades SQLite.
-     * L'arxiu de la base de dades és "./data/exercici1400.sqlite".
      * Es desactiva l'autocommit per permetre el control manual de transaccions.
      */
     public void connect(String filePath) {
@@ -65,6 +69,9 @@ public class AppData {
      * @param sql la sentència SQL d'actualització a executar.
      */
     public void update(String sql) {
+        if (conn == null) {
+            throw new IllegalStateException("Database connection is not established. Call connect() first.");
+        }
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
             conn.commit();
@@ -72,9 +79,10 @@ public class AppData {
             System.out.println(e.getMessage());
             try {
                 conn.rollback();
-            } catch (SQLException ex) {
-                System.out.println("Error en fer rollback.");
-                ex.printStackTrace();
+            } catch (SQLException rollbackEx) {
+                System.err.println("Error during rollback: " + rollbackEx.getMessage());
+                rollbackEx.printStackTrace(); // Replace with logging
+                System.err.println("Rollback failed: " + rollbackEx.getMessage());
             }
         }
     }
@@ -101,7 +109,8 @@ public class AppData {
             try {
                 conn.rollback();
             } catch (SQLException ex) {
-                System.out.println("Error during rollback.");
+                ex.printStackTrace(); // Replace with logging
+                System.err.println("Error during rollback: " + ex.getMessage());
                 ex.printStackTrace();
             }
         }

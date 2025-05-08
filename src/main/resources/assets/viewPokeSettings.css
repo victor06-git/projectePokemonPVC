@@ -1,3 +1,12 @@
+/* Importar la fuente pixelada desde Google Fonts */
+@import  url('https://fonts.googleapis.com/css2?family=Micro+5+Charted&family=Tiny5&display=swap');
+
+/* Aplicar la fuente pixelada a todos los elementos */
+* {
+    -fx-font-family: 'Tiny5', sans-serif;
+}
+#title {
+}
 /* Estilos generales */
 .anchor-pane {
     -fx-background-color: #3fa1ad;
@@ -29,7 +38,7 @@
 /* Título "Potenciadors" */
 .label-potenciador {
     -fx-font-size: 20px;
-    -fx-text-fill: #d46645;
+    -fx-text-fill: #ff3c00;
     -fx-font-weight: bold;
     -fx-padding: 10px 0 5px 0;
 }
@@ -46,7 +55,7 @@
 /* Labels de multiplicador (X) - SIN clase en el FXML */
 .vbox > .label {  /* Selector para Labels dentro de VBox */
     -fx-font-size: 22px;
-    -fx-text-fill: #ff5722;
+    -fx-text-fill: #ff3c00;
     -fx-font-weight: bold;
     -fx-padding: 0 5px;
 }
