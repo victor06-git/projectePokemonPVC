@@ -2,10 +2,6 @@ package com.projecte;
 
 public class createDatabase {
 
-    public static void main(String[] args) {
-        setTables();
-        insertAllPokemon();
-    }
 
     public static void setTables() {
         AppData db = AppData.getInstance();
@@ -178,7 +174,7 @@ public class createDatabase {
             {"Slowbro", "Water/Psychic", "slowbro.gif", "080.png"},
             {"Magnemite", "Electric/Steel", "magnemite.gif", "081.png"},
             {"Magneton", "Electric/Steel", "magneton.gif", "082.png"},
-            {"Farfetch'd", "Normal/Flying", "farfetchd.gif", "083.png"},
+            {"Farfetch", "Normal/Flying", "farfetchd.gif", "083.png"},
             {"Doduo", "Normal/Flying", "doduo.gif", "084.png"},
             {"Dodrio", "Normal/Flying", "dodrio.gif", "085.png"},
             {"Seel", "Water", "seel.gif", "086.png"},
@@ -359,12 +355,36 @@ public class createDatabase {
             String name = pokemon[0];
             String type = pokemon[1];
             String imagePath = pokemon[2];
+            String iconPath = pokemon[3];
 
             // Ejecutamos la sentencia SQL para insertar el Pokémon
-            db.update("INSERT INTO Pokemon (name, type, image_path) VALUES ('" +
-                      name + "', '" + type + "', '" + imagePath + "');");
+            db.update("INSERT INTO Pokemon (name, type, image_path, icon_path) VALUES ('" +
+                      name + "', '" + type + "', '" + imagePath + "', '" + iconPath + "');");
         }
 
         System.out.println("Pokémons insertados correctamente.");
+    }
+    public static void insertAllItems() {
+        String[][] items = {
+            {"X_Attack", "attack", "10"},
+            {"X_Defense", "Defense", "20"},
+            {"Bottle_Cap", "All", "100"},
+        };
+
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
+
+        // Iteramos sobre el arreglo de objetos para insertar uno por uno
+        for (String[] item : items) {
+            String name = item[0];
+            String effectType = item[1];
+            int effectValue = Integer.parseInt(item[2]);
+
+            // Ejecutamos la sentencia SQL para insertar el objeto
+            db.update("INSERT INTO Item (name, effect_type, effect_value) VALUES ('" +
+                      name + "', '" + effectType + "', '" + effectValue + "');");
+        }
+
+        System.out.println("Items insertados correctamente.");
     }
 }
