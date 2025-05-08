@@ -471,4 +471,6 @@ public class ControllerBattleAttack {
         });
         pause.play();
     }
+
+    //Afegir showAlert per quan es rendeix
 }

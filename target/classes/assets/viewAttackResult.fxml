@@ -26,35 +26,48 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
                      <children>
-                        <Label text="Primer Atac: ">
+                        <Label prefHeight="20.0" prefWidth="107.0" text="Primer Atac: ">
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
-                        <Label style="-fx-text-fill: black;" text="Label">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin></Label>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <Label fx:id="equipLabel" style="-fx-text-fill: black;" text="Computer:">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="pokemonLabel" text="Bulbasaur" />
+                           </children>
+                        </HBox>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="170.0">
                      <children>
-                        <Label text="Resultat atac:">
+                        <Label prefHeight="20.0" prefWidth="168.0" text="Resultat atac:">
                            <HBox.margin>
-                              <Insets left="100.0" />
+                              <Insets left="97.0" />
                            </HBox.margin></Label>
-                        <Label style="-fx-text-fill: black;" text="Label" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
-                     <children>
-                        <Label text="Stats noves: ">
-                           <HBox.margin>
-                              <Insets left="100.0" />
-                           </HBox.margin></Label>
-                        <Label style="-fx-text-fill: black;" text="Label">
+                        <Label fx:id="statsLabel" style="-fx-text-fill: black;" text="Label">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin></Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
+                     <children>
+                        <Label prefHeight="20.0" prefWidth="177.0" text="Stats noves: ">
+                           <HBox.margin>
+                              <Insets left="100.0" />
+                           </HBox.margin></Label>
+                        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="273.0" spacing="10.0">
+                           <children>
+                              <Label prefHeight="20.0" prefWidth="29.0" style="-fx-text-fill: black;" text="HP:" />
+                              <Label prefHeight="20.0" prefWidth="38.0" text="100" />
+                              <Label prefHeight="20.0" prefWidth="51.0" text="STMN:" />
+                              <Label prefHeight="20.0" prefWidth="35.0" text="50" />
+                           </children>
+                        </HBox>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
@@ -63,7 +76,7 @@
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
-                        <Label style="-fx-text-fill: black;" text="Label">
+                        <Label fx:id="hpLabel" style="-fx-text-fill: black;" text="Label">
                            <HBox.margin>
                               <Insets left="40.0" />
                            </HBox.margin></Label>
@@ -75,7 +88,7 @@
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
-                        <Label style="-fx-text-fill: black;" text="Label">
+                        <Label fx:id="estaminaLabel" style="-fx-text-fill: black;" text="Label">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin></Label>

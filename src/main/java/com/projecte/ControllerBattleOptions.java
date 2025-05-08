@@ -184,10 +184,8 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setEnemyPokemonImage("/assets/pokemons/normal/005.gif");
         ctrl.setPlayerPokemonImage("/assets/pokemons/back/020.gif");
         ctrl.setEnemyStaminaBar(0.5);
-        ctrl.setPlayerHpBar(1.0);
+        ctrl.setPlayerHpBar(0.8);
         ctrl.setPlayerStaminaBar(1.0);
         UtilsViews.setViewAnimating("ViewBattleAttack");
     }
-
-   
 }
