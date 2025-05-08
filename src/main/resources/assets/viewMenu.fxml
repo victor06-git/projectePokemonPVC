@@ -7,6 +7,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -197,7 +199,7 @@
                                         </children>
                                     </HBox>
                                     
-                                    <!-- Progress bar for next level -->
+                                    <!-- Progress bar for next level - FIXED with StackPane -->
                                     <VBox alignment="CENTER_LEFT" spacing="2" style="-fx-padding: 10 0 0 0;">
                                         <children>
                                             <Label text="NEXT LEVEL:" textFill="#ffcb05">
@@ -205,10 +207,17 @@
                                                     <Font name="Pokemon GB" size="10.0" />
                                                 </font>
                                             </Label>
-                                            <Rectangle width="160" height="12" fill="#1a1a1a">
-                                                <Rectangle width="120" height="10" fill="#ffcb05" 
-                                                          layoutX="2" layoutY="1"/>
-                                            </Rectangle>
+                                            <StackPane>
+                                                <children>
+                                                    <Rectangle width="160" height="12" fill="#1a1a1a"/>
+                                                    <Rectangle width="120" height="10" fill="#ffcb05"
+                                                               StackPane.alignment="CENTER_LEFT">
+                                                        <StackPane.margin>
+                                                            <Insets left="2" />
+                                                        </StackPane.margin>
+                                                    </Rectangle>
+                                                </children>
+                                            </StackPane>
                                         </children>
                                     </VBox>
                                 </children>
