@@ -1,10 +1,9 @@
 package com.projecte;
 
 
-import java.io.File;
-
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -33,7 +32,7 @@ public class ControllerBattleAttack {
     private ImageView enemyPokemonImage, playerPokemonImage, backgroundImage;
     
     @FXML
-    private Label attackNameLabel, attackTypeLabel, attackDamageLabel, estaminaLabel; 
+    private Label attackNameLabel, attackTypeLabel, attackDamageLabel, estaminaLabel, hpComputer, estaminePlayer, estamineComputer, hpPlayer; 
 
     private int currentSelection = 0;
 
@@ -43,12 +42,6 @@ public class ControllerBattleAttack {
     public void initialize() {
         moves = new Label[]{move1, move2, move3, move4};
         updateSelection();
-
-        loadPokemonImages("data/pokemons/Hitmonchan.gif", enemyPokemonImage);
-        loadPokemonImages("data/pokemons/Mewtwo.gif", playerPokemonImage);  
-        loadPokemonImages("data/mapa/mapa2.jpg", backgroundImage);
-        
-        playerPokemonImage.setScaleX(-1); //Per cambiar la vista del PlayerPokemon
     
         Platform.runLater(() -> movePanel.requestFocus()); // Asegura que el panel tenga foco
     
@@ -83,6 +76,7 @@ public class ControllerBattleAttack {
                 }
             }
         });
+        
     }
     
     /**
@@ -149,20 +143,27 @@ public class ControllerBattleAttack {
         return move4.getText();
     }
 
-    /**
-     * Método para obtener la barra de vida del enemigo.
-     * @return ProgressBar de la barra de vida del enemigo.
-     */
-    public ProgressBar getEnemyHpBar() {
-        return enemyHpBar;
+    public void setEstaminaPlayer(String estamina) {
+        this.estaminePlayer.setText(estamina);
     }
 
+    public void setHpPlayer(String hp){
+        this.hpPlayer.setText(hp);
+    }
+
+    public void setHpComputer(String hp){
+        this.hpComputer.setText(hp);
+    }
+
+    public void setEstaminaComputer(String estamina){
+        this.estamineComputer.setText(estamina);
+    }
     /**
      * Método para establecer la barra de vida del enemigo.
      * @param enemyHpBar
      */
-    public void setEnemyHpBar(ProgressBar enemyHpBar) {
-        this.enemyHpBar = enemyHpBar;
+    public void setEnemyHpBar(double hp) {
+        this.enemyHpBar.setProgress(hp);
     }
 
     /**
@@ -177,8 +178,8 @@ public class ControllerBattleAttack {
      * Método para establecer la barra de stamina del enemigo.
      * @param enemyStaminaBar
      */
-    public void setEnemyStaminaBar(ProgressBar enemyStaminaBar) {
-        this.enemyStaminaBar = enemyStaminaBar;
+    public void setEnemyStaminaBar(double stamina) {
+        this.enemyStaminaBar.setProgress(stamina);
     }
 
     /**
@@ -193,8 +194,8 @@ public class ControllerBattleAttack {
      * Método para establecer la barra de stamina del jugador.
      * @param playerStaminaBar
      */
-    public void setPlayerStaminaBar(ProgressBar playerStaminaBar) {
-        this.playerStaminaBar = playerStaminaBar;
+    public void setPlayerStaminaBar(double stamina) {
+        this.playerStaminaBar.setProgress(stamina);
     }
 
     /**
@@ -208,8 +209,8 @@ public class ControllerBattleAttack {
      * Método para establecer la barra de vida del jugador.
      * @param playerHpBar
      */
-    public void setPlayerHpBar(ProgressBar playerHpBar) {
-        this.playerHpBar = playerHpBar;
+    public void setPlayerHpBar(double hp) {
+        this.playerHpBar.setProgress(hp);
     }
 
     /**
@@ -224,8 +225,27 @@ public class ControllerBattleAttack {
      * Método para establecer la imagen del Pokémon enemigo.
      * @param enemyPokemonImage
      */
-    public void setEnemyPokemonImage(ImageView enemyPokemonImage) {
-        this.enemyPokemonImage = enemyPokemonImage;
+    public void setEnemyPokemonImage(String imagePath) {
+        try {
+            // Asegúrate de que la ruta comience con "/"
+            if (!imagePath.startsWith("/")) {
+                imagePath = "/" + imagePath;
+            }
+    
+            // Obtén el recurso
+            java.net.URL resource = getClass().getResource(imagePath);
+            if (resource == null) {
+                throw new NullPointerException("Recurso no encontrado: " + imagePath);
+            }
+    
+            // Carga la imagen
+            String fullPath = resource.toExternalForm();
+            Image image = new Image(fullPath);
+            enemyPokemonImage.setImage(image);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.err.println("Error cargando el recurso: " + imagePath);
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -240,8 +260,27 @@ public class ControllerBattleAttack {
      * Método para establecer la imagen del Pokémon jugador.
      * @param playerPokemonImage
      */
-    public void setPlayerPokemonImage(ImageView playerPokemonImage) {
-        this.playerPokemonImage = playerPokemonImage;
+    public void setPlayerPokemonImage(String imagePath) {
+        try {
+            // Asegúrate de que la ruta comience con "/"
+            if (!imagePath.startsWith("/")) {
+                imagePath = "/" + imagePath;
+            }
+    
+            // Obtén el recurso
+            java.net.URL resource = getClass().getResource(imagePath);
+            if (resource == null) {
+                throw new NullPointerException("Recurso no encontrado: " + imagePath);
+            }
+    
+            // Carga la imagen
+            String fullPath = resource.toExternalForm();
+            Image image = new Image(fullPath);
+            playerPokemonImage.setImage(image);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.err.println("Error cargando el recurso: " + imagePath);
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -256,8 +295,27 @@ public class ControllerBattleAttack {
      * Método para establecer la imagen de fondo.
      * @param backgroundImage
      */
-    public void setBackgroundImage(ImageView backgroundImage) {
-        this.backgroundImage = backgroundImage;
+    public void setMap(String imagePath) {
+        try {
+            // Asegúrate de que la ruta comience con "/"
+            if (!imagePath.startsWith("/")) {
+                imagePath = "/" + imagePath;
+            }
+    
+            // Obtén el recurso
+            java.net.URL resource = getClass().getResource(imagePath);
+            if (resource == null) {
+                throw new NullPointerException("Recurso no encontrado: " + imagePath);
+            }
+    
+            // Carga la imagen
+            String fullPath = resource.toExternalForm();
+            Image image = new Image(fullPath);
+            backgroundImage.setImage(image);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.err.println("Error cargando el recurso: " + imagePath);
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -267,7 +325,6 @@ public class ControllerBattleAttack {
     public Label getAttackNameLabel() {
         return attackNameLabel;
     }
-
 
     /**
      * Método para establecer el nombre del ataque.
@@ -321,18 +378,8 @@ public class ControllerBattleAttack {
      * Método para establecer la estamina.
      * @param estaminaLabel Label que contiene la estamina.
      */
-    public void setEstaminaLabel(Label estaminaLabel) {
-        this.estaminaLabel = estaminaLabel;
-    }
-
-    /**
-     * Método para cargar el mapa en el ImageView.
-     * @param imagePath La ruta de la imagen del mapa.
-     */
-    public void setMap(String imagePath) {
-        // Cargar la imagen del mapa desde la ruta proporcionada
-        String mapImage = getClass().getResource(imagePath).toExternalForm();
-        backgroundImage.setImage(new Image(mapImage));
+    public void setEstaminaLabel(String estaminaLabel) {
+        this.estaminaLabel.setText(estaminaLabel);
     }
         
     /**
@@ -398,21 +445,30 @@ public class ControllerBattleAttack {
         
     }
 
-    /**
-     * Function to load Pokémon images from the specified path.
-     * 
-     * @param imagePath The path to the image file.
-     * @param pokemon  The ImageView to display the Pokémon image.
-     */
-    private void loadPokemonImages(String imagePath, ImageView pokemon) {
-        try {
-            File file = new File(imagePath);
-            Image image = new Image(file.toURI().toString());
-            pokemon.setImage(image);
-        } catch (NullPointerException e) {
-            System.err.println("Error loading image asset: " + imagePath);
-            e.printStackTrace();
-        }
+    @FXML
+    public void fightButtonAction(ActionEvent event) {
+
+        fightButton.setStyle("-fx-background-color: red;");
+
+        handleAttack(currentSelection); // Mostrar el ataque seleccionado
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.setOnFinished(event2 -> {
+                fightButton.setStyle("-fx-background-color: #ffcc00; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0); -fx-font-weight: bold;");
+            }); // Resetear el estilo después de 1 segundo
+            pause.play();
+            System.out.println("Fight button clicked! Current move: " + moves[currentSelection].getText());
     }
 
+    @FXML
+    public void runButtonAction(ActionEvent event) {
+        // Cambiar el estilo del botón al hacer clic
+        runButton.setStyle("-fx-background-color: blue;");
+        
+        // Resetear el estilo después de 1 segundo
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(event2 -> {
+            runButton.setStyle("-fx-background-color: #ffcc00; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0); -fx-font-weight: bold;");
+        });
+        pause.play();
+    }
 }
