@@ -122,8 +122,12 @@ public class ControllerBattleOptions {
         ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
         ctrl.setEnemyHpBar(0.6);
         ctrl.setMap("/assets/mapa/mapa2.jpg");
-        ctrl.setEnemyPokemonImage("/assets/pokemons/Hitmonchan.gif");
-        ctrl.setPlayerPokemonImage("/assets/pokemons/Mewtwo.gif");
+        ctrl.setEstaminaComputer("100/200");
+        ctrl.setEstaminaPlayer("200/20");
+        ctrl.setHpPlayer("50/50");
+        ctrl.setHpComputer("100/50");
+        ctrl.setEnemyPokemonImage("/assets/pokemons/normal/normal_005.gif");
+        ctrl.setPlayerPokemonImage("/assets/pokemons/back/back_020.gif");
         ctrl.setEnemyStaminaBar(0.5);
         ctrl.setPlayerHpBar(1.0);
         ctrl.setPlayerStaminaBar(1.0);

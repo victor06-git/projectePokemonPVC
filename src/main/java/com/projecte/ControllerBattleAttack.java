@@ -32,7 +32,7 @@ public class ControllerBattleAttack {
     private ImageView enemyPokemonImage, playerPokemonImage, backgroundImage;
     
     @FXML
-    private Label attackNameLabel, attackTypeLabel, attackDamageLabel, estaminaLabel; 
+    private Label attackNameLabel, attackTypeLabel, attackDamageLabel, estaminaLabel, hpComputer, estaminePlayer, estamineComputer, hpPlayer; 
 
     private int currentSelection = 0;
 
@@ -42,8 +42,6 @@ public class ControllerBattleAttack {
     public void initialize() {
         moves = new Label[]{move1, move2, move3, move4};
         updateSelection();
-        
-        playerPokemonImage.setScaleX(-1); //Per cambiar la vista del PlayerPokemon
     
         Platform.runLater(() -> movePanel.requestFocus()); // Asegura que el panel tenga foco
     
@@ -145,19 +143,26 @@ public class ControllerBattleAttack {
         return move4.getText();
     }
 
-    /**
-     * Método para obtener la barra de vida del enemigo.
-     * @return ProgressBar de la barra de vida del enemigo.
-     */
-    public ProgressBar getEnemyHpBar() {
-        return enemyHpBar;
+    public void setEstaminaPlayer(String estamina) {
+        this.estaminePlayer.setText(estamina);
     }
 
+    public void setHpPlayer(String hp){
+        this.hpPlayer.setText(hp);
+    }
+
+    public void setHpComputer(String hp){
+        this.hpComputer.setText(hp);
+    }
+
+    public void setEstaminaComputer(String estamina){
+        this.estamineComputer.setText(estamina);
+    }
     /**
      * Método para establecer la barra de vida del enemigo.
      * @param enemyHpBar
      */
-    public void setEnemyHpBar(Double hp) {
+    public void setEnemyHpBar(double hp) {
         this.enemyHpBar.setProgress(hp);
     }
 
@@ -173,7 +178,7 @@ public class ControllerBattleAttack {
      * Método para establecer la barra de stamina del enemigo.
      * @param enemyStaminaBar
      */
-    public void setEnemyStaminaBar(Double stamina) {
+    public void setEnemyStaminaBar(double stamina) {
         this.enemyStaminaBar.setProgress(stamina);
     }
 
@@ -189,7 +194,7 @@ public class ControllerBattleAttack {
      * Método para establecer la barra de stamina del jugador.
      * @param playerStaminaBar
      */
-    public void setPlayerStaminaBar(Double stamina) {
+    public void setPlayerStaminaBar(double stamina) {
         this.playerStaminaBar.setProgress(stamina);
     }
 
@@ -204,7 +209,7 @@ public class ControllerBattleAttack {
      * Método para establecer la barra de vida del jugador.
      * @param playerHpBar
      */
-    public void setPlayerHpBar(Double hp) {
+    public void setPlayerHpBar(double hp) {
         this.playerHpBar.setProgress(hp);
     }
 
@@ -321,7 +326,6 @@ public class ControllerBattleAttack {
         return attackNameLabel;
     }
 
-
     /**
      * Método para establecer el nombre del ataque.
      * @param attackNameLabel Label que contiene el nombre del ataque.
@@ -374,8 +378,8 @@ public class ControllerBattleAttack {
      * Método para establecer la estamina.
      * @param estaminaLabel Label que contiene la estamina.
      */
-    public void setEstaminaLabel(Label estaminaLabel) {
-        this.estaminaLabel = estaminaLabel;
+    public void setEstaminaLabel(String estaminaLabel) {
+        this.estaminaLabel.setText(estaminaLabel);
     }
         
     /**

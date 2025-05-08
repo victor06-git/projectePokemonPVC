@@ -106,7 +106,7 @@
 
                   <!-- Panel de Pokémon Enemigo -->
 
-      <VBox alignment="CENTER" layoutX="38.0" layoutY="40.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="190.0" spacing="2.5">
+      <VBox alignment="CENTER" layoutX="38.0" layoutY="40.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="211.0" spacing="2.5">
 
           <Label fx:id="computerPokemonLabel" style="-fx-text-fill: black; -fx-font-weight: bold;" text="Charizard Lv15" />
 
@@ -116,7 +116,7 @@
 
               <ProgressBar fx:id="enemyHpBar" prefWidth="100" progress="0.6" style="-fx-accent: green;" />
 
-           <Label fx:id="hpComputer" text="70/100" textFill="BLACK" />
+           <Label fx:id="hpComputer" prefHeight="18.0" prefWidth="65.0" text="70/100" textFill="BLACK" />
 
           </HBox>
 
@@ -126,7 +126,7 @@
 
               <ProgressBar fx:id="enemyStaminaBar" prefWidth="100" progress="0.5" style="-fx-accent: blue;" />
 
-           <Label fx:id="estamineComputer" text="55/100" textFill="BLACK" />
+           <Label fx:id="estamineComputer" prefHeight="18.0" prefWidth="62.0" text="55/100" textFill="BLACK" />
 
           </HBox>
 
@@ -138,7 +138,7 @@
 
       <!-- Panel de Pokémon del Jugador -->
 
-      <VBox alignment="CENTER" layoutX="379.0" layoutY="275.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="190.0" spacing="2.5">
+      <VBox alignment="CENTER" layoutX="379.0" layoutY="275.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="211.0" spacing="2.5">
 
           <Label fx:id="playerPokemonLabel" style="-fx-text-fill: black; -fx-font-weight: bold;" text="Moltres  Lv19" />
 
@@ -148,7 +148,7 @@
 
               <ProgressBar fx:id="playerHpBar" prefWidth="100" progress="1.0" style="-fx-accent: green;" />
 
-           <Label fx:id="hpPlayer" text="100/100" textFill="BLACK" />
+           <Label fx:id="hpPlayer" prefHeight="18.0" prefWidth="59.0" text="100/100" textFill="BLACK" />
 
           </HBox>
 
@@ -158,7 +158,7 @@
 
               <ProgressBar fx:id="playerStaminaBar" prefWidth="100" progress="0.76" style="-fx-accent: blue;" />
 
-           <Label fx:id="estaminePlayer" text="100/100" textFill="BLACK" />
+           <Label fx:id="estaminePlayer" prefHeight="18.0" prefWidth="59.0" text="100/100" textFill="BLACK" />
 
           </HBox>
 
@@ -212,9 +212,9 @@
 
                   </VBox>
       
-      <ImageView fx:id="enemyPokemonImage" fitHeight="150.0" fitWidth="150.0" layoutX="347.0" layoutY="57.0" preserveRatio="true" />
+      <ImageView fx:id="enemyPokemonImage" fitHeight="150.0" fitWidth="150.0" layoutX="361.0" layoutY="65.0" preserveRatio="true" />
       
-      <ImageView fx:id="playerPokemonImage" fitHeight="150.0" fitWidth="150.0" layoutX="61.0" layoutY="142.0" preserveRatio="true" />
+      <ImageView fx:id="playerPokemonImage" fitHeight="150.0" fitWidth="150.0" layoutX="59.0" layoutY="146.0" preserveRatio="true" />
 
   </children>
 
