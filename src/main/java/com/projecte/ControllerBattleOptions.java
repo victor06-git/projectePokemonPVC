@@ -1,13 +1,28 @@
 package com.projecte;
 
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.ResourceBundle;
+
+import com.utils.UtilsViews;
+
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
-public class ControllerBattleOptions {
+public class ControllerBattleOptions implements Initializable {
 
+    @FXML 
+    private ImageView imgArrowBack;
+
+    @FXML
+    private Button startButton;
+    
     @FXML
     private VBox mapListPanel, teamPanel;
 
@@ -23,17 +38,21 @@ public class ControllerBattleOptions {
     @FXML
     private Label labelSelectedMap;
 
-    
-
-    @FXML
-    private javafx.scene.control.Button startButton;
-
     private int currentMapSelection = 0;
-    private Label[] maps;
+    private Label[] maps = new Label[0];
 
-    @FXML
-    private ImageView imgArrowBack;
-
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        Path imagePath = null;
+        try {
+            URL imageURL = getClass().getResource("/assets/image/arrow-back.gif");
+            Image image = new Image(imageURL.toExternalForm());
+            imgArrowBack.setImage(image);
+        } catch (Exception e) {
+            System.err.println("Error loading image asset: " + imagePath);
+            e.printStackTrace();
+        }
+    }
     
     // Getters
     public VBox getMapListPanel() {
@@ -84,10 +103,7 @@ public class ControllerBattleOptions {
         return currentMapSelection;
     }
 
-    public Label[] getMaps() {
-        return maps;
-    }
-
+  
     public ImageView getImgArrowBack() {
         return imgArrowBack;
     }
@@ -148,4 +164,11 @@ public class ControllerBattleOptions {
     public void setImgArrowBack(ImageView imgArrowBack) {
         this.imgArrowBack = imgArrowBack;
     }
+
+    public void toViewMenu() {
+        // Change to the Menu view
+        UtilsViews.setViewAnimating("ViewStart");
+    }
+
+   
 }

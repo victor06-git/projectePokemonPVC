@@ -10,3 +10,4 @@ com/projecte/ControllerStart.class
 com/projecte/createDatabase.class
 com/projecte/ControllerBattleOptions.class
 com/projecte/ControllerPokemonView.class
+com/projecte/ControllerMenu.class
