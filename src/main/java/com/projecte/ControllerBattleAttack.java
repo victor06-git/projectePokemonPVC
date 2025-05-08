@@ -1,8 +1,6 @@
 package com.projecte;
 
 
-import java.io.File;
-
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -222,11 +220,23 @@ public class ControllerBattleAttack {
      */
     public void setEnemyPokemonImage(String imagePath) {
         try {
-            File file = new File(imagePath);
-            Image image = new Image(file.toURI().toString());
+            // Asegúrate de que la ruta comience con "/"
+            if (!imagePath.startsWith("/")) {
+                imagePath = "/" + imagePath;
+            }
+    
+            // Obtén el recurso
+            java.net.URL resource = getClass().getResource(imagePath);
+            if (resource == null) {
+                throw new NullPointerException("Recurso no encontrado: " + imagePath);
+            }
+    
+            // Carga la imagen
+            String fullPath = resource.toExternalForm();
+            Image image = new Image(fullPath);
             enemyPokemonImage.setImage(image);
-        } catch (NullPointerException e) {
-            System.err.println("Error loading image asset: " + imagePath);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.err.println("Error cargando el recurso: " + imagePath);
             e.printStackTrace();
         }
     }
@@ -245,11 +255,23 @@ public class ControllerBattleAttack {
      */
     public void setPlayerPokemonImage(String imagePath) {
         try {
-            File file = new File(imagePath);
-            Image image = new Image(file.toURI().toString());
+            // Asegúrate de que la ruta comience con "/"
+            if (!imagePath.startsWith("/")) {
+                imagePath = "/" + imagePath;
+            }
+    
+            // Obtén el recurso
+            java.net.URL resource = getClass().getResource(imagePath);
+            if (resource == null) {
+                throw new NullPointerException("Recurso no encontrado: " + imagePath);
+            }
+    
+            // Carga la imagen
+            String fullPath = resource.toExternalForm();
+            Image image = new Image(fullPath);
             playerPokemonImage.setImage(image);
-        } catch (NullPointerException e) {
-            System.err.println("Error loading image asset: " + imagePath);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.err.println("Error cargando el recurso: " + imagePath);
             e.printStackTrace();
         }
     }
@@ -266,8 +288,27 @@ public class ControllerBattleAttack {
      * Método para establecer la imagen de fondo.
      * @param backgroundImage
      */
-    public void setBackgroundImage(ImageView backgroundImage) {
-        this.backgroundImage = backgroundImage;
+    public void setMap(String imagePath) {
+        try {
+            // Asegúrate de que la ruta comience con "/"
+            if (!imagePath.startsWith("/")) {
+                imagePath = "/" + imagePath;
+            }
+    
+            // Obtén el recurso
+            java.net.URL resource = getClass().getResource(imagePath);
+            if (resource == null) {
+                throw new NullPointerException("Recurso no encontrado: " + imagePath);
+            }
+    
+            // Carga la imagen
+            String fullPath = resource.toExternalForm();
+            Image image = new Image(fullPath);
+            backgroundImage.setImage(image);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.err.println("Error cargando el recurso: " + imagePath);
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -334,16 +375,6 @@ public class ControllerBattleAttack {
     public void setEstaminaLabel(Label estaminaLabel) {
         this.estaminaLabel = estaminaLabel;
     }
-
-    /**
-     * Método para cargar el mapa en el ImageView.
-     * @param imagePath La ruta de la imagen del mapa.
-     */
-    public void setMap(String imagePath) {
-        // Cargar la imagen del mapa desde la ruta proporcionada
-        String mapImage = getClass().getResource(imagePath).toExternalForm();
-        backgroundImage.setImage(new Image(mapImage));
-    }
         
     /**
      * Método para actualizar la selección de movimientos.
@@ -407,22 +438,4 @@ public class ControllerBattleAttack {
         pause.play();
         
     }
-
-    // /**
-    //  * Function to load Pokémon images from the specified path.
-    //  * 
-    //  * @param imagePath The path to the image file.
-    //  * @param pokemon  The ImageView to display the Pokémon image.
-    //  */
-    // private void loadPokemonImages(String imagePath, ImageView pokemon) {
-    //     try {
-    //         File file = new File(imagePath);
-    //         Image image = new Image(file.toURI().toString());
-    //         pokemon.setImage(image);
-    //     } catch (NullPointerException e) {
-    //         System.err.println("Error loading image asset: " + imagePath);
-    //         e.printStackTrace();
-    //     }
-    // }
-
 }

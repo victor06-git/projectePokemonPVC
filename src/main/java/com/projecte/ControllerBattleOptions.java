@@ -120,9 +120,9 @@ public class ControllerBattleOptions {
     @FXML
     public void toViewBattle(MouseEvent event) {
         ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
-        ctrl.setMap("data/mapa/mapa2.jpg");
-        ctrl.setEnemyPokemonImage("data/pokemons/Hitmonchan.gif");
-        ctrl.setPlayerPokemonImage("data/pokemons/Mew.gif");
+        ctrl.setMap("/assets/mapa/mapa2.jpg");
+        ctrl.setEnemyPokemonImage("/assets/pokemons/Hitmonchan.gif");
+        ctrl.setPlayerPokemonImage("/assets/pokemons/Mewtwo.gif");
         UtilsViews.setViewAnimating("ViewBattleAttack");
     }
     
