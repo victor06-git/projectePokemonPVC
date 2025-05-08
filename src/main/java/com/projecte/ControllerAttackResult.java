@@ -1,5 +1,9 @@
 package com.projecte;
 
+import java.awt.event.MouseEvent;
+
+import com.utils.UtilsViews;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -38,12 +42,18 @@ public class ControllerAttackResult {
         statsLabel.setText(stats);
     }
 
-    private void setHpLabel(String hp) {
+    public void setHpLabel(String hp) {
         hpLabel.setText(hp);
     }
 
-    private void setEstaminaLabel(String estamina) {
+    public void setEstaminaLabel(String estamina) {
         estaminaLabel.setText(estamina);
+    }
+
+    @FXML
+    public void toContinue(MouseEvent event) {
+        ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
+        UtilsViews.setViewAnimating("ViewBattleAttack");
     }
 
 }

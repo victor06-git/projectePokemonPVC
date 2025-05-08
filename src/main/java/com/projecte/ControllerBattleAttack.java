@@ -1,6 +1,8 @@
 package com.projecte;
 
 
+import com.utils.UtilsViews;
+
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -147,17 +149,34 @@ public class ControllerBattleAttack {
         this.estaminePlayer.setText(estamina);
     }
 
+    public String getEstaminaPlayer(){
+        return this.estaminePlayer.getText();
+    }
+
     public void setHpPlayer(String hp){
         this.hpPlayer.setText(hp);
+    }
+
+    public String getHpPlayer(){
+        return this.hpPlayer.getText();
     }
 
     public void setHpComputer(String hp){
         this.hpComputer.setText(hp);
     }
 
+    public String getHpComputer(){
+        return this.hpComputer.getText();
+    }
+
     public void setEstaminaComputer(String estamina){
         this.estamineComputer.setText(estamina);
     }
+
+    public String getEstaminaComputer(){
+        return this.estamineComputer.getText();
+    }
+
     /**
      * Método para establecer la barra de vida del enemigo.
      * @param enemyHpBar
@@ -470,6 +489,41 @@ public class ControllerBattleAttack {
             runButton.setStyle("-fx-background-color: #ffcc00; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0); -fx-font-weight: bold;");
         });
         pause.play();
+    }
+
+    /**
+     * Método para actualizar el estado del player.
+     * 
+     */
+    public void updatePlayerStatus() {
+        if (playerPokemonDead() || playerPokemonOutOfStamina()) {
+            ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+            String enemyHp = getHpComputer();
+            String enemyEstamina = getEstaminaComputer();
+            ctrl.setHpLabel(enemyHp);
+            ctrl.setEstaminaLabel(enemyEstamina);
+        }
+    }
+
+
+    /**
+     * Método para verificar si el Pokémon atacante está muerto.
+     * 
+     * @return true si el Pokémon atacante tiene 0 o menos HP, de lo contrario false.
+     */
+    private boolean playerPokemonDead() {
+        double playerHp = playerHpBar.getProgress();
+        return playerHp <= 0;
+    }
+
+    /**
+     * Método para verificar si el Pokémon atacante se quedó sin estamina.
+     * 
+     * @return true si el Pokémon atacante tiene 0 o menos estamina, de lo contrario false.
+     */
+    private boolean playerPokemonOutOfStamina() {
+        double playerStamina = playerStaminaBar.getProgress();
+        return playerStamina <= 0;
     }
 
     //Afegir showAlert per quan es rendeix
