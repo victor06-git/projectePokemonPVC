@@ -157,8 +157,8 @@ public class ControllerBattleAttack {
      * Método para establecer la barra de vida del enemigo.
      * @param enemyHpBar
      */
-    public void setEnemyHpBar(ProgressBar enemyHpBar) {
-        this.enemyHpBar = enemyHpBar;
+    public void setEnemyHpBar(Double hp) {
+        this.enemyHpBar.setProgress(hp);
     }
 
     /**
@@ -173,8 +173,8 @@ public class ControllerBattleAttack {
      * Método para establecer la barra de stamina del enemigo.
      * @param enemyStaminaBar
      */
-    public void setEnemyStaminaBar(ProgressBar enemyStaminaBar) {
-        this.enemyStaminaBar = enemyStaminaBar;
+    public void setEnemyStaminaBar(Double stamina) {
+        this.enemyStaminaBar.setProgress(stamina);
     }
 
     /**
@@ -189,8 +189,8 @@ public class ControllerBattleAttack {
      * Método para establecer la barra de stamina del jugador.
      * @param playerStaminaBar
      */
-    public void setPlayerStaminaBar(ProgressBar playerStaminaBar) {
-        this.playerStaminaBar = playerStaminaBar;
+    public void setPlayerStaminaBar(Double stamina) {
+        this.playerStaminaBar.setProgress(stamina);
     }
 
     /**
@@ -204,8 +204,8 @@ public class ControllerBattleAttack {
      * Método para establecer la barra de vida del jugador.
      * @param playerHpBar
      */
-    public void setPlayerHpBar(ProgressBar playerHpBar) {
-        this.playerHpBar = playerHpBar;
+    public void setPlayerHpBar(Double hp) {
+        this.playerHpBar.setProgress(hp);
     }
 
     /**
