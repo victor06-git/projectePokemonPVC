@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+
     final int WINDOW_WIDTH = 600;
     final int WINDOW_HEIGHT = 440;
     final int MIN_WIDTH = 600;
@@ -16,7 +17,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        
+        // Inicialitzar la base de dades
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
+        BuildDatabase.main(new String[]{});
+        db.close();
 
         // Carga vistas
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
@@ -44,6 +49,13 @@ public class Main extends Application {
             Image icon = new Image("file:icons/icon.png");
             stage.getIcons().add(icon);
         }
+    }
+
+    @Override
+    public void stop() throws Exception {
+        AppData db = AppData.getInstance();
+        db.close();
+        super.stop();
     }
 
     public static void main(String[] args) {
