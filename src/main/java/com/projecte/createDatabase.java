@@ -89,7 +89,6 @@ public class createDatabase {
     }
 
     public static void insertAllPokemon() {
-
         String[][] pokemons = {
             // Primera Generación (1-151)
             {"Bulbasaur", "Grass/Poison", "bulbasaur.gif", "001.png"},
