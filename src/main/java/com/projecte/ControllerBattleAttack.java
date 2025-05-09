@@ -7,6 +7,8 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -39,6 +41,8 @@ public class ControllerBattleAttack {
     private int currentSelection = 0;
 
     private Label[] moves;
+
+    private int round = 2; // Variable to track the current round
 
     @FXML
     public void initialize() {
@@ -79,6 +83,14 @@ public class ControllerBattleAttack {
             }
         });
         
+    }
+
+    /**
+     * Método para establecer el número de ronda actual.
+     * @param round El número de ronda a establecer.
+     */
+    public void setRound(int round){
+        this.round = round;
     }
     
     /**
@@ -205,8 +217,8 @@ public class ControllerBattleAttack {
      * Método para obtener la barra de stamina del jugador.
      * @return ProgressBar de la barra de stamina del jugador.
      */
-    public ProgressBar getPlayerStaminaBar() {
-        return playerStaminaBar;
+    public double getPlayerStaminaBar() {
+        return playerStaminaBar.getProgress();
     }
 
     /**
@@ -221,8 +233,8 @@ public class ControllerBattleAttack {
      * Método para obtener la barra de vida del jugador.
      * @return ProgressBar de la barra de vida del jugador. 
      */
-    public ProgressBar getPlayerHpBar() {
-        return playerHpBar;
+    public double getPlayerHpBar() {
+        return playerHpBar.getProgress();
     }
     /**
      * Método para establecer la barra de vida del jugador.
@@ -470,12 +482,24 @@ public class ControllerBattleAttack {
         fightButton.setStyle("-fx-background-color: red;");
 
         handleAttack(currentSelection); // Mostrar el ataque seleccionado
-            PauseTransition pause = new PauseTransition(Duration.seconds(1));
-            pause.setOnFinished(event2 -> {
-                fightButton.setStyle("-fx-background-color: #ffcc00; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0); -fx-font-weight: bold;");
-            }); // Resetear el estilo después de 1 segundo
-            pause.play();
-            System.out.println("Fight button clicked! Current move: " + moves[currentSelection].getText());
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(event2 -> {
+        fightButton.setStyle("-fx-background-color: #ffcc00; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0); -fx-font-weight: bold;");
+        }); // Resetear el estilo después de 1 segundo
+        pause.play();
+        System.out.println("Fight button clicked! Current move: " + moves[currentSelection].getText());
+        // Crear una transición para simular el cooldown
+        PauseTransition cooldown = new PauseTransition(Duration.seconds(1.5));
+
+        // Durante el cooldown, reducir gradualmente la barra de vida del jugador
+        cooldown.setOnFinished(event1 -> {
+            playerStaminaBar.setProgress(0); // Bajar la estamina del jugador
+            updatePlayerStatus(); // Cambiar la vista después de que la vida llegue a 0
+        });
+
+        // Iniciar la transición
+        cooldown.play();
+
     }
 
     @FXML
@@ -502,9 +526,26 @@ public class ControllerBattleAttack {
             String enemyEstamina = getEstaminaComputer();
             ctrl.setHpLabel(enemyHp);
             ctrl.setEstaminaLabel(enemyEstamina);
+            ctrl.setRound(this.round);
+            ctrl.setEquipLabel(playerPokemonDead() ? "Computer" : "Player");
+            String playerHp = getHpPlayer();
+            String playerEstamina = getEstaminaPlayer();
+            ctrl.setHpPlayer(playerHp);
+            ctrl.setEstaminaPlayer(playerEstamina);
+            ctrl.setStatsLabel("Ataque: " + moves[currentSelection].getText().replace("➤", "").trim());
+            ctrl.setPokemonLabel("Charmander");
+
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("¡Tu Pokémon ha sido derrotado!");
+            Platform.runLater(() -> {
+                alert.showAndWait().ifPresent(response -> {
+                    UtilsViews.setViewAnimating("ViewAttackResult");
+                });
+            });
         }
     }
-
 
     /**
      * Método para verificar si el Pokémon atacante está muerto.
@@ -526,5 +567,17 @@ public class ControllerBattleAttack {
         return playerStamina <= 0;
     }
 
-    //Afegir showAlert per quan es rendeix
+    /**
+     * Método para mostrar una alerta con un mensaje específico.
+     * 
+     * @param message El mensaje a mostrar en la alerta.
+     * @param type El tipo de alerta a mostrar.
+     */
+    private void showAlert(String message, AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(type == AlertType.ERROR ? "Error" : "Información");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

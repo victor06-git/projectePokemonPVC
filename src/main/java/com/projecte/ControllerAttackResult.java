@@ -1,7 +1,5 @@
 package com.projecte;
 
-import java.awt.event.MouseEvent;
-
 import com.utils.UtilsViews;
 
 import javafx.fxml.FXML;
@@ -11,34 +9,44 @@ import javafx.scene.control.Label;
 public class ControllerAttackResult {
 
     @FXML
-    private Label roundLabel, equipLabel, pokemonLabel, statsLabel, hpLabel, estaminaLabel;
+    private Label roundLabel, equipLabel, pokemonLabel, statsLabel, hpLabel, estaminaLabel, hpPlayer, estaminaPlayer;
     
     @FXML
     private Button buttonContinue;
 
+    private int round = -1;
+
     @FXML
     private void initialize() {
+        
+    }
 
+    public void setRound(int round) {
+        this.round = round;
+        setRoundLabel(this.round);
+    }
+
+    public void setHpPlayer(String hp) {
+        hpPlayer.setText(hp);
     }
     
-    @FXML
-    private void handleContinueButtonAction() {
-
+    public void setEstaminaPlayer(String estamina) {
+        estaminaPlayer.setText(estamina);
     }
 
-    private void setRoundLabel(String round) {
-        roundLabel.setText(round);
+    public void setRoundLabel(int round) {
+        roundLabel.setText("Round " + round);
     }   
 
-    private void setEquipLabel(String equip) {
+    public void setEquipLabel(String equip) {
         equipLabel.setText(equip);
     }
 
-    private void setPokemonLabel(String pokemon) {
+    public void setPokemonLabel(String pokemon) {
         pokemonLabel.setText(pokemon);
     }
 
-    private void setStatsLabel(String stats) {
+    public void setStatsLabel(String stats) {
         statsLabel.setText(stats);
     }
 
@@ -50,10 +58,23 @@ public class ControllerAttackResult {
         estaminaLabel.setText(estamina);
     }
 
+    /**
+     * Método para continuar la batalla.
+     * 
+     * @param event El evento de acción del botón continuar.
+     */
     @FXML
-    public void toContinue(MouseEvent event) {
-        ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
-        UtilsViews.setViewAnimating("ViewBattleAttack");
-    }
+    public void toContinue(javafx.event.ActionEvent event) {
+        
+        ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
+        ControllerBattleAttack ctrlAttack = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
+        
+        if (ctrlAttack.getPlayerHpBar() == 0.0 || ctrlAttack.getPlayerStaminaBar() == 0.0) {
+            UtilsViews.setViewAnimating("ViewBattleOptions");
+        } else {  
+            UtilsViews.setViewAnimating("ViewBattleAttack");
 
+        }
+    }
+    
 }
