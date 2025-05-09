@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     final int WINDOW_WIDTH = 600;
-    final int WINDOW_HEIGHT = 450;
+    final int WINDOW_HEIGHT = 440;
     final int MIN_WIDTH = 600;
     final int MIN_HEIGHT = 400;
 
@@ -27,12 +27,12 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewBattleOptions", "/assets/viewBattleOptions.fxml");
         UtilsViews.addView(getClass(), "ViewMenu", "/assets/viewMenu.fxml");
 
-        UtilsViews.setView("ViewMenu");
+        UtilsViews.setView("ViewBattleOptions");
 
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
         stage.setScene(scene);
-        stage.setTitle("Pokémons PvP");
+        stage.setTitle("Pokémons PvC");
         stage.setMinWidth(MIN_WIDTH);
         stage.setMinHeight(MIN_HEIGHT);
         stage.setWidth(WINDOW_WIDTH);
