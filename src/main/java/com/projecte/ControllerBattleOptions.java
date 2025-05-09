@@ -41,6 +41,7 @@ public class ControllerBattleOptions implements Initializable {
 
     private int currentMapSelection = 0;
     private Label[] maps = new Label[0];
+    private int round = 1; // Variable to track the current round
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -172,22 +173,22 @@ public class ControllerBattleOptions implements Initializable {
     }
 
     //Funció per canviar de vista
+    
+
     @FXML
     public void toViewBattle(MouseEvent event) {
         ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
-        ctrl.setEnemyHpBar(0.6);
         ctrl.setMap("/assets/mapa/mapa2.jpg");
+        ctrl.setEnemyPokemonImage("/assets/pokemons/normal/005.gif");
+        ctrl.setPlayerPokemonImage("/assets/pokemons/back/020.gif");
         ctrl.setEstaminaComputer("100/200");
         ctrl.setEstaminaPlayer("200/20");
         ctrl.setHpPlayer("50/50");
         ctrl.setHpComputer("100/50");
-        ctrl.setEnemyPokemonImage("/assets/pokemons/normal/005.gif");
-        ctrl.setPlayerPokemonImage("/assets/pokemons/back/020.gif");
+        ctrl.setEnemyHpBar(0.6);
         ctrl.setEnemyStaminaBar(0.5);
-        ctrl.setPlayerHpBar(1.0);
+        ctrl.setPlayerHpBar(0.8);
         ctrl.setPlayerStaminaBar(1.0);
         UtilsViews.setViewAnimating("ViewBattleAttack");
     }
-
-   
 }
