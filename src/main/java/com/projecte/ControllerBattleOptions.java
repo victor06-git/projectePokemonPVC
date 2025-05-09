@@ -185,7 +185,12 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setEstaminaPlayer("200/20");
         ctrl.setHpPlayer("50/50");
         ctrl.setHpComputer("100/50");
+<<<<<<< HEAD
+        ctrl.setEnemyPokemonImage("/assets/pokemons/normal/203.gif");
+        ctrl.setPlayerPokemonImage("/assets/pokemons/back/128.gif");
+=======
         ctrl.setEnemyHpBar(0.6);
+>>>>>>> main
         ctrl.setEnemyStaminaBar(0.5);
         ctrl.setPlayerHpBar(0.8);
         ctrl.setPlayerStaminaBar(1.0);

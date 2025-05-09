@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+
     final int WINDOW_WIDTH = 600;
     final int WINDOW_HEIGHT = 440;
     final int MIN_WIDTH = 600;
@@ -16,6 +17,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        
 
         // Carga vistas
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
@@ -27,7 +29,7 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewMenu", "/assets/viewMenu.fxml");
         UtilsViews.addView(getClass(), "ViewAttackResult", "/assets/viewAttackResult.fxml");
 
-        UtilsViews.setView("ViewBattleOptions");
+        UtilsViews.setView("ViewStart");
 
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
@@ -44,6 +46,13 @@ public class Main extends Application {
             Image icon = new Image("file:icons/icon.png");
             stage.getIcons().add(icon);
         }
+    }
+
+    @Override
+    public void stop() throws Exception {
+        AppData db = AppData.getInstance();
+        db.close();
+        super.stop();
     }
 
     public static void main(String[] args) {

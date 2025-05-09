@@ -13,7 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
-public class ControllerStart implements Initializable {
+public class ControllerStart extends BuildDatabase implements Initializable {
 
     @FXML
     private ImageView pokemonImage;
@@ -35,33 +35,37 @@ public class ControllerStart implements Initializable {
     }
 
     @FXML
-    private void empezarJuego() {
-
-        // Alerta por terminal cuando pulsas boton
+    private void startGame() {
         System.out.println("Botón Open Game pulsado");
-
-        //Selecciona base de datos
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona la base de datos");
         fileChooser.getExtensionFilters().add(
             new FileChooser.ExtensionFilter("SQLite Files", "*.sqlite")
         );
-
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
-            String rutaDB = selectedFile.getAbsolutePath();
-            System.out.println("Archivo seleccionado: " + rutaDB);
-            AppData.getInstance().connect(rutaDB);
+            String rutaDBAbsoluta = selectedFile.getAbsolutePath();
+            System.out.println("--- ABSOLUTE ROUTE DB: " + rutaDBAbsoluta);
+            // Obtener la ruta del directorio base (puedes cambiar esto según tu estructura)
+            String directorioBase = new File("").getAbsolutePath(); // Directorio de trabajo actual
+            String rutaRelativa = getRelativePath(directorioBase, rutaDBAbsoluta);
+            System.out.println("--- RELATIVE ROUTE DB: " + rutaRelativa);
+            
 
+            BuildDatabase.main(rutaRelativa);
             UtilsViews.setViewAnimating("ViewMenu");
         } else {
-            //Alertas si no se carga ninguna base de datos
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("No se ha seleccionado ningún archivo.");
             alert.setContentText("Por favor, selecciona un archivo de base de datos.");
             alert.showAndWait();
         }
+    }
+    // Método para obtener la ruta relativa
+    private String getRelativePath(String basePath, String absolutePath) {
+        File base = new File(basePath);
+        File file = new File(absolutePath);
+        return base.toURI().relativize(file.toURI()).getPath();
     }
 }

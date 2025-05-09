@@ -1,6 +1,5 @@
 com/utils/UtilsViews.class
 com/projecte/AppData.class
-com/projecte/createDatabase.class
 com/projecte/ControllerBattleOptions.class
 com/projecte/ControllerBattleAttack.class
 com/projecte/ControllerPokeSettings.class
@@ -8,6 +7,7 @@ com/projecte/ControllerPokemonView.class
 com/projecte/ControllerStart.class
 com/projecte/Main.class
 com/projecte/ControllerManagement.class
+com/projecte/BuildDatabase.class
 com/projecte/ControllerMenu.class
 com/projecte/ControllerBattleAttack$1.class
 com/projecte/ControllerAttackResult.class
