@@ -1,5 +1,6 @@
 package com.projecte;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -9,9 +10,12 @@ import javafx.stage.Stage;
 
 public class BuildDatabase extends Application {
 
-    public static void main(String[] args) {
+    public static String selected_path;
+
+    public static void main(String input_path) {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        selected_path = input_path;
+        db.connect(selected_path);
 
         // Crear la base de datos y las tablas si no existen
         setTables();
@@ -25,10 +29,11 @@ public class BuildDatabase extends Application {
         db.close();
     }
 
+    
 
     public static void setTables() {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Primero eliminamos las tablas si existen (en orden inverso por dependencias)
         String dropTables = """
@@ -380,7 +385,7 @@ public class BuildDatabase extends Application {
         };
 
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Iteramos sobre el arreglo de objetos para insertar uno por uno
         for (String[] item : items) {
@@ -543,7 +548,7 @@ public class BuildDatabase extends Application {
             {"Fighting", "Ghost", "0.0"}
         };
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Iteramos sobre el arreglo de efectividad de tipos para insertar uno por uno
         for (String[] effectiveness : typeEffectiveness) {
@@ -556,6 +561,10 @@ public class BuildDatabase extends Application {
                       attackType + "', '" + targetType + "', '" + multiplier + "');");
         }
         System.out.println("Type effectiveness insertados correctamente.");
+    }
+
+    public static void buildJSON() {
+        // TODO
     }
 
     @Override

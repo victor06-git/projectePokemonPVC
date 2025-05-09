@@ -17,11 +17,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // Inicialitzar la base de dades
-        AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
-        BuildDatabase.main(new String[]{});
-        db.close();
+        
 
         // Carga vistas
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
@@ -32,7 +28,7 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewBattleOptions", "/assets/viewBattleOptions.fxml");
         UtilsViews.addView(getClass(), "ViewMenu", "/assets/viewMenu.fxml");
 
-        UtilsViews.setView("ViewBattleOptions");
+        UtilsViews.setView("ViewStart");
 
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
