@@ -5,26 +5,23 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import com.utils.UtilsViews;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class ControllerManagement {
 
-    
     @FXML
-    private VBox list = new VBox();
+    private VBox list; // Asegúrate de que el fx:id en el FXML sea "list"
 
     @FXML
     private ImageView imgMarca;
 
     public void initialize(URL url, ResourceBundle rb) {
-        
+        loadList(); // Cargar la lista al inicializar
     }
 
     public void loadList() {
@@ -36,47 +33,46 @@ public class ControllerManagement {
         try {
             setList(llistaPokemons);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Error al cargar la lista: " + e.getMessage());
         }
     }
 
     private void setList(ArrayList<HashMap<String, Object>> llistaPokemons) throws IOException {
         // Ruta al archivo FXML del diseño de cada Pokémon
         URL resource = this.getClass().getResource("/assets/pokemonView.fxml");
-    
+
         // Limpiar el contenido existente del VBox
         list.getChildren().clear();
-    
+
         // Iterar sobre la lista de Pokémon
         for (HashMap<String, Object> pokemon : llistaPokemons) {
             // Extraer la información necesaria del HashMap
-            int number = (int) pokemon.get("number"); //Cambiar
-            String name = (String) pokemon.get("name"); //Cambiar
-            String type = (String) pokemon.get("type"); //Cambiar
-            String imagePath = (String) pokemon.get("image"); //Cambiar
-    
+            int id = (int) pokemon.get("id");
+            String name = (String) pokemon.get("name");
+            String type = (String) pokemon.get("type");
+            String iconPath = (String) pokemon.get("icon_path");
+
             // Cargar el diseño de pokemonView.fxml
             FXMLLoader loader = new FXMLLoader(resource);
             Parent itemTemplate = loader.load();
-    
+
             // Obtener el controlador de la vista cargada
             ControllerPokemonView itemController = loader.getController();
-    
+
             // Asignar los valores a los controles del template
             itemController.setVidaMaxima(100);
             itemController.setStaminaMaxima(100);
-            itemController.setHP(100);   
-            itemController.setName(name);
+            itemController.setHP(100);
+            String idname = "#" + id + " - " + name;
+            itemController.setName(idname);
             itemController.setType(type);
-            itemController.setImatge(imagePath);
+            itemController.setImatge(iconPath);
             itemController.setNickName(name);
             itemController.setLevel(1);
             itemController.setStamina(100);
-    
+
             // Agregar el nuevo elemento al VBox
             list.getChildren().add(itemTemplate);
         }
     }
-
-    
 }

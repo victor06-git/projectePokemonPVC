@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="root" stylesheets="@viewManagement.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerManagement">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="root" stylesheets="@viewManagement.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerManagement">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" stylesheets="@viewManagement.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -29,7 +29,7 @@
                   <Pane prefHeight="2.0" prefWidth="580.0" style="-fx-background-color: black;" styleClass="line" stylesheets="@viewManagement.css" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" fillWidth="false" prefHeight="200.0" prefWidth="100.0" stylesheets="@viewManagement.css" VBox.vgrow="ALWAYS">
+            <VBox fx:id="List" alignment="CENTER_LEFT" fillWidth="false" prefHeight="200.0" prefWidth="100.0" stylesheets="@viewManagement.css" VBox.vgrow="ALWAYS">
                <children>
                   <ScrollPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="560.0">
                     <content>
