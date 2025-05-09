@@ -2,6 +2,8 @@ package com.projecte;
 
 import java.io.File;
 
+import com.utils.UtilsViews;
+
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -66,14 +68,37 @@ public class ControllerPokemonView {
     }
 
     // Resto de métodos del controller...
-    public void setVidaMaxima(int value) { this.vidaMaxima = value; }
-    public void setStaminaMaxima(int value) { this.staminaMaxima = value; }
-    public void setHP(int value) { this.hpBar.setProgress((double) value / vidaMaxima); }
-    public void setStamina(int value) { this.staminaBar.setProgress((double) value / staminaMaxima); }
-    public void setName(String value) { this.labelName.setText(value); }
-    public void setNickName(String value) { this.labelNickname.setText(value); }
-    public void setType(String value) { this.labelType.setText(value); }
-    public void setLevel(int value) { this.labelLevel.setText(String.valueOf(value)); }
+    public void setVidaMaxima(int value) {
+         this.vidaMaxima = value;
+    }
+    
+    public void setStaminaMaxima(int value) {
+         this.staminaMaxima = value; 
+        }
+    
+    public void setHP(int value) {
+        this.hpBar.setProgress((double) value / vidaMaxima); 
+    }
+
+    public void setStamina(int value) {
+        this.staminaBar.setProgress((double) value / staminaMaxima); 
+    }
+    
+    public void setName(String value) {
+        this.labelName.setText(value); 
+    }
+    
+    public void setNickName(String value) {
+        this.labelNickname.setText(value); 
+    }
+   
+    public void setType(String value) {
+        this.labelType.setText(value); 
+    }
+   
+    public void setLevel(int value) {
+        this.labelLevel.setText(String.valueOf(value)); 
+    }
 
     public void setImatge(String imagePath) {
         try {
@@ -89,5 +114,7 @@ public class ControllerPokemonView {
     @FXML
     public void toViewSettings(MouseEvent event) {
         // Implementación pendiente
+        ControllerPokeSettings ctrl = (ControllerPokeSettings) UtilsViews.getController("ViewPokeSettings");
+        UtilsViews.setViewAnimating("ViewPokeSettings");
     }
 }
