@@ -1,11 +1,9 @@
 package com.projecte;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.HashSet;
+import java.util.Random;
 
 import javafx.application.Application;
-import javafx.fxml.Initializable;
 import javafx.stage.Stage;
 
 public class BuildDatabase extends Application {
@@ -25,6 +23,10 @@ public class BuildDatabase extends Application {
         insertAllItems();
         insertAllAttacks();
         insertAllTypeEffectiveness();
+
+        // Insertar Pokémon del jugador, solo al principio del juego
+        insertPlayerPokemon();
+        
 
         db.close();
     }
@@ -199,9 +201,9 @@ public class BuildDatabase extends Application {
             {"Rapidash", "Fire", "078.gif", "078.png"},
             {"Slowpoke", "Water/Psychic", "079.gif", "079.png"},
             {"Slowbro", "Water/Psychic", "080.gif", "080.png"},
-            {"Magnemite", "Electric/Steel", "081.gif", "081.png"},
-            {"Magneton", "Electric/Steel", "082.gif", "082.png"},
-            {"Farfetch", "Normal/Flying", "083.gif", "083.png"},
+            {"Magnemite", "Electric", "081.gif", "081.png"},
+            {"Magneton", "Electric", "082.gif", "082.png"},
+            {"Farfetch'd", "Normal/Flying", "083.gif", "083.png"},
             {"Doduo", "Normal/Flying", "084.gif", "084.png"},
             {"Dodrio", "Normal/Flying", "085.gif", "085.png"},
             {"Seel", "Water", "086.gif", "086.png"},
@@ -271,7 +273,7 @@ public class BuildDatabase extends Application {
             {"Mewtwo", "Psychic", "150.gif", "150.png"},
             {"Mew", "Psychic", "151.gif", "151.png"},
 
-            // Segunda Generación (152-251)
+            // Segunda Generación (152-251)// Segunda Generación (152-251)
             {"Chikorita", "Grass", "152.gif", "152.png"},
             {"Bayleef", "Grass", "153.gif", "153.png"},
             {"Meganium", "Grass", "154.gif", "154.png"},
@@ -311,17 +313,31 @@ public class BuildDatabase extends Application {
             {"Skiploom", "Grass/Flying", "188.gif", "188.png"},
             {"Jumpluff", "Grass/Flying", "189.gif", "189.png"},
             {"Aipom", "Normal", "190.gif", "190.png"},
-            {"Sunkern", "Grass/Poison", "191.gif", "191.png"},
+            {"Sunkern", "Grass", "191.gif", "191.png"},
             {"Sunflora", "Grass", "192.gif", "192.png"},
             {"Yanma", "Bug/Flying", "193.gif", "193.png"},
             {"Wooper", "Water/Ground", "194.gif", "194.png"},
             {"Quagsire", "Water/Ground", "195.gif", "195.png"},
             {"Espeon", "Psychic", "196.gif", "196.png"},
             {"Umbreon", "Dark", "197.gif", "197.png"},
-            {"Leafeon", "Grass", "470.gif", "470.png"},
-            {"Glaceon", "Ice", "471.gif", "471.png"},
-            {"Sylveon", "Fairy", "700.gif", "700.png"},
-            {"Porygon2", "Normal", "233.gif", "233.png"},
+            {"Murkrow", "Dark/Flying", "198.gif", "198.png"},
+            {"Slowking", "Water/Psychic", "199.gif", "199.png"},
+            {"Misdreavus", "Ghost", "200.gif", "200.png"},
+            {"Unown", "Psychic", "201.gif", "201.png"},
+            {"Wobbuffet", "Psychic", "202.gif", "202.png"},
+            {"Girafarig", "Normal/Psychic", "203.gif", "203.png"},
+            {"Pineco", "Bug", "204.gif", "204.png"},
+            {"Forretress", "Bug/Steel", "205.gif", "205.png"},
+            {"Dunsparce", "Normal", "206.gif", "206.png"},
+            {"Gligar", "Ground/Flying", "207.gif", "207.png"},
+            {"Steelix", "Steel/Ground", "208.gif", "208.png"},
+            {"Snubbull", "Fairy", "209.gif", "209.png"},
+            {"Granbull", "Fairy", "210.gif", "210.png"},
+            {"Qwilfish", "Water/Poison", "211.gif", "211.png"},
+            {"Scizor", "Bug/Steel", "212.gif", "212.png"},
+            {"Shuckle", "Bug/Rock", "213.gif", "213.png"},
+            {"Heracross", "Bug/Fighting", "214.gif", "214.png"},
+            {"Sneasel", "Dark/Ice", "215.gif", "215.png"},
             {"Teddiursa", "Normal", "216.gif", "216.png"},
             {"Ursaring", "Normal", "217.gif", "217.png"},
             {"Slugma", "Fire", "218.gif", "218.png"},
@@ -339,7 +355,7 @@ public class BuildDatabase extends Application {
             {"Kingdra", "Water/Dragon", "230.gif", "230.png"},
             {"Phanpy", "Ground", "231.gif", "231.png"},
             {"Donphan", "Ground", "232.gif", "232.png"},
-            {"Porygon-Z", "Normal", "474.gif", "474.png"},
+            {"Porygon2", "Normal", "233.gif", "233.png"},
             {"Stantler", "Normal", "234.gif", "234.png"},
             {"Smeargle", "Normal", "235.gif", "235.png"},
             {"Tyrogue", "Fighting", "236.gif", "236.png"},
@@ -431,20 +447,48 @@ public class BuildDatabase extends Application {
         AppData db = AppData.getInstance();
         db.connect("./data/pokemons.sqlite");
 
-        // Iteramos sobre el arreglo de ataques para insertar uno por uno
-        for (String[] attack : attacks) {
-            String name = attack[0];
-            String type = attack[1];
-            int damage = Integer.parseInt(attack[2]);
-            int staminaCost = Integer.parseInt(attack[3]);
+        // Insertar tres Pokémon con "unlocked" en true sin que se repitan
+        Random random = new Random();
+        HashSet<Integer> unlockedPokemonIds = new HashSet<>();
+        while (unlockedPokemonIds.size() < 3) {
+            int pokemonId = random.nextInt(251) + 1; // IDs del 1 al 251
+            if (!unlockedPokemonIds.contains(pokemonId)) {
+            unlockedPokemonIds.add(pokemonId);
+            db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
+                  pokemonId + ", 100, 50, 30, 1);");
+            }
+        }
 
-            // Ejecutamos la sentencia SQL para insertar el ataque
-            db.update("INSERT INTO Attack (name, type, damage, stamina_cost) VALUES ('" +
-                      name + "', '" + type + "', '" + damage + "', '" + staminaCost + "');");
+        // Insertar el resto de los Pokémon del 1 al 251 con "unlocked" en false
+        for (int i = 1; i <= 251; i++) {
+            if (!unlockedPokemonIds.contains(i)) {
+            db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
+                  i + ", 100, 50, 30, 0);");
+            }
         }
 
         System.out.println("Attacks insertados correctamente.");        
 
+    }
+    public static void insertPlayerPokemon() {
+        AppData db = AppData.getInstance();
+        db.connect(selected_path);
+        Random random = new Random();
+        int max_hp = random.nextInt(50) + 1; 
+        int attack = random.nextInt(50) + 1;
+        int pokemon_id = random.nextInt(151) + 1; // ID de Pokémon entre 1 y 151
+    
+        for (int i = 0; i < 3; i++) {
+            int stamina = random.nextInt(50) + 1;
+            db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina) VALUES (" +
+                      pokemon_id + ", " + max_hp + ", " + attack + ", " + stamina + ");");
+            pokemon_id = random.nextInt(151) + 1; // Generar un nuevo Pokémon aleatorio
+            max_hp = random.nextInt(50) + 1;
+            attack = random.nextInt(50) + 1;
+        }
+
+        System.out.println("Player Pokemon insertados correctamente.");
+        
     }
 
     public static void insertAllTypeEffectiveness() {
