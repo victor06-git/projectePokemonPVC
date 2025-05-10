@@ -1,5 +1,6 @@
 package com.projecte;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -15,8 +16,9 @@ public class BuildDatabase extends Application {
         selected_path = input_path;
         db.connect(selected_path);
 
-        // Crear la base de datos y las tablas si no existen
-        setTables();
+        // Crear las tablas necesarias sin borrar las tablas del jugador
+        
+        createAllTables();
 
         // Insertar Pokémon, objetos y efectividad de tipos
         insertAllPokemon();
@@ -24,16 +26,57 @@ public class BuildDatabase extends Application {
         insertAllAttacks();
         insertAllTypeEffectiveness();
 
-        // Insertar Pokémon del jugador, solo al principio del juego
-        insertPlayerPokemon();
-        
+        // Verificar si existen registros en GameStats
+        ArrayList<java.util.HashMap<String, Object>> gameStatsResult = db.query("SELECT COUNT(*) AS count FROM GameStats;");
+        boolean hasGameStats = !gameStatsResult.isEmpty() && ((Number) gameStatsResult.get(0).get("count")).intValue() > 0;
+
+        // Verificar si existen registros en ItemInventory
+        ArrayList<java.util.HashMap<String, Object>> itemInventoryResult = db.query("SELECT COUNT(*) AS count FROM ItemInventory;");
+        boolean hasItemInventory = !itemInventoryResult.isEmpty() && ((Number) itemInventoryResult.get(0).get("count")).intValue() > 0;
+
+        // Verificar si PlayerPokemon tiene 3 o más con unlocked = 1
+        ArrayList<java.util.HashMap<String, Object>> playerPokemonResult = db.query("SELECT COUNT(*) AS count FROM PlayerPokemon WHERE unlocked = 1;");
+        int unlockedPokemonCount = playerPokemonResult.isEmpty() ? 0 : ((Number) playerPokemonResult.get(0).get("count")).intValue();
+
+        // Insertar datos iniciales si no existen
+        if (!hasGameStats) {
+            db.update("INSERT INTO GameStats (id, total_experience, battles_played, max_win_streak, current_win_streak) VALUES (1, 0, 0, 0, 0);");
+        }
+
+        if (!hasItemInventory) {
+            db.update("INSERT INTO ItemInventory (item_id, quantity) SELECT id, 0 FROM Item;");
+        }
+
+        if (unlockedPokemonCount < 3) {
+            // Si no hay suficientes Pokémon desbloqueados, insertar 3 Pokémon desbloqueados
+            Random random = new Random();
+            HashSet<Integer> unlockedPokemonIds = new HashSet<>();
+            while (unlockedPokemonIds.size() < 3) {
+                int pokemonId = random.nextInt(251) + 1; // IDs del 1 al 251
+                if (!unlockedPokemonIds.contains(pokemonId)) {
+                    unlockedPokemonIds.add(pokemonId);
+                    db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
+                          pokemonId + ", 100, 50, 30, 1);");
+
+                    System.out.println("Pokémon desbloqueado: " + pokemonId );
+                }
+            }
+
+            // Insertar el resto de los Pokémon con "unlocked" en false
+            for (int i = 1; i <= 251; i++) {
+                if (!unlockedPokemonIds.contains(i)) {
+                    db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
+                          i + ", 100, 50, 30, 0);");
+                }
+            }
+        }
 
         db.close();
     }
 
     
 
-    public static void setTables() {
+    public static void cleanAllTaables() {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
@@ -49,74 +92,96 @@ public class BuildDatabase extends Application {
             DROP TABLE IF EXISTS Pokemon;
         """;
 
-        // Luego creamos las tablas (en el orden correcto considerando las dependencias)
-        String createTables = """
-            CREATE TABLE Pokemon (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                type TEXT NOT NULL,
-                image_path TEXT,
-                icon_path TEXT
-            );
-
-            CREATE TABLE PlayerPokemon (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                pokemon_id INTEGER NOT NULL,
-                nickname TEXT,
-                max_hp INTEGER NOT NULL,
-                attack INTEGER NOT NULL,
-                stamina INTEGER NOT NULL,
-                unlocked BOOLEAN DEFAULT 0,
-                FOREIGN KEY (pokemon_id) REFERENCES Pokemon(id)
-            );
-
-            CREATE TABLE Attack (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                type TEXT NOT NULL,
-                damage INTEGER NOT NULL,
-                stamina_cost INTEGER NOT NULL
-            );
-
-            CREATE TABLE PokemonAttack (
-                pokemon_id INTEGER NOT NULL,
-                attack_id INTEGER NOT NULL,
-                PRIMARY KEY (pokemon_id, attack_id),
-                FOREIGN KEY (pokemon_id) REFERENCES Pokemon(id),
-                FOREIGN KEY (attack_id) REFERENCES Attack(id)
-            );
-
-            CREATE TABLE TypeEffectiveness (
-                attack_type TEXT NOT NULL,
-                target_type TEXT NOT NULL,
-                multiplier REAL NOT NULL,
-                PRIMARY KEY (attack_type, target_type)
-            );
-
-            CREATE TABLE Item (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL UNIQUE,
-                effect_type TEXT NOT NULL,
-                effect_value INTEGER
-            );
-
-            CREATE TABLE ItemInventory (
-                item_id INTEGER PRIMARY KEY,
-                quantity INTEGER DEFAULT 0,
-                FOREIGN KEY (item_id) REFERENCES Item(id)
-            );
-
-            CREATE TABLE GameStats (
-                id INTEGER PRIMARY KEY CHECK (id = 1),
-                total_experience INTEGER DEFAULT 0,
-                battles_played INTEGER DEFAULT 0,
-                max_win_streak INTEGER DEFAULT 0,
-                current_win_streak INTEGER DEFAULT 0
-            );
-        """;
+       
         db.update(dropTables);
-        db.update(createTables);
     }
+
+    public static void cleanBaseTables() {
+        AppData db = AppData.getInstance();
+        db.connect(selected_path);
+
+        // Primero eliminamos las tablas si existen (en orden inverso por dependencias)
+        String dropTables = """
+            DROP TABLE IF EXISTS Item;
+            DROP TABLE IF EXISTS Attack;
+            DROP TABLE IF EXISTS TypeEffectiveness;
+            DROP TABLE IF EXISTS Pokemon;
+        """;
+
+       
+        db.update(dropTables);
+    }
+
+    public static void createAllTables() {
+        AppData db = AppData.getInstance();
+        String createTables = """
+                CREATE TABLE IF NOT EXISTS Pokemon (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    type TEXT NOT NULL,
+                    image_path TEXT,
+                    icon_path TEXT
+                );
+
+                CREATE TABLE IF NOT EXISTS PlayerPokemon (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    pokemon_id INTEGER NOT NULL,
+                    nickname TEXT,
+                    max_hp INTEGER NOT NULL,
+                    attack INTEGER NOT NULL,
+                    stamina INTEGER NOT NULL,
+                    unlocked BOOLEAN DEFAULT 0,
+                    FOREIGN KEY (pokemon_id) REFERENCES Pokemon(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS Attack (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    type TEXT NOT NULL,
+                    damage INTEGER NOT NULL,
+                    stamina_cost INTEGER NOT NULL
+                );
+
+                CREATE TABLE IF NOT EXISTS PokemonAttack (
+                    pokemon_id INTEGER NOT NULL,
+                    attack_id INTEGER NOT NULL,
+                    PRIMARY KEY (pokemon_id, attack_id),
+                    FOREIGN KEY (pokemon_id) REFERENCES Pokemon(id),
+                    FOREIGN KEY (attack_id) REFERENCES Attack(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS TypeEffectiveness (
+                    attack_type TEXT NOT NULL,
+                    target_type TEXT NOT NULL,
+                    multiplier REAL NOT NULL,
+                    PRIMARY KEY (attack_type, target_type)
+                );
+
+                CREATE TABLE IF NOT EXISTS Item (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL UNIQUE,
+                    effect_type TEXT NOT NULL,
+                    effect_value INTEGER
+                );
+
+                CREATE TABLE IF NOT EXISTS ItemInventory (
+                    item_id INTEGER PRIMARY KEY,
+                    quantity INTEGER DEFAULT 0,
+                    FOREIGN KEY (item_id) REFERENCES Item(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS GameStats (
+                    id INTEGER PRIMARY KEY CHECK (id = 1),
+                    total_experience INTEGER DEFAULT 0,
+                    battles_played INTEGER DEFAULT 0,
+                    max_win_streak INTEGER DEFAULT 0,
+                    current_win_streak INTEGER DEFAULT 0
+                );
+            """;
+            
+            db.update(createTables);
+    }
+
 
     public static void insertAllPokemon() {
         String[][] pokemons = {
@@ -203,7 +268,7 @@ public class BuildDatabase extends Application {
             {"Slowbro", "Water/Psychic", "080.gif", "080.png"},
             {"Magnemite", "Electric", "081.gif", "081.png"},
             {"Magneton", "Electric", "082.gif", "082.png"},
-            {"Farfetch'd", "Normal/Flying", "083.gif", "083.png"},
+            {"Farfetch", "Normal/Flying", "083.gif", "083.png"},
             {"Doduo", "Normal/Flying", "084.gif", "084.png"},
             {"Dodrio", "Normal/Flying", "085.gif", "085.png"},
             {"Seel", "Water", "086.gif", "086.png"},
@@ -470,26 +535,7 @@ public class BuildDatabase extends Application {
         System.out.println("Attacks insertados correctamente.");        
 
     }
-    public static void insertPlayerPokemon() {
-        AppData db = AppData.getInstance();
-        db.connect(selected_path);
-        Random random = new Random();
-        int max_hp = random.nextInt(50) + 1; 
-        int attack = random.nextInt(50) + 1;
-        int pokemon_id = random.nextInt(151) + 1; // ID de Pokémon entre 1 y 151
-    
-        for (int i = 0; i < 3; i++) {
-            int stamina = random.nextInt(50) + 1;
-            db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina) VALUES (" +
-                      pokemon_id + ", " + max_hp + ", " + attack + ", " + stamina + ");");
-            pokemon_id = random.nextInt(151) + 1; // Generar un nuevo Pokémon aleatorio
-            max_hp = random.nextInt(50) + 1;
-            attack = random.nextInt(50) + 1;
-        }
-
-        System.out.println("Player Pokemon insertados correctamente.");
-        
-    }
+   
 
     public static void insertAllTypeEffectiveness() {
         String[][] typeEffectiveness = {
