@@ -70,7 +70,7 @@
                      <children>
                         <HBox alignment="CENTER_RIGHT" minWidth="50.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Label text="Ability:" textFill="RED">
+                              <Label text="Type:" textFill="RED">
                                  <effect>
                                     <Glow level="0.92">
                                        <input>
@@ -82,7 +82,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="labelAbility" text="Ability">
+                              <Label fx:id="labelType" text="Type">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -91,7 +91,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Label text="Category:" textFill="#866736">
+                              <Label text="Level:" textFill="#866736">
                                  <effect>
                                     <Glow level="0.88" />
                                  </effect>
@@ -129,12 +129,12 @@
                         </ImageView>
                         <HBox alignment="CENTER" prefHeight="47.0" prefWidth="275.0" spacing="10.0">
                            <children>
-                              <Label text="Type:" textFill="#0073ff">
+                              <Label text="NickName:" textFill="#0073ff">
                                  <effect>
                                     <Glow level="1.0" />
                                  </effect>
                               </Label>
-                              <Label fx:id="labelType" text="Type" />
+                              <Label fx:id="labelNickname" text="NickName" />
                            </children>
                         </HBox>
                      </children>
@@ -154,7 +154,7 @@
                                     <Cursor fx:constant="NONE" />
                                  </cursor>
                               </Label>
-                              <Label fx:id="labelHp" text="Weigth">
+                              <Label fx:id="labelHp" text="100/100">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -171,7 +171,7 @@
                                     <Glow level="0.94" />
                                  </effect>
                               </Label>
-                              <Label fx:id="labelStamina" text="Height">
+                              <Label fx:id="labelStamina" text="200/200">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
