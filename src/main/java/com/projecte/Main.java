@@ -3,6 +3,7 @@ package com.projecte;
 import com.utils.UtilsViews;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -17,7 +18,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        
 
         // Carga vistas
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
@@ -33,7 +33,8 @@ public class Main extends Application {
         UtilsViews.setView("ViewManagement");
 
         ControllerManagement ctrl = (ControllerManagement) UtilsViews.getController("ViewManagement");
-        ctrl.loadPokemon(this.number); //Definir el número del Pokemon para la obtención de los datos en la vista PokeCard
+        int number = 1; //Número del Pokemon a cargar
+        ctrl.loadPokemon(number); //Definir el número del Pokemon para la obtención de los datos en la vista PokeCard
         
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);

@@ -28,7 +28,7 @@ public class ControllerManagement implements Initializable {
     private Button buttonPrevious = new Button();
 
     @FXML
-    private Label labelAbility = new Label();
+    private Label labelLevel = new Label();
     
     @FXML
     private Label labelName = new Label();
@@ -37,13 +37,13 @@ public class ControllerManagement implements Initializable {
     private Label labelType = new Label();
     
     @FXML
-    private Label labelWeight = new Label();
+    private Label labelStamina = new Label();
     
     @FXML
-    private Label labelHeight = new Label();
+    private Label labelHp = new Label();
     
     @FXML
-    private Label labelCategory = new Label();
+    private Label labelNickname = new Label();
 
     @FXML
     private ImageView imgBackArrow; //Imagen para retroceder de vista
@@ -76,44 +76,49 @@ public class ControllerManagement implements Initializable {
 
         AppData db = AppData.getInstance();
 
-        ArrayList<HashMap<String, Object>> llistaPokemons = db.query(String.format("SELECT * FROM pokemons WHERE number = '%d';", this.number));
+        ArrayList<HashMap<String, Object>> llistaPokemons = db.query(String.format("SELECT * FROM Pokemon WHERE id = '%d';", this.number));
         if (llistaPokemons.size() == 1) {
             HashMap<String, Object> pokemon = llistaPokemons.get(0);
-            this.labelCategory.setText((String) pokemon.get("category"));
-            this.labelAbility.setText((String) pokemon.get("ability"));
-            this.labelHeight.setText((String) pokemon.get("height"));
-            this.labelName.setText("#" + number + " " + (String) pokemon.get("name"));
-            this.labelType.setText((String) pokemon.get("type"));
-            this.labelWeight.setText((String) pokemon.get("weight"));
-            String imagePath = (String) pokemon.get("image");
+            String id = (String) pokemon.get("id");
+            String name = (String) pokemon.get("name");
+            String type = (String) pokemon.get("type");
+            this.labelType.setText(type);
+            this.labelName.setText("#" + id + " " + name);
+
+            String imagePokemon = (String) pokemon.get("icon-path");
             
             try {
-                File file = new File(imagePath);
-                Image image = new Image(file.toURI().toString());
-                this.imgPokemon.setImage(image);
-            } catch (NullPointerException e) {
-                System.err.println("Error loading image asset: " + imagePath);
+                String imagePath = "assets/poke-icons/" + imagePokemon;
+                java.io.InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(imagePath);
+                if (resourceStream == null) {
+                    throw new NullPointerException("Recurso no encontrado: " + imagePath);
+                }
+            
+                Image image = new Image(resourceStream);
+                imgPokemon.setImage(image);
+            } catch (NullPointerException | IllegalArgumentException e) {
+                System.err.println("Error cargando el recurso: " + imagePokemon);
                 e.printStackTrace();
             }
         }
 
                 
-        ArrayList<HashMap<String, Object>> llistaPrevious = db.query(String.format("SELECT * FROM pokemons WHERE number < '%d' ORDER BY number DESC LIMIT 1;", this.number));
+        ArrayList<HashMap<String, Object>> llistaPrevious = db.query(String.format("SELECT * FROM Pokemon WHERE id < '%d' ORDER BY id DESC LIMIT 1;", this.number));
     
         if (llistaPrevious.size() == 1) {
             HashMap<String, Object> pokemon_pr = llistaPrevious.get(0);
-            this.previousNumber = (int) pokemon_pr.get("number"); 
+            this.previousNumber = (int) pokemon_pr.get("id"); 
             buttonPrevious.setDisable(false);          
         } else {
             this.previousNumber = -1;
             this.buttonPrevious.setDisable(true);
         }
-
-        ArrayList<HashMap<String, Object>> llistaNextList = db.query(String.format("SELECT * FROM pokemons WHERE number > '%d' ORDER BY number ASC LIMIT 1;", this.number));
+        
+        ArrayList<HashMap<String, Object>> llistaNextList = db.query(String.format("SELECT * FROM Pokemon WHERE id > '%d' ORDER BY id ASC LIMIT 1;", this.number));
 
         if (llistaNextList.size() == 1) {
             HashMap<String, Object> pokemon_nxt = llistaNextList.get(0);
-            this.nextNumber = (int) pokemon_nxt.get("number");    
+            this.nextNumber = (int) pokemon_nxt.get("id");    
             this.buttonNext.setDisable(false);        
         } else {
             this.nextNumber = -1;
@@ -131,7 +136,7 @@ public class ControllerManagement implements Initializable {
     //Arrow back
     @FXML
     public void goBack(MouseEvent event) {
-        UtilsViews.setViewAnimating("ViewList");
+        UtilsViews.setViewAnimating("ViewMenu");
     }
 
     //Button previous

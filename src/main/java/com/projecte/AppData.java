@@ -42,10 +42,13 @@ public class AppData {
     public void connect(String filePath) {
         String url = "jdbc:sqlite:" + filePath;
         try {
-            conn = DriverManager.getConnection(url);
-            conn.setAutoCommit(false);
+            if (conn == null || conn.isClosed()) {
+                conn = DriverManager.getConnection(url);
+                conn.setAutoCommit(false);
+                System.out.println("Conexión a la base de datos establecida.");
+            }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println("Error al conectar a la base de datos: " + e.getMessage());
         }
     }
 
@@ -54,11 +57,21 @@ public class AppData {
      */
     public void close() {
         try {
-            if (conn != null) {
+            if (conn != null && !conn.isClosed()) {
                 conn.close();
+                System.out.println("Conexión a la base de datos cerrada.");
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println("Error al cerrar la conexión: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Verifica si la connexió està establerta.
+     */
+    private void checkConnection() {
+        if (conn == null) {
+            throw new IllegalStateException("Database connection is not established. Call connect() first.");
         }
     }
 
@@ -69,20 +82,16 @@ public class AppData {
      * @param sql la sentència SQL d'actualització a executar.
      */
     public void update(String sql) {
-        if (conn == null) {
-            throw new IllegalStateException("Database connection is not established. Call connect() first.");
-        }
+        checkConnection();
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
             conn.commit();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println("Error al executar l'actualització: " + e.getMessage());
             try {
                 conn.rollback();
             } catch (SQLException rollbackEx) {
-                System.err.println("Error during rollback: " + rollbackEx.getMessage());
-                rollbackEx.printStackTrace(); // Replace with logging
-                System.err.println("Rollback failed: " + rollbackEx.getMessage());
+                System.err.println("Error durant el rollback: " + rollbackEx.getMessage());
             }
         }
     }
@@ -95,6 +104,7 @@ public class AppData {
      * @return l'identificador generat per la fila inserida, o -1 en cas d'error.
      */
     public int insertAndGetId(String sql) {
+        checkConnection();
         int generatedId = -1;
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
@@ -105,13 +115,11 @@ public class AppData {
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println("Error al inserir i obtenir l'ID: " + e.getMessage());
             try {
                 conn.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace(); // Replace with logging
-                System.err.println("Error during rollback: " + ex.getMessage());
-                ex.printStackTrace();
+            } catch (SQLException rollbackEx) {
+                System.err.println("Error durant el rollback: " + rollbackEx.getMessage());
             }
         }
         return generatedId;
@@ -125,6 +133,7 @@ public class AppData {
      * @return una ArrayList de HashMap amb els resultats de la consulta.
      */
     public ArrayList<HashMap<String, Object>> query(String sql) {
+        checkConnection();
         ArrayList<HashMap<String, Object>> resultList = new ArrayList<>();
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -138,7 +147,7 @@ public class AppData {
                 resultList.add(row);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println("Error al realitzar la consulta: " + e.getMessage());
         }
         return resultList;
     }

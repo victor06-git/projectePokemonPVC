@@ -15,7 +15,6 @@
 
 /* ===== CONTENEDOR PRINCIPAL ===== */
 .v-box {
-    
     -fx-border-color: #383838;
     -fx-border-width: 4px;
     -fx-border-radius: 5px;
@@ -36,69 +35,27 @@
 }
 
 /* ===== TÍTULO PRINCIPAL ===== */
-.label {
+.label#title {
     -fx-font-family: 'Press Start 2P', cursive;
-    -fx-font-size: 18px;
+    -fx-font-size: 20px;
     -fx-text-fill: #fffb02;
     -fx-effect: dropshadow(one-pass-box, #383838, 2, 0, 0, 0);
     -fx-padding: 5px;
 }
 
 /* ===== ICONO FLECHA ===== */
-#imgArrow {
+#imgBackArrow {
     -fx-effect: dropshadow(gaussian, #383838, 5, 0.5, 0, 2);
     -fx-border-color: #f8f8f8;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
+    -fx-cursor: hand;
 }
 
-/* ===== BARRA DIVISORIA ===== */
-.pane#linea-divisoria {
-    -fx-background-radius: 0;
-    -fx-pref-height: 3px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 3, 0, 0, 1);
-}
-
-/* ===== ÁREA DE CONTENIDO ===== */
-.scroll-pane {
-    -fx-border-color: #383838;
-    -fx-border-width: 3px;
-    -fx-background-radius: 5px;
-    -fx-border-radius: 5px;
-    -fx-padding: 5px;
-}
-
-.scroll-pane .viewport {
-    -fx-border-color: #a0a0a0;
-    -fx-border-width: 2px;
-    -fx-border-radius: 5px;
-}
-
-/* ===== BARRAS DE SCROLL ===== */
-.scroll-bar:horizontal, .scroll-bar:vertical {
-    -fx-background-color: #f8f8f8;
-    -fx-border-color: #383838;
-    -fx-border-width: 2px;
-    -fx-border-radius: 5px;
-}
-
-.scroll-bar .thumb {
-    -fx-background-color: #d01010; /* Rojo Pokémon */
-    -fx-background-insets: 0;
-    -fx-background-radius: 5px;
-}
-
-.scroll-bar .increment-button, .scroll-bar .decrement-button {
-    -fx-background-color: #f8a010; /* Naranja Pokémon */
-    -fx-border-color: #383838;
-    -fx-border-width: 1px;
-    -fx-border-radius: 5px;
-}
-
-/* ===== BOTONES POKÉMON ===== */
+/* ===== BOTONES ===== */
 .button {
     -fx-font-family: 'VT323', monospace;
-    -fx-font-size: 22px;
+    -fx-font-size: 16px;
     -fx-text-fill: #383838;
     -fx-background-color: #f8a010; /* Naranja Pokémon */
     -fx-border-color: #383838;
@@ -122,15 +79,94 @@
     -fx-translate-y: 1px;
 }
 
-/* ===== EFECTOS ESPECIALES ===== */
-@keyframes blink {
-    0% { -fx-opacity: 1; }
-    50% { -fx-opacity: 0.7; }
-    100% { -fx-opacity: 1; }
+/* ===== BOTÓN SETTINGS ===== */
+.button-settings {
+    -fx-background-color: #00bcd4; /* Azul claro */
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-border-color: #0073ff;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
 }
 
-.highlight {
-    -fx-effect: dropshadow(gaussian, #f8a010, 10, 0.5, 0, 0);
-    -fx-animation: blink 1s infinite;
+.button-settings:hover {
+    -fx-background-color: #0097a7; /* Azul más oscuro */
+    -fx-text-fill: #f8f8f8;
+}
+
+.button-settings:pressed {
+    -fx-background-color: #006064; /* Azul oscuro */
+    -fx-text-fill: #ffffff;
+}
+
+/* ===== BOTÓN PREVIOUS ===== */
+.button-previous {
+    -fx-background-color: #ffeb3b; /* Amarillo */
+    -fx-text-fill: #383838;
+    -fx-font-size: 14px;
+    -fx-border-color: #fbc02d;
+    -fx-border-width: 2px;
     -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.button-previous:hover {
+    -fx-background-color: #fdd835; /* Amarillo más oscuro */
+    -fx-text-fill: #d01010;
+}
+
+.button-previous:pressed {
+    -fx-background-color: #fbc02d; /* Amarillo oscuro */
+    -fx-text-fill: #ffffff;
+}
+
+/* ===== BOTÓN NEXT ===== */
+.button-next {
+    -fx-background-color: #4caf50; /* Verde */
+    -fx-text-fill: #ff0000;
+    -fx-font-size: 14px;
+    -fx-border-color: #388e3c;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.button-next:hover {
+    -fx-background-color: #43a047; /* Verde más oscuro */
+    -fx-text-fill: #8b1010;
+}
+
+.button-next:pressed {
+    -fx-background-color: #2e7d32; /* Verde oscuro */
+    -fx-text-fill: #5c0a0a;
+}
+
+/* ===== LABELS ===== */
+.label {
+    -fx-font-family: 'VT323', monospace;
+    -fx-font-size: 20px;
+    -fx-text-fill: #383838;
+}
+
+.label#labelName {
+    -fx-font-size: 25px;
+    -fx-text-fill: #0073ff;
+    -fx-effect: dropshadow(gaussian, #383838, 3, 0.5, 0, 0);
+}
+
+.label#labelType {
+    -fx-font-size: 20px;
+    -fx-text-fill: #ff0000;
+    -fx-effect: dropshadow(gaussian, #383838, 3, 0.5, 0, 0);
+}
+
+.label#labelLevel {
+    -fx-font-size: 20px;
+    -fx-text-fill: #866736;
+}
+
+.label#labelNickname {
+    -fx-font-size: 20px;
+    -fx-text-fill: #0073ff;
 }
