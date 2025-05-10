@@ -3,7 +3,6 @@ package com.projecte;
 import com.utils.UtilsViews;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -15,6 +14,8 @@ public class Main extends Application {
     final int WINDOW_HEIGHT = 440;
     final int MIN_WIDTH = 600;
     final int MIN_HEIGHT = 400;
+
+    
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -30,7 +31,7 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewAttackResult", "/assets/viewAttackResult.fxml");
         UtilsViews.addView(getClass(), "ViewManagement", "/assets/viewManagement.fxml");
 
-        UtilsViews.setView("ViewManagement");
+        UtilsViews.setView("ViewManagement"); // Vista inicial
 
         ControllerManagement ctrl = (ControllerManagement) UtilsViews.getController("ViewManagement");
         int number = 1; //Número del Pokemon a cargar

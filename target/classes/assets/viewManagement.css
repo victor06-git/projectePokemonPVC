@@ -150,8 +150,8 @@
 }
 
 .label#labelName {
-    -fx-font-size: 25px;
-    -fx-text-fill: #0073ff;
+    -fx-font-size: 30px;
+    -fx-text-fill: #00ff00;
     -fx-effect: dropshadow(gaussian, #383838, 3, 0.5, 0, 0);
 }
 
