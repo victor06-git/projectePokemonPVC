@@ -1,5 +1,9 @@
 package com.projecte;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Random;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -12,8 +16,9 @@ public class BuildDatabase extends Application {
         selected_path = input_path;
         db.connect(selected_path);
 
-        // Crear la base de datos y las tablas si no existen
-        setTables();
+        // Crear las tablas necesarias sin borrar las tablas del jugador
+        
+        createAllTables();
 
         // Insertar Pokémon, objetos y efectividad de tipos
         insertAllPokemon();
@@ -21,10 +26,57 @@ public class BuildDatabase extends Application {
         insertAllAttacks();
         insertAllTypeEffectiveness();
 
+        // Verificar si existen registros en GameStats
+        ArrayList<java.util.HashMap<String, Object>> gameStatsResult = db.query("SELECT COUNT(*) AS count FROM GameStats;");
+        boolean hasGameStats = !gameStatsResult.isEmpty() && ((Number) gameStatsResult.get(0).get("count")).intValue() > 0;
+
+        // Verificar si existen registros en ItemInventory
+        ArrayList<java.util.HashMap<String, Object>> itemInventoryResult = db.query("SELECT COUNT(*) AS count FROM ItemInventory;");
+        boolean hasItemInventory = !itemInventoryResult.isEmpty() && ((Number) itemInventoryResult.get(0).get("count")).intValue() > 0;
+
+        // Verificar si PlayerPokemon tiene 3 o más con unlocked = 1
+        ArrayList<java.util.HashMap<String, Object>> playerPokemonResult = db.query("SELECT COUNT(*) AS count FROM PlayerPokemon WHERE unlocked = 1;");
+        int unlockedPokemonCount = playerPokemonResult.isEmpty() ? 0 : ((Number) playerPokemonResult.get(0).get("count")).intValue();
+
+        // Insertar datos iniciales si no existen
+        if (!hasGameStats) {
+            db.update("INSERT INTO GameStats (id, total_experience, battles_played, max_win_streak, current_win_streak) VALUES (1, 0, 0, 0, 0);");
+        }
+
+        if (!hasItemInventory) {
+            db.update("INSERT INTO ItemInventory (item_id, quantity) SELECT id, 0 FROM Item;");
+        }
+
+        if (unlockedPokemonCount < 3) {
+            // Si no hay suficientes Pokémon desbloqueados, insertar 3 Pokémon desbloqueados
+            Random random = new Random();
+            HashSet<Integer> unlockedPokemonIds = new HashSet<>();
+            while (unlockedPokemonIds.size() < 3) {
+                int pokemonId = random.nextInt(251) + 1; // IDs del 1 al 251
+                if (!unlockedPokemonIds.contains(pokemonId)) {
+                    unlockedPokemonIds.add(pokemonId);
+                    db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
+                          pokemonId + ", 100, 50, 30, 1);");
+
+                    System.out.println("Pokémon desbloqueado: " + pokemonId );
+                }
+            }
+
+            // Insertar el resto de los Pokémon con "unlocked" en false
+            for (int i = 1; i <= 251; i++) {
+                if (!unlockedPokemonIds.contains(i)) {
+                    db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
+                          i + ", 100, 50, 30, 0);");
+                }
+            }
+        }
+
         db.close();
     }
 
-    public static void setTables() {
+    
+
+    public static void cleanAllTaables() {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
@@ -40,74 +92,96 @@ public class BuildDatabase extends Application {
             DROP TABLE IF EXISTS Pokemon;
         """;
 
-        // Luego creamos las tablas (en el orden correcto considerando las dependencias)
-        String createTables = """
-            CREATE TABLE Pokemon (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                type TEXT NOT NULL,
-                image_path TEXT,
-                icon_path TEXT
-            );
-
-            CREATE TABLE PlayerPokemon (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                pokemon_id INTEGER NOT NULL,
-                nickname TEXT,
-                max_hp INTEGER NOT NULL,
-                attack INTEGER NOT NULL,
-                stamina INTEGER NOT NULL,
-                unlocked BOOLEAN DEFAULT 0,
-                FOREIGN KEY (pokemon_id) REFERENCES Pokemon(id)
-            );
-
-            CREATE TABLE Attack (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                type TEXT NOT NULL,
-                damage INTEGER NOT NULL,
-                stamina_cost INTEGER NOT NULL
-            );
-
-            CREATE TABLE PokemonAttack (
-                pokemon_id INTEGER NOT NULL,
-                attack_id INTEGER NOT NULL,
-                PRIMARY KEY (pokemon_id, attack_id),
-                FOREIGN KEY (pokemon_id) REFERENCES Pokemon(id),
-                FOREIGN KEY (attack_id) REFERENCES Attack(id)
-            );
-
-            CREATE TABLE TypeEffectiveness (
-                attack_type TEXT NOT NULL,
-                target_type TEXT NOT NULL,
-                multiplier REAL NOT NULL,
-                PRIMARY KEY (attack_type, target_type)
-            );
-
-            CREATE TABLE Item (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL UNIQUE,
-                effect_type TEXT NOT NULL,
-                effect_value INTEGER
-            );
-
-            CREATE TABLE ItemInventory (
-                item_id INTEGER PRIMARY KEY,
-                quantity INTEGER DEFAULT 0,
-                FOREIGN KEY (item_id) REFERENCES Item(id)
-            );
-
-            CREATE TABLE GameStats (
-                id INTEGER PRIMARY KEY CHECK (id = 1),
-                total_experience INTEGER DEFAULT 0,
-                battles_played INTEGER DEFAULT 0,
-                max_win_streak INTEGER DEFAULT 0,
-                current_win_streak INTEGER DEFAULT 0
-            );
-        """;
+       
         db.update(dropTables);
-        db.update(createTables);
     }
+
+    public static void cleanBaseTables() {
+        AppData db = AppData.getInstance();
+        db.connect(selected_path);
+
+        // Primero eliminamos las tablas si existen (en orden inverso por dependencias)
+        String dropTables = """
+            DROP TABLE IF EXISTS Item;
+            DROP TABLE IF EXISTS Attack;
+            DROP TABLE IF EXISTS TypeEffectiveness;
+            DROP TABLE IF EXISTS Pokemon;
+        """;
+
+       
+        db.update(dropTables);
+    }
+
+    public static void createAllTables() {
+        AppData db = AppData.getInstance();
+        String createTables = """
+                CREATE TABLE IF NOT EXISTS Pokemon (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    type TEXT NOT NULL,
+                    image_path TEXT,
+                    icon_path TEXT
+                );
+
+                CREATE TABLE IF NOT EXISTS PlayerPokemon (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    pokemon_id INTEGER NOT NULL,
+                    nickname TEXT,
+                    max_hp INTEGER NOT NULL,
+                    attack INTEGER NOT NULL,
+                    stamina INTEGER NOT NULL,
+                    unlocked BOOLEAN DEFAULT 0,
+                    FOREIGN KEY (pokemon_id) REFERENCES Pokemon(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS Attack (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    type TEXT NOT NULL,
+                    damage INTEGER NOT NULL,
+                    stamina_cost INTEGER NOT NULL
+                );
+
+                CREATE TABLE IF NOT EXISTS PokemonAttack (
+                    pokemon_id INTEGER NOT NULL,
+                    attack_id INTEGER NOT NULL,
+                    PRIMARY KEY (pokemon_id, attack_id),
+                    FOREIGN KEY (pokemon_id) REFERENCES Pokemon(id),
+                    FOREIGN KEY (attack_id) REFERENCES Attack(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS TypeEffectiveness (
+                    attack_type TEXT NOT NULL,
+                    target_type TEXT NOT NULL,
+                    multiplier REAL NOT NULL,
+                    PRIMARY KEY (attack_type, target_type)
+                );
+
+                CREATE TABLE IF NOT EXISTS Item (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL UNIQUE,
+                    effect_type TEXT NOT NULL,
+                    effect_value INTEGER
+                );
+
+                CREATE TABLE IF NOT EXISTS ItemInventory (
+                    item_id INTEGER PRIMARY KEY,
+                    quantity INTEGER DEFAULT 0,
+                    FOREIGN KEY (item_id) REFERENCES Item(id)
+                );
+
+                CREATE TABLE IF NOT EXISTS GameStats (
+                    id INTEGER PRIMARY KEY CHECK (id = 1),
+                    total_experience INTEGER DEFAULT 0,
+                    battles_played INTEGER DEFAULT 0,
+                    max_win_streak INTEGER DEFAULT 0,
+                    current_win_streak INTEGER DEFAULT 0
+                );
+            """;
+            
+            db.update(createTables);
+    }
+
 
     public static void insertAllPokemon() {
         String[][] pokemons = {
@@ -192,8 +266,8 @@ public class BuildDatabase extends Application {
             {"Rapidash", "Fire", "078.gif", "078.png"},
             {"Slowpoke", "Water/Psychic", "079.gif", "079.png"},
             {"Slowbro", "Water/Psychic", "080.gif", "080.png"},
-            {"Magnemite", "Electric/Steel", "081.gif", "081.png"},
-            {"Magneton", "Electric/Steel", "082.gif", "082.png"},
+            {"Magnemite", "Electric", "081.gif", "081.png"},
+            {"Magneton", "Electric", "082.gif", "082.png"},
             {"Farfetch", "Normal/Flying", "083.gif", "083.png"},
             {"Doduo", "Normal/Flying", "084.gif", "084.png"},
             {"Dodrio", "Normal/Flying", "085.gif", "085.png"},
@@ -264,7 +338,7 @@ public class BuildDatabase extends Application {
             {"Mewtwo", "Psychic", "150.gif", "150.png"},
             {"Mew", "Psychic", "151.gif", "151.png"},
 
-            // Segunda Generación (152-251)
+            // Segunda Generación (152-251)// Segunda Generación (152-251)
             {"Chikorita", "Grass", "152.gif", "152.png"},
             {"Bayleef", "Grass", "153.gif", "153.png"},
             {"Meganium", "Grass", "154.gif", "154.png"},
@@ -304,17 +378,31 @@ public class BuildDatabase extends Application {
             {"Skiploom", "Grass/Flying", "188.gif", "188.png"},
             {"Jumpluff", "Grass/Flying", "189.gif", "189.png"},
             {"Aipom", "Normal", "190.gif", "190.png"},
-            {"Sunkern", "Grass/Poison", "191.gif", "191.png"},
+            {"Sunkern", "Grass", "191.gif", "191.png"},
             {"Sunflora", "Grass", "192.gif", "192.png"},
             {"Yanma", "Bug/Flying", "193.gif", "193.png"},
             {"Wooper", "Water/Ground", "194.gif", "194.png"},
             {"Quagsire", "Water/Ground", "195.gif", "195.png"},
             {"Espeon", "Psychic", "196.gif", "196.png"},
             {"Umbreon", "Dark", "197.gif", "197.png"},
-            {"Leafeon", "Grass", "470.gif", "470.png"},
-            {"Glaceon", "Ice", "471.gif", "471.png"},
-            {"Sylveon", "Fairy", "700.gif", "700.png"},
-            {"Porygon2", "Normal", "233.gif", "233.png"},
+            {"Murkrow", "Dark/Flying", "198.gif", "198.png"},
+            {"Slowking", "Water/Psychic", "199.gif", "199.png"},
+            {"Misdreavus", "Ghost", "200.gif", "200.png"},
+            {"Unown", "Psychic", "201.gif", "201.png"},
+            {"Wobbuffet", "Psychic", "202.gif", "202.png"},
+            {"Girafarig", "Normal/Psychic", "203.gif", "203.png"},
+            {"Pineco", "Bug", "204.gif", "204.png"},
+            {"Forretress", "Bug/Steel", "205.gif", "205.png"},
+            {"Dunsparce", "Normal", "206.gif", "206.png"},
+            {"Gligar", "Ground/Flying", "207.gif", "207.png"},
+            {"Steelix", "Steel/Ground", "208.gif", "208.png"},
+            {"Snubbull", "Fairy", "209.gif", "209.png"},
+            {"Granbull", "Fairy", "210.gif", "210.png"},
+            {"Qwilfish", "Water/Poison", "211.gif", "211.png"},
+            {"Scizor", "Bug/Steel", "212.gif", "212.png"},
+            {"Shuckle", "Bug/Rock", "213.gif", "213.png"},
+            {"Heracross", "Bug/Fighting", "214.gif", "214.png"},
+            {"Sneasel", "Dark/Ice", "215.gif", "215.png"},
             {"Teddiursa", "Normal", "216.gif", "216.png"},
             {"Ursaring", "Normal", "217.gif", "217.png"},
             {"Slugma", "Fire", "218.gif", "218.png"},
@@ -332,7 +420,7 @@ public class BuildDatabase extends Application {
             {"Kingdra", "Water/Dragon", "230.gif", "230.png"},
             {"Phanpy", "Ground", "231.gif", "231.png"},
             {"Donphan", "Ground", "232.gif", "232.png"},
-            {"Porygon-Z", "Normal", "474.gif", "474.png"},
+            {"Porygon2", "Normal", "233.gif", "233.png"},
             {"Stantler", "Normal", "234.gif", "234.png"},
             {"Smeargle", "Normal", "235.gif", "235.png"},
             {"Tyrogue", "Fighting", "236.gif", "236.png"},
@@ -424,21 +512,30 @@ public class BuildDatabase extends Application {
         AppData db = AppData.getInstance();
         db.connect("./data/pokemons.sqlite");
 
-        // Iteramos sobre el arreglo de ataques para insertar uno por uno
-        for (String[] attack : attacks) {
-            String name = attack[0];
-            String type = attack[1];
-            int damage = Integer.parseInt(attack[2]);
-            int staminaCost = Integer.parseInt(attack[3]);
+        // Insertar tres Pokémon con "unlocked" en true sin que se repitan
+        Random random = new Random();
+        HashSet<Integer> unlockedPokemonIds = new HashSet<>();
+        while (unlockedPokemonIds.size() < 3) {
+            int pokemonId = random.nextInt(251) + 1; // IDs del 1 al 251
+            if (!unlockedPokemonIds.contains(pokemonId)) {
+            unlockedPokemonIds.add(pokemonId);
+            db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
+                  pokemonId + ", 100, 50, 30, 1);");
+            }
+        }
 
-            // Ejecutamos la sentencia SQL para insertar el ataque
-            db.update("INSERT INTO Attack (name, type, damage, stamina_cost) VALUES ('" +
-                      name + "', '" + type + "', '" + damage + "', '" + staminaCost + "');");
+        // Insertar el resto de los Pokémon del 1 al 251 con "unlocked" en false
+        for (int i = 1; i <= 251; i++) {
+            if (!unlockedPokemonIds.contains(i)) {
+            db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
+                  i + ", 100, 50, 30, 0);");
+            }
         }
 
         System.out.println("Attacks insertados correctamente.");        
 
     }
+   
 
     public static void insertAllTypeEffectiveness() {
         String[][] typeEffectiveness = {
