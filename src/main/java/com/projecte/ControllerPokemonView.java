@@ -1,7 +1,5 @@
 package com.projecte;
 
-import java.io.File;
-
 import com.utils.UtilsViews;
 
 import javafx.fxml.FXML;
@@ -14,7 +12,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 
 public class ControllerPokemonView {
-    @FXML private int vidaMaxima, staminaMaxima;
+    
+    private int vidaMaxima, staminaMaxima;
     @FXML private ProgressBar hpBar, staminaBar;
     @FXML private Label labelName, labelNickname, labelType, labelLevel;
     @FXML private ImageView imgPokemon;
@@ -25,6 +24,7 @@ public class ControllerPokemonView {
         
         // Aplicar hoja de estilos
         applyStylesheet();
+
     }
 
     private void loadFonts() {
@@ -100,12 +100,8 @@ public class ControllerPokemonView {
 
     public void setImatge(String imagePokemon) {
         try {
-            String imagePath = "/assets/pokemons/" + imagePokemon;
-            if (!imagePath.startsWith("/")) {
-                imagePath = "/" + imagePath;
-            }
-        
-            java.net.URL resource = getClass().getResource(imagePath);
+            String imagePath = "assets/poke-icons/" + imagePokemon;
+            java.net.URL resource = getClass().getClassLoader().getResource(imagePath);
             if (resource == null) {
                 throw new NullPointerException("Recurso no encontrado: " + imagePath);
             }

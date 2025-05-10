@@ -1,11 +1,6 @@
 package com.projecte;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.application.Application;
-import javafx.fxml.Initializable;
 import javafx.stage.Stage;
 
 public class BuildDatabase extends Application {
@@ -28,8 +23,6 @@ public class BuildDatabase extends Application {
 
         db.close();
     }
-
-    
 
     public static void setTables() {
         AppData db = AppData.getInstance();

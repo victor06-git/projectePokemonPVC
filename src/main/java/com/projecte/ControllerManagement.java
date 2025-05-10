@@ -1,78 +1,155 @@
 package com.projecte;
 
-import java.io.IOException;
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+import com.utils.UtilsViews;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
 
-public class ControllerManagement {
+public class ControllerManagement implements Initializable {
+
+    
+    @FXML
+    private Button buttonNext = new Button();
 
     @FXML
-    private VBox list; // Asegúrate de que el fx:id en el FXML sea "list"
+    private Button buttonPrevious = new Button();
 
     @FXML
-    private ImageView imgMarca;
+    private Label labelAbility = new Label();
+    
+    @FXML
+    private Label labelName = new Label();
+    
+    @FXML
+    private Label labelType = new Label();
+    
+    @FXML
+    private Label labelWeight = new Label();
+    
+    @FXML
+    private Label labelHeight = new Label();
+    
+    @FXML
+    private Label labelCategory = new Label();
 
-    public void initialize(URL url, ResourceBundle rb) {
-        loadList(); // Cargar la lista al inicializar
-    }
+    @FXML
+    private ImageView imgBackArrow; //Imagen para retroceder de vista
+    
+    @FXML
+    private ImageView imgPokemon;
 
-    public void loadList() {
-        AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+    private int number, previousNumber = -1, nextNumber = -1; //Definición de variables para control de pokemons
 
-        // Llistar les 10 últimes ciutats utilitzant ArrayList i HashMap
-        ArrayList<HashMap<String, Object>> llistaPokemons = db.query("SELECT * FROM Pokemon;");
+    @Override
+    public void initialize(URL url, ResourceBundle rb) { //Función para inicializar con la imagen de retroceder
+        /*
+        Path imagePath = null;
         try {
-            setList(llistaPokemons);
+            URL imageURL = getClass().getResource("/assets/images602/arrow-back.png");
+            Image image = new Image(imageURL.toExternalForm());
+            imgBackArrow.setImage(image);
         } catch (Exception e) {
-            System.out.println("Error al cargar la lista: " + e.getMessage());
+            System.err.println("Error loading image asset: " + imagePath);
+            e.printStackTrace();
+        }
+        */
+    }
+
+    //Funció per carregar pokemons segons el seu número
+    @FXML
+    public void loadPokemon(int number){
+
+        this.number = number;
+
+        AppData db = AppData.getInstance();
+
+        ArrayList<HashMap<String, Object>> llistaPokemons = db.query(String.format("SELECT * FROM pokemons WHERE number = '%d';", this.number));
+        if (llistaPokemons.size() == 1) {
+            HashMap<String, Object> pokemon = llistaPokemons.get(0);
+            this.labelCategory.setText((String) pokemon.get("category"));
+            this.labelAbility.setText((String) pokemon.get("ability"));
+            this.labelHeight.setText((String) pokemon.get("height"));
+            this.labelName.setText("#" + number + " " + (String) pokemon.get("name"));
+            this.labelType.setText((String) pokemon.get("type"));
+            this.labelWeight.setText((String) pokemon.get("weight"));
+            String imagePath = (String) pokemon.get("image");
+            
+            try {
+                File file = new File(imagePath);
+                Image image = new Image(file.toURI().toString());
+                this.imgPokemon.setImage(image);
+            } catch (NullPointerException e) {
+                System.err.println("Error loading image asset: " + imagePath);
+                e.printStackTrace();
+            }
+        }
+
+                
+        ArrayList<HashMap<String, Object>> llistaPrevious = db.query(String.format("SELECT * FROM pokemons WHERE number < '%d' ORDER BY number DESC LIMIT 1;", this.number));
+    
+        if (llistaPrevious.size() == 1) {
+            HashMap<String, Object> pokemon_pr = llistaPrevious.get(0);
+            this.previousNumber = (int) pokemon_pr.get("number"); 
+            buttonPrevious.setDisable(false);          
+        } else {
+            this.previousNumber = -1;
+            this.buttonPrevious.setDisable(true);
+        }
+
+        ArrayList<HashMap<String, Object>> llistaNextList = db.query(String.format("SELECT * FROM pokemons WHERE number > '%d' ORDER BY number ASC LIMIT 1;", this.number));
+
+        if (llistaNextList.size() == 1) {
+            HashMap<String, Object> pokemon_nxt = llistaNextList.get(0);
+            this.nextNumber = (int) pokemon_nxt.get("number");    
+            this.buttonNext.setDisable(false);        
+        } else {
+            this.nextNumber = -1;
+            this.buttonNext.setDisable(true);
         }
     }
 
-    private void setList(ArrayList<HashMap<String, Object>> llistaPokemons) throws IOException {
-        // Ruta al archivo FXML del diseño de cada Pokémon
-        URL resource = this.getClass().getResource("/assets/pokemonView.fxml");
+    //Button edit
+    @FXML
+    public void editPokemon(ActionEvent event) {
+        ControllerPokeSettings ctrl = (ControllerPokeSettings) UtilsViews.getController("ViewPokeSettings");
+        UtilsViews.setViewAnimating("ViewPokeSettings");
+    }
 
-        // Limpiar el contenido existente del VBox
-        list.getChildren().clear();
+    //Arrow back
+    @FXML
+    public void goBack(MouseEvent event) {
+        UtilsViews.setViewAnimating("ViewList");
+    }
 
-        // Iterar sobre la lista de Pokémon
-        for (HashMap<String, Object> pokemon : llistaPokemons) {
-            // Extraer la información necesaria del HashMap
-            int id = (int) pokemon.get("id");
-            String name = (String) pokemon.get("name");
-            String type = (String) pokemon.get("type");
-            String iconPath = (String) pokemon.get("icon_path");
+    //Button previous
+    @FXML
+    public void previous(ActionEvent event) {
 
-            // Cargar el diseño de pokemonView.fxml
-            FXMLLoader loader = new FXMLLoader(resource);
-            Parent itemTemplate = loader.load();
-
-            // Obtener el controlador de la vista cargada
-            ControllerPokemonView itemController = loader.getController();
-
-            // Asignar los valores a los controles del template
-            itemController.setVidaMaxima(100);
-            itemController.setStaminaMaxima(100);
-            itemController.setHP(100);
-            String idname = "#" + id + " - " + name;
-            itemController.setName(idname);
-            itemController.setType(type);
-            itemController.setImatge(iconPath);
-            itemController.setNickName(name);
-            itemController.setLevel(1);
-            itemController.setStamina(100);
-
-            // Agregar el nuevo elemento al VBox
-            list.getChildren().add(itemTemplate);
+        if (this.previousNumber != -1) {
+            loadPokemon(previousNumber);
         }
     }
+
+    //Button next
+    @FXML
+    public void next(ActionEvent event) {
+        
+        if (this.nextNumber != -1) {
+            loadPokemon(nextNumber);
+        }
+    }
+
 }

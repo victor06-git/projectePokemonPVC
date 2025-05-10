@@ -32,6 +32,9 @@ public class Main extends Application {
 
         UtilsViews.setView("ViewManagement");
 
+        ControllerManagement ctrl = (ControllerManagement) UtilsViews.getController("ViewManagement");
+        ctrl.loadPokemon(this.number); //Definir el número del Pokemon para la obtención de los datos en la vista PokeCard
+        
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
         stage.setScene(scene);
