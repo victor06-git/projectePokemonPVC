@@ -38,7 +38,7 @@
                   </VBox>
                   <VBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#editPokemon" style="-fx-background-color: cyan;" stylesheets="@viewManagement.css" text="Settings" />
+                        <Button fx:id="buttonSettings" mnemonicParsing="false" onAction="#editPokemon" style="-fx-background-color: cyan;" stylesheets="@viewManagement.css" text="Settings" />
                      </children>
                   </VBox>
                </children>

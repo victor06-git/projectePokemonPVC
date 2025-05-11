@@ -11,7 +11,7 @@ public class Main extends Application {
 
 
     final int WINDOW_WIDTH = 600;
-    final int WINDOW_HEIGHT = 440;
+    final int WINDOW_HEIGHT = 490;
     final int MIN_WIDTH = 600;
     final int MIN_HEIGHT = 400;
 
@@ -33,9 +33,9 @@ public class Main extends Application {
 
         UtilsViews.setView("ViewManagement"); // Vista inicial
 
-        ControllerManagement ctrl = (ControllerManagement) UtilsViews.getController("ViewManagement");
-        int number = 1; //Número del Pokemon a cargar
-        ctrl.loadPokemon(number); //Definir el número del Pokemon para la obtención de los datos en la vista PokeCard
+        //ControllerManagement ctrl = (ControllerManagement) UtilsViews.getController("ViewManagement");
+        //int number = 1; //Número del Pokemon a cargar
+        //ctrl.loadPokemon(number); //Definir el número del Pokemon para la obtención de los datos en la vista PokeCard
 
         //BuildDatabase.main("C:\\Users\\User\\Desktop\\projectePokemonPVC\\data\\pokemons.sqlite"); //Cargar la base de datos
         

@@ -34,6 +34,9 @@ public class ControllerManagement implements Initializable {
     private Button buttonPrevious = new Button();
 
     @FXML
+    private Button buttonSettings = new Button();
+
+    @FXML
     private Label labelLevel = new Label();
     
     @FXML
@@ -87,6 +90,19 @@ public class ControllerManagement implements Initializable {
                 }
             }
         });
+    }
+
+    @FXML
+    public void setLabelNickname(String nickname) {
+        this.labelNickname.setText(nickname);
+    }
+    @FXML
+    public void setLabelName(String name) {
+        this.labelName.setText(name);
+    }
+    @FXML
+    public void setImagePokemon(Image image) {
+        this.imgPokemon.setImage(image);
     }
 
     /**
@@ -196,6 +212,8 @@ public class ControllerManagement implements Initializable {
                 this.labelNickname.setText("?");
             }
 
+            buttonSettings.setDisable(!isUnlocked);
+
         try {
             String imagePath = "assets/poke-icons/" + iconPath;
             java.io.InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(imagePath);
@@ -246,6 +264,9 @@ public class ControllerManagement implements Initializable {
     @FXML
     public void editPokemon(ActionEvent event) {
         ControllerPokeSettings ctrl = (ControllerPokeSettings) UtilsViews.getController("ViewPokeSettings");
+        ctrl.setLabelName(labelName.getText());
+        ctrl.setLabelNickname(labelNickname.getText());
+        ctrl.setImagePokemon(imgPokemon.getImage());
         UtilsViews.setViewAnimating("ViewPokeSettings");
     }
 
