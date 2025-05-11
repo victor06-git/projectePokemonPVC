@@ -9,20 +9,23 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleOptions">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleOptions">
    <children>
-      <ImageView fitHeight="405.0" fitWidth="604.0" layoutX="-1.0" layoutY="-4.0" pickOnBounds="true">
+      <ImageView fitHeight="405.0" fitWidth="604.0" layoutY="-2.0" pickOnBounds="true">
          <image>
             <Image url="@image/pokeOptions.png" />
          </image>
       </ImageView>
-      <VBox layoutX="379.0" layoutY="66.0" prefHeight="228.0" prefWidth="167.0" spacing="5.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="45.0" layoutX="14.0" layoutY="15.0" stroke="BLACK" strokeType="INSIDE" width="86.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d9edff" height="237.0" layoutX="382.0" layoutY="66.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <VBox layoutX="389.0" layoutY="71.0" prefHeight="228.0" prefWidth="167.0" spacing="5.0">
          <children>
             <HBox alignment="CENTER" prefHeight="48.0" prefWidth="96.0">
                <children>
-                  <Label fx:id="previousMap" text="&lt;&lt;" textFill="RED">
+                  <Label fx:id="previousMap" onMouseClicked="#showPreviousMap" text="&lt;&lt;" textFill="RED">
                      <font>
                         <Font size="30.0" />
                      </font>
@@ -31,7 +34,7 @@
                      <font>
                         <Font size="18.0" />
                      </font></Label>
-                  <Label fx:id="nextMap" text="&gt;&gt;" textFill="RED">
+                  <Label fx:id="nextMap" onMouseClicked="#showNextMap" text="&gt;&gt;" textFill="RED">
                      <font>
                         <Font size="30.0" />
                      </font>
@@ -40,7 +43,7 @@
             </HBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <ImageView fx:id="imgSelectedMap" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgSelectedMap" fitHeight="150.0" fitWidth="187.0" pickOnBounds="true" preserveRatio="true" />
                   <Label fx:id="labelSelectedMap" text="Map name" textFill="RED">
                      <font>
                         <Font size="18.0" />
@@ -49,32 +52,32 @@
             </VBox>
          </children>
       </VBox>
-      <HBox layoutX="42.0" layoutY="253.0" prefHeight="132.0" prefWidth="307.0" spacing="10.0">
+      <HBox layoutX="24.0" layoutY="135.0" prefHeight="132.0" prefWidth="307.0" spacing="10.0">
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                <children>
-                  <ImageView fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgPokemon1" fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
                   <ChoiceBox fx:id="choicePokemon1" prefWidth="150.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                <children>
-                  <ImageView fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgPokemon2" fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
                   <ChoiceBox fx:id="choicePokemon2" prefWidth="150.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                <children>
-                  <ImageView fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgPokemon3" fitHeight="76.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" />
                   <ChoiceBox fx:id="choicePokemon3" prefWidth="150.0" />
                </children>
             </VBox>
          </children>
       </HBox>
-      <ImageView fx:id="imgArrowBack" fitHeight="53.0" fitWidth="66.0" layoutX="20.0" layoutY="15.0" onMouseClicked="#toViewMenu" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imgArrowBack" fitHeight="45.0" fitWidth="66.0" layoutX="24.0" layoutY="15.0" onMouseClicked="#toViewMenu" pickOnBounds="true" preserveRatio="true">
          <effect>
             <Glow />
          </effect></ImageView>
-      <Button fx:id="startButton" onMouseClicked="#toViewBattle" layoutX="447.0" layoutY="338.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="70.0" text="Start" />
+      <Button fx:id="startButton" layoutX="447.0" layoutY="338.0" mnemonicParsing="false" onMouseClicked="#toViewBattle" prefHeight="36.0" prefWidth="70.0" text="Start" />
    </children>
 </AnchorPane>
