@@ -200,6 +200,8 @@ public class ControllerPokeSettings {
     alert.showAndWait();
     }
 
+    
+
     @FXML
     private void setAttack(ActionEvent event) {
         // Lógica para manejar el uso del ítem de ataque
@@ -240,28 +242,15 @@ public class ControllerPokeSettings {
     }
 
     private void updateItemQuantity(String itemName, int newQuantity) {
-    String query = """
-        UPDATE ItemInventory
-        SET quantity = ?
-        WHERE item_id = (SELECT id FROM Item WHERE name = ?);
-    """;
-
-    try (java.sql.Connection connection = java.sql.DriverManager.getConnection("jdbc:sqlite:your_database_path.db");
-         java.sql.PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-        preparedStatement.setInt(1, newQuantity);
-        preparedStatement.setString(2, itemName);
-
-        int rowsAffected = preparedStatement.executeUpdate();
-        if (rowsAffected > 0) {
-            System.out.println("Cantidad de " + itemName + " actualizada a " + newQuantity + ".");
-        } else {
-            System.out.println("No se pudo actualizar la cantidad de " + itemName + ".");
-        }
-    } catch (java.sql.SQLException e) {
-        System.err.println("Error al actualizar la cantidad de " + itemName + ": " + e.getMessage());
-        e.printStackTrace();
-    }
+    
+    AppData db = AppData.getInstance();
+    db.update(String.format(
+        "UPDATE ItemInventory " +
+        "SET quantity = %d " +
+        "WHERE item_id = (SELECT id FROM Item WHERE name = '%s')",
+                newQuantity, itemName
+            ));
+    db.close();
     }
 
 }

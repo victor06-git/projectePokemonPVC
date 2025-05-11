@@ -24,7 +24,7 @@
                <children>
                   <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="50.0" HBox.hgrow="NEVER">
                      <children>
-                        <ImageView fx:id="imgBackArrow" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#goBack" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="imgBackArrow" fitHeight="42.0" fitWidth="48.0" onMouseClicked="#goBack" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">

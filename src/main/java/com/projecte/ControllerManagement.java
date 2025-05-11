@@ -1,6 +1,7 @@
 package com.projecte;
 
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -68,6 +69,16 @@ public class ControllerManagement implements Initializable {
         // Insertar Pokémon con id 1, 4 y 7 en la tabla PlayerPokemon si no existen
         AppData db = AppData.getInstance();
         db.connect("./data/pokemons.sqlite");
+
+        Path imagePath = null;
+        try {
+            URL imageURL = getClass().getResource("/assets/image/arrow-back.gif");
+            Image image = new Image(imageURL.toExternalForm());
+            imgBackArrow.setImage(image);
+        } catch (Exception e) {
+            System.err.println("Error loading image asset: " + imagePath);
+            e.printStackTrace();
+        }
 
         showUnlockedOnly.setOnAction(event -> loadAllPokemons());
 
@@ -273,8 +284,10 @@ public class ControllerManagement implements Initializable {
     //Arrow back
     @FXML
     public void goBack(MouseEvent event) {
+        ControllerMenu ctrl2 = (ControllerMenu) UtilsViews.getController("ViewMenu");
         UtilsViews.setViewAnimating("ViewMenu");
     }
+
 
     // Button previous
     @FXML
