@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@viewPokeSettings.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerPokeSettings">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@viewPokeSettings.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerPokeSettings">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -18,11 +20,20 @@
                <children>
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="2.0">
                      <children>
-                        <Label alignment="TOP_CENTER" contentDisplay="TOP" minHeight="50.0" prefHeight="93.0" prefWidth="580.0" styleClass="label-title" text="POKÉMON SETTINGS" textFill="#2a599a">
-                           <font>
-                              <Font name="Noto Kufi Arabic ExtraBold" size="46.0" />
-                           </font>
-                        </Label>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fx:id="imgBackArrow" fitHeight="50.0" fitWidth="79.0" onMouseClicked="#goBack" pickOnBounds="true" preserveRatio="true">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <Label alignment="TOP_CENTER" contentDisplay="TOP" minHeight="50.0" prefHeight="93.0" prefWidth="580.0" styleClass="label-title" text="POKÉMON SETTINGS" textFill="#2a599a">
+                                 <font>
+                                    <Font name="Noto Kufi Arabic ExtraBold" size="46.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
                         <Label fx:id="labelName" alignment="CENTER" prefHeight="25.0" prefWidth="228.0" styleClass="label-name" text="Name">
                            <VBox.margin>
                               <Insets top="15.0" />
@@ -31,11 +42,13 @@
                               <Font name="Pokemon Pixel Font Regular" size="20.0" />
                            </font>
                         </Label>
-                        <ImageView fitHeight="171.0" fitWidth="193.0" pickOnBounds="true" preserveRatio="true" />
-                        <Label fx:id="nicknameLabel" alignment="CENTER" prefHeight="22.0" prefWidth="245.0" stylesheets="@viewPokeSettings.css" text="NickName">
-                           <font>
-                              <Font name="Pokemon Pixel Font Regular" size="20.0" />
-                           </font></Label>
+                        <ImageView fx:id="imgPokemon" fitHeight="171.0" fitWidth="193.0" pickOnBounds="true" preserveRatio="true" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                           <children>
+                              <TextField fx:id="nicknameText" maxWidth="200.0" prefHeight="22.0" prefWidth="179.0" />
+                              <Button mnemonicParsing="false" onAction="#updatePokemon" text="Change" />
+                           </children>
+                        </HBox>
                         <Separator prefHeight="14.0" prefWidth="580.0" />
                      </children>
                   </VBox>
@@ -48,9 +61,17 @@
                         </Label>
                         <HBox alignment="CENTER" prefHeight="66.0" prefWidth="580.0" spacing="20.0">
                            <children>
-                              <VBox alignment="CENTER" maxWidth="60.0" prefHeight="68.0" prefWidth="61.0">
+                              <VBox alignment="CENTER" maxWidth="103.0" prefHeight="90.0" prefWidth="103.0">
                                  <children>
-                                    <ImageView fx:id="attackImage" fitHeight="68.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="attackImage" fitHeight="68.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
+                                       <VBox.margin>
+                                          <Insets left="5.0" />
+                                       </VBox.margin></ImageView>
+                                    <Button fx:id="buttonAttack" mnemonicParsing="false" onAction="#setAttack" text="Select">
+                                       <VBox.margin>
+                                          <Insets left="5.0" />
+                                       </VBox.margin>
+                                    </Button>
                                  </children>
                               </VBox>
                               <VBox alignment="CENTER" prefHeight="68.0" prefWidth="31.0">
@@ -69,6 +90,7 @@
                               <VBox alignment="CENTER" maxWidth="50.0" prefHeight="68.0" prefWidth="50.0">
                                  <children>
                                     <ImageView fx:id="deffenseImage" fitHeight="68.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true" />
+                                    <Button fx:id="buttonDeffense" mnemonicParsing="false" onAction="#setDeffense" text="Select" />
                                  </children>
                               </VBox>
                               <VBox alignment="CENTER" prefHeight="68.0" prefWidth="26.0">
@@ -87,6 +109,7 @@
                               <VBox alignment="CENTER" prefHeight="68.0" prefWidth="100.0">
                                  <children>
                                     <ImageView fx:id="bottlecapImage" fitHeight="68.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true" />
+                                    <Button fx:id="buttonBottle" mnemonicParsing="false" onAction="#setBottle" text="Select" />
                                  </children>
                               </VBox>
                               <VBox alignment="CENTER" prefHeight="68.0" prefWidth="25.0">

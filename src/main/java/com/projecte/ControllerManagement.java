@@ -1,6 +1,7 @@
 package com.projecte;
 
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -32,6 +33,9 @@ public class ControllerManagement implements Initializable {
 
     @FXML
     private Button buttonPrevious = new Button();
+
+    @FXML
+    private Button buttonSettings = new Button();
 
     @FXML
     private Label labelLevel = new Label();
@@ -66,6 +70,16 @@ public class ControllerManagement implements Initializable {
         AppData db = AppData.getInstance();
         db.connect("./data/pokemons.sqlite");
 
+        Path imagePath = null;
+        try {
+            URL imageURL = getClass().getResource("/assets/image/arrow-back.gif");
+            Image image = new Image(imageURL.toExternalForm());
+            imgBackArrow.setImage(image);
+        } catch (Exception e) {
+            System.err.println("Error loading image asset: " + imagePath);
+            e.printStackTrace();
+        }
+
         showUnlockedOnly.setOnAction(event -> loadAllPokemons());
 
         // Llenar el ChoiceBox con los nombres de los Pokémon al inicializar
@@ -87,6 +101,19 @@ public class ControllerManagement implements Initializable {
                 }
             }
         });
+    }
+
+    @FXML
+    public void setLabelNickname(String nickname) {
+        this.labelNickname.setText(nickname);
+    }
+    @FXML
+    public void setLabelName(String name) {
+        this.labelName.setText(name);
+    }
+    @FXML
+    public void setImagePokemon(Image image) {
+        this.imgPokemon.setImage(image);
     }
 
     /**
@@ -196,6 +223,8 @@ public class ControllerManagement implements Initializable {
                 this.labelNickname.setText("?");
             }
 
+            buttonSettings.setDisable(!isUnlocked);
+
         try {
             String imagePath = "assets/poke-icons/" + iconPath;
             java.io.InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(imagePath);
@@ -246,14 +275,19 @@ public class ControllerManagement implements Initializable {
     @FXML
     public void editPokemon(ActionEvent event) {
         ControllerPokeSettings ctrl = (ControllerPokeSettings) UtilsViews.getController("ViewPokeSettings");
+        ctrl.setLabelName(labelName.getText());
+        ctrl.setLabelNickname(labelNickname.getText());
+        ctrl.setImagePokemon(imgPokemon.getImage());
         UtilsViews.setViewAnimating("ViewPokeSettings");
     }
 
     //Arrow back
     @FXML
     public void goBack(MouseEvent event) {
+        ControllerMenu ctrl2 = (ControllerMenu) UtilsViews.getController("ViewMenu");
         UtilsViews.setViewAnimating("ViewMenu");
     }
+
 
     // Button previous
     @FXML
