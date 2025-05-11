@@ -15,9 +15,10 @@ public class Main extends Application {
     final int MIN_WIDTH = 600;
     final int MIN_HEIGHT = 400;
 
+    
+
     @Override
     public void start(Stage stage) throws Exception {
-        
 
         // Carga vistas
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
@@ -28,9 +29,16 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewBattleOptions", "/assets/viewBattleOptions.fxml");
         UtilsViews.addView(getClass(), "ViewMenu", "/assets/viewMenu.fxml");
         UtilsViews.addView(getClass(), "ViewAttackResult", "/assets/viewAttackResult.fxml");
+        UtilsViews.addView(getClass(), "ViewManagement", "/assets/viewManagement.fxml");
 
-        UtilsViews.setView("ViewStart");
+        UtilsViews.setView("ViewManagement"); // Vista inicial
 
+        ControllerManagement ctrl = (ControllerManagement) UtilsViews.getController("ViewManagement");
+        int number = 1; //Número del Pokemon a cargar
+        ctrl.loadPokemon(number); //Definir el número del Pokemon para la obtención de los datos en la vista PokeCard
+
+        //BuildDatabase.main("C:\\Users\\User\\Desktop\\projectePokemonPVC\\data\\pokemons.sqlite"); //Cargar la base de datos
+        
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
         stage.setScene(scene);

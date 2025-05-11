@@ -1,78 +1,329 @@
 package com.projecte;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+import com.utils.UtilsViews;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
 
-public class ControllerManagement {
+public class ControllerManagement implements Initializable {
 
     
     @FXML
-    private VBox list = new VBox();
+    private Button buttonNext = new Button();
 
     @FXML
-    private ImageView imgMarca;
+    private ChoiceBox<String> pokemons;
 
+    @FXML
+    private CheckBox showUnlockedOnly;
+
+    @FXML
+    private Button buttonPrevious = new Button();
+
+    @FXML
+    private Label labelLevel = new Label();
+    
+    @FXML
+    private Label labelName = new Label();
+    
+    @FXML
+    private Label labelType = new Label();
+    
+    @FXML
+    private Label labelStamina = new Label();
+    
+    @FXML
+    private Label labelHp = new Label();
+    
+    @FXML
+    private Label labelNickname = new Label();
+
+    @FXML
+    private ImageView imgBackArrow; //Imagen para retroceder de vista
+    
+    @FXML
+    private ImageView imgPokemon;
+
+    private int number, previousNumber = -1, nextNumber = -1; //Definición de variables para control de pokemons
+
+    @FXML
     public void initialize(URL url, ResourceBundle rb) {
-        Image img = new Image(getClass().getResourceAsStream("/assets/images0602/marca.png"));
-        imgMarca.setImage(img);
-    }
 
-    public void loadList() {
+        // Insertar Pokémon con id 1, 4 y 7 en la tabla PlayerPokemon si no existen
         AppData db = AppData.getInstance();
         db.connect("./data/pokemons.sqlite");
 
-        // Llistar les 10 últimes ciutats utilitzant ArrayList i HashMap
-        ArrayList<HashMap<String, Object>> llistaPokemons = db.query("SELECT * FROM pokemons;");
-        try {
-            setList(llistaPokemons);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        showUnlockedOnly.setOnAction(event -> loadAllPokemons());
+
+        // Llenar el ChoiceBox con los nombres de los Pokémon al inicializar
+        loadAllPokemons();
+        
+        // Configurar el evento de selección en el ChoiceBox
+        pokemons.setOnAction(event -> {
+            String selectedPokemon = pokemons.getValue();
+            if (selectedPokemon != null) {
+                // Extraer el ID del Pokémon seleccionado (asumiendo que el formato es "#ID Nombre")
+                String[] parts = selectedPokemon.split(" ");
+                if (parts.length > 0) {
+                    try {
+                        int selectedId = Integer.parseInt(parts[0].substring(1)); // Quitar el "#" y convertir a entero
+                        loadPokemon(selectedId); // Cargar el Pokémon seleccionado
+                    } catch (NumberFormatException e) {
+                        System.err.println("Error al parsear el ID del Pokémon seleccionado: " + e.getMessage());
+                    }
+                }
+            }
+        });
     }
 
-    private void setList(ArrayList<HashMap<String, Object>> llistaPokemons) throws IOException {
+    /**
+     * Carga todos los Pokémon en el ChoiceBox.
+     */
+    private void loadAllPokemons() {
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
 
-        URL resource = this.getClass().getResource("/assets/pokemonView.fxml");
+        // Determinar si se deben mostrar solo los desbloqueados
+        boolean showOnlyUnlocked = showUnlockedOnly.isSelected();
 
-        // Netejar el contingut existent
-        list.getChildren().clear();
+        // Consulta para obtener los Pokémon
+        String query = "SELECT p.id, p.name, p.type, p.icon_path, pp.unlocked " +
+                   "FROM Pokemon p " +
+                   "LEFT JOIN PlayerPokemon pp ON p.id = pp.pokemon_id ";
+        if (showOnlyUnlocked) {
+            query += "WHERE pp.unlocked = 1 ";
+        }
+            query += "ORDER BY p.id ASC;";
 
-        // Iterar sobre els elements del JSONArray 'jsonInfo' (ja carregat a initialize)
-        for (int i = 0; i < llistaPokemons.size(); i++) {
-            // Obtenir l'objecte JSON individual (animal)
-            HashMap<String, Object> pokemon = llistaPokemons.get(i);
+        // Consulta para obtener todos los Pokémon
+        ArrayList<HashMap<String, Object>> allPokemons = db.query(query);        
 
-            // Extreure la informació necessària del JSON
-            int number = (int) pokemon.get("number");
+        pokemons.getItems().clear(); // Limpiar el ChoiceBox antes de llenarlo
+
+        for (HashMap<String, Object> pokemon : allPokemons) {
+            int id = (int) pokemon.get("id");
             String name = (String) pokemon.get("name");
-            String type = (String) pokemon.get("type");
-            String imagePath = (String) pokemon.get("image");
+            String iconPath = (String) pokemon.get("icon_path");
+            boolean isUnlocked = pokemon.get("unlocked") != null && (int) pokemon.get("unlocked") == 1;
 
-            // Carregar el template
-            FXMLLoader loader = new FXMLLoader(resource);
-            Parent itemTemplate = loader.load();
-            ControllerPokemonView itemController = loader.getController();
-            /* 
-            // Assignar els valors als controls del template
-            itemController.setNumber(number);
-            itemController.setTitle(name);
-            itemController.setSubtitle(type);
-            itemController.setImatge(imagePath);
-            */
-            // Afegir el nou element a 'yPane'
-            list.getChildren().add(itemTemplate);
+            // Agregar al ChoiceBox en el formato "#ID Nombre"
+            pokemons.getItems().add("#" + id + " " + name);
+
+           try {
+            String imagePath = "assets/poke-icons/" + iconPath;
+            java.io.InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(imagePath);
+            if (resourceStream == null) {
+                throw new NullPointerException("Recurso no encontrado: " + imagePath);
+            }
+
+            Image image = new Image(resourceStream);
+            imgPokemon.setImage(image);
+
+            // Aplicar o quitar el efecto Shadow según el estado de desbloqueo
+            if (!isUnlocked) {
+                imgPokemon.setEffect(new javafx.scene.effect.Shadow(15, javafx.scene.paint.Color.BLACK));
+            } else {
+                imgPokemon.setEffect(null); // Quitar el efecto si está desbloqueado
+            }
+
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.err.println("Error cargando el recurso: " + iconPath);
+            e.printStackTrace();
         }
     }
 
+        // Seleccionar el primer Pokémon por defecto si hay elementos
+        if (!pokemons.getItems().isEmpty()) {
+            pokemons.setValue(pokemons.getItems().get(0)); // Seleccionar el primero
+            String[] parts = pokemons.getValue().split(" ");
+            if (parts.length > 0) {
+                try {
+                    int firstId = Integer.parseInt(parts[0].substring(1)); // Quitar el "#" y convertir a entero
+                    loadPokemon(firstId); // Cargar el primer Pokémon
+                } catch (NumberFormatException e) {
+                    System.err.println("Error al parsear el ID del primer Pokémon: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    //Funció per carregar pokemons segons el seu número
+    @FXML
+    public void loadPokemon(int number) {
+    this.number = number;
+
+    AppData db = AppData.getInstance();
+    db.connect("./data/pokemons.sqlite");
+
+    ArrayList<HashMap<String, Object>> llistaPokemons = db.query(String.format("SELECT p.id, p.name, p.type, p.icon_path, pp.stamina, pp.max_hp, pp.unlocked FROM Pokemon p LEFT JOIN PlayerPokemon pp ON p.id = pp.pokemon_id WHERE p.id = '%d';", this.number));
+    if (llistaPokemons.size() == 1) {
+        HashMap<String, Object> pokemon = llistaPokemons.get(0);
+        String id = String.valueOf(pokemon.get("id"));
+        String name = (String) pokemon.get("name");
+        String type = (String) pokemon.get("type");
+        String iconPath = (String) pokemon.get("icon_path");
+        String stamina = String.valueOf(pokemon.get("stamina"));
+        String maxHp = String.valueOf(pokemon.get("max_hp"));
+
+        boolean isUnlocked = pokemon.get("unlocked") != null && (int) pokemon.get("unlocked") == 1;
+
+        if (isUnlocked) {
+                // Si el Pokémon está desbloqueado, mostrar sus datos
+                this.labelType.setText(type);
+                this.labelName.setText("#" + id + " " + name);
+                this.labelStamina.setText(stamina);
+                this.labelHp.setText(maxHp);
+                this.labelNickname.setText(name);
+            } else {
+                // Si el Pokémon no está desbloqueado, mostrar "?"
+                this.labelType.setText("?");
+                this.labelName.setText("?");
+                this.labelStamina.setText("?");
+                this.labelHp.setText("?");
+                this.labelNickname.setText("?");
+            }
+
+        try {
+            String imagePath = "assets/poke-icons/" + iconPath;
+            java.io.InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(imagePath);
+            if (resourceStream == null) {
+                throw new NullPointerException("Recurso no encontrado: " + imagePath);
+            }
+
+            Image image = new Image(resourceStream);
+            imgPokemon.setImage(image);
+
+            // Aplicar o quitar el efecto Shadow según el estado de desbloqueo
+            if (!isUnlocked) {
+                imgPokemon.setEffect(new javafx.scene.effect.Shadow(15, javafx.scene.paint.Color.BLACK));
+            } else {
+                imgPokemon.setEffect(null); // Quitar el efecto si está desbloqueado
+            }
+
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.err.println("Error cargando el recurso: " + iconPath);
+            e.printStackTrace();
+        }
+     }
+
+        ArrayList<HashMap<String, Object>> llistaPrevious = db.query(String.format("SELECT id FROM Pokemon WHERE id < %d ORDER BY id DESC LIMIT 1;", this.number));
     
-}
+        if (llistaPrevious.size() == 1) {
+            HashMap<String, Object> pokemon_pr = llistaPrevious.get(0);
+            this.previousNumber = (int) pokemon_pr.get("id");
+            buttonPrevious.setDisable(false);
+        } else {
+            this.previousNumber = -1;
+            this.buttonPrevious.setDisable(true);
+        }
+
+        ArrayList<HashMap<String, Object>> llistaNextList = db.query(String.format("SELECT id FROM Pokemon WHERE id > %d ORDER BY id ASC LIMIT 1;", this.number));
+
+        if (llistaNextList.size() == 1) {
+            HashMap<String, Object> pokemon_nxt = llistaNextList.get(0);
+            this.nextNumber = (int) pokemon_nxt.get("id");
+            this.buttonNext.setDisable(false);
+        } else {
+            this.nextNumber = -1;
+            this.buttonNext.setDisable(true);
+        }
+    }
+
+    //Button edit
+    @FXML
+    public void editPokemon(ActionEvent event) {
+        ControllerPokeSettings ctrl = (ControllerPokeSettings) UtilsViews.getController("ViewPokeSettings");
+        UtilsViews.setViewAnimating("ViewPokeSettings");
+    }
+
+    //Arrow back
+    @FXML
+    public void goBack(MouseEvent event) {
+        UtilsViews.setViewAnimating("ViewMenu");
+    }
+
+    // Button previous
+    @FXML
+    public void previous(ActionEvent event) {
+        if (this.number != -1) {
+            // Verificar si el CheckBox está activado
+            boolean showOnlyUnlocked = showUnlockedOnly.isSelected();
+
+            // Si el CheckBox está activado, buscar el Pokémon desbloqueado anterior
+            if (showOnlyUnlocked) {
+                ArrayList<HashMap<String, Object>> llistaPrevious = AppData.getInstance().query(
+                    String.format("SELECT p.id, p.name, p.type, p.icon_path FROM Pokemon p INNER JOIN PlayerPokemon pp ON p.id = pp.pokemon_id WHERE pp.unlocked = 1 AND p.id < '%d' ORDER BY p.id DESC LIMIT 1;", this.number)
+                );
+
+                if (llistaPrevious.size() == 1) {
+                    HashMap<String, Object> pokemon_pr = llistaPrevious.get(0);
+                    this.number = (int) pokemon_pr.get("id"); // Actualizar el número actual
+                    loadPokemon(this.number);
+                    updateChoiceBox(this.number);
+                } else {
+                    // No hay más Pokémon desbloqueados anteriores
+                    this.buttonPrevious.setDisable(true);
+                }
+            } else {
+                // Cargar el Pokémon anterior normalmente
+                loadPokemon(previousNumber + 2);
+                System.out.println("previousNumber: " + (previousNumber - 1));
+                System.out.println("number: " + number);
+                updateChoiceBox(previousNumber - 1);
+            }
+        }
+    }
+
+    // Button next
+    @FXML
+    public void next(ActionEvent event) {
+        if (this.number != -1) {
+            // Verificar si el CheckBox está activado
+            boolean showOnlyUnlocked = showUnlockedOnly.isSelected();
+
+            // Si el CheckBox está activado, buscar el Pokémon desbloqueado siguiente
+            if (showOnlyUnlocked) {
+                ArrayList<HashMap<String, Object>> llistaNext = AppData.getInstance().query(
+                    String.format("SELECT p.id, p.name, p.type, p.icon_path FROM Pokemon p INNER JOIN PlayerPokemon pp ON p.id = pp.pokemon_id WHERE pp.unlocked = 1 AND p.id > '%d' ORDER BY p.id ASC LIMIT 1;", this.number)
+                );
+
+                if (llistaNext.size() == 1) {
+                    HashMap<String, Object> pokemon_nxt = llistaNext.get(0);
+                    this.number = (int) pokemon_nxt.get("id"); // Actualizar el número actual
+                    loadPokemon(this.number);
+                    updateChoiceBox(this.number);
+                } else {
+                    // No hay más Pokémon desbloqueados siguientes
+                    this.buttonNext.setDisable(true);
+                }
+            } else {
+                // Cargar el Pokémon siguiente normalmente
+                loadPokemon(nextNumber);
+                updateChoiceBox(nextNumber - 1);
+            }
+        }
+    }
+
+    // Método auxiliar para actualizar el ChoiceBox
+    private void updateChoiceBox(int pokemonId) {
+        for (String item : pokemons.getItems()) {
+            if (item.startsWith("#" + pokemonId + " ")) {
+                pokemons.setValue(item);
+                break;
+                }
+            }
+        }
+    }

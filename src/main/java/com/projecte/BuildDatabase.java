@@ -17,7 +17,7 @@ public class BuildDatabase extends Application {
         db.connect(selected_path);
 
         // Crear las tablas necesarias sin borrar las tablas del jugador
-        
+        cleanAllTables();
         createAllTables();
 
         // Insertar Pokémon, objetos y efectividad de tipos
@@ -76,7 +76,7 @@ public class BuildDatabase extends Application {
 
     
 
-    public static void cleanAllTaables() {
+    public static void cleanAllTables() {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 

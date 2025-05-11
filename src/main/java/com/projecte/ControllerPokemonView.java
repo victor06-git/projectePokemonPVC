@@ -1,6 +1,6 @@
 package com.projecte;
 
-import java.io.File;
+import com.utils.UtilsViews;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -12,7 +12,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 
 public class ControllerPokemonView {
-    @FXML private int vidaMaxima, staminaMaxima;
+    
+    private int vidaMaxima, staminaMaxima;
     @FXML private ProgressBar hpBar, staminaBar;
     @FXML private Label labelName, labelNickname, labelType, labelLevel;
     @FXML private ImageView imgPokemon;
@@ -23,6 +24,7 @@ public class ControllerPokemonView {
         
         // Aplicar hoja de estilos
         applyStylesheet();
+
     }
 
     private void loadFonts() {
@@ -31,18 +33,17 @@ public class ControllerPokemonView {
         // Cargar fuentes desde archivos locales
         try {
             if (pixelFont != null) {
-            labelName.setFont(pixelFont);
-            labelNickname.setFont(pixelFont);
-            labelType.setFont(pixelFont);
-            labelLevel.setFont(pixelFont);
+                labelName.setFont(pixelFont);
+                labelNickname.setFont(pixelFont);
+                labelType.setFont(pixelFont);
+                labelLevel.setFont(pixelFont);
             } else {
-            System.err.println("Error: No se pudo cargar la fuente pixel-font.ttf");
+                System.err.println("Error: No se pudo cargar la fuente pixel-font.ttf");
             }
         } catch (Exception e) {
             System.err.println("Error cargando fuentes:");
             e.printStackTrace();
         }
-        
     }
 
     private void applyStylesheet() {
@@ -65,29 +66,58 @@ public class ControllerPokemonView {
         }
     }
 
-    // Resto de métodos del controller...
-    public void setVidaMaxima(int value) { this.vidaMaxima = value; }
-    public void setStaminaMaxima(int value) { this.staminaMaxima = value; }
-    public void setHP(int value) { this.hpBar.setProgress((double) value / vidaMaxima); }
-    public void setStamina(int value) { this.staminaBar.setProgress((double) value / staminaMaxima); }
-    public void setName(String value) { this.labelName.setText(value); }
-    public void setNickName(String value) { this.labelNickname.setText(value); }
-    public void setType(String value) { this.labelType.setText(value); }
-    public void setLevel(int value) { this.labelLevel.setText(String.valueOf(value)); }
+    public void setVidaMaxima(int value) {
+        this.vidaMaxima = value;
+    }
+    
+    public void setStaminaMaxima(int value) {
+        this.staminaMaxima = value; 
+    }
+    
+    public void setHP(int value) {
+        this.hpBar.setProgress((double) value / vidaMaxima); 
+    }
 
-    public void setImatge(String imagePath) {
+    public void setStamina(int value) {
+        this.staminaBar.setProgress((double) value / staminaMaxima); 
+    }
+    
+    public void setName(String value) {
+        this.labelName.setText(value); 
+    }
+    
+    public void setNickName(String value) {
+        this.labelNickname.setText(value); 
+    }
+   
+    public void setType(String value) {
+        this.labelType.setText(value); 
+    }
+   
+    public void setLevel(int value) {
+        this.labelLevel.setText(String.valueOf(value)); 
+    }
+
+    public void setImatge(String imagePokemon) {
         try {
-            File file = new File(imagePath);
-            Image image = new Image(file.toURI().toString());
-            this.imgPokemon.setImage(image);
-        } catch (NullPointerException e) {
-            System.err.println("Error cargando imagen: " + imagePath);
+            String imagePath = "assets/poke-icons/" + imagePokemon;
+            java.net.URL resource = getClass().getClassLoader().getResource(imagePath);
+            if (resource == null) {
+                throw new NullPointerException("Recurso no encontrado: " + imagePath);
+            }
+        
+            String fullPath = resource.toExternalForm();
+            Image image = new Image(fullPath);
+            imgPokemon.setImage(image);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.err.println("Error cargando el recurso: " + imagePokemon);
             e.printStackTrace();
         }
     }
 
     @FXML
     public void toViewSettings(MouseEvent event) {
-        // Implementación pendiente
+        ControllerPokeSettings ctrl = (ControllerPokeSettings) UtilsViews.getController("ViewPokeSettings");
+        UtilsViews.setViewAnimating("ViewPokeSettings");
     }
 }
