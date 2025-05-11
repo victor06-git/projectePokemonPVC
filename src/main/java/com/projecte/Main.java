@@ -36,6 +36,8 @@ public class Main extends Application {
         ControllerManagement ctrl = (ControllerManagement) UtilsViews.getController("ViewManagement");
         int number = 1; //Número del Pokemon a cargar
         ctrl.loadPokemon(number); //Definir el número del Pokemon para la obtención de los datos en la vista PokeCard
+
+        //BuildDatabase.main("C:\\Users\\User\\Desktop\\projectePokemonPVC\\data\\pokemons.sqlite"); //Cargar la base de datos
         
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
