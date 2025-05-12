@@ -43,7 +43,7 @@ public class ControllerMenu implements Initializable {
     }
 
     public void toViewBattleHistory(ActionEvent event) {
-        UtilsViews.setViewAnimating("ViewBattleHistory");
+        UtilsViews.setViewAnimating("ViewHistory");
     }
     
     public void toViewNewBattle(ActionEvent event) {
