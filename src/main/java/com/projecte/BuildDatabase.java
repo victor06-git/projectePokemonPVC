@@ -512,26 +512,17 @@ public class BuildDatabase extends Application {
         AppData db = AppData.getInstance();
         db.connect("./data/pokemons.sqlite");
 
-        // Insertar tres Pokémon con "unlocked" en true sin que se repitan
-        Random random = new Random();
-        HashSet<Integer> unlockedPokemonIds = new HashSet<>();
-        while (unlockedPokemonIds.size() < 3) {
-            int pokemonId = random.nextInt(251) + 1; // IDs del 1 al 251
-            if (!unlockedPokemonIds.contains(pokemonId)) {
-            unlockedPokemonIds.add(pokemonId);
-            db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
-                  pokemonId + ", 100, 50, 30, 1);");
-            }
-        }
+        // Iteramos sobre el arreglo de ataques para insertar uno por uno
+        for (String[] attack : attacks) {
+            String name = attack[0];
+            String type = attack[1];
+            int damage = Integer.parseInt(attack[2]);
+            int staminaCost = Integer.parseInt(attack[3]);
 
-        // Insertar el resto de los Pokémon del 1 al 251 con "unlocked" en false
-        for (int i = 1; i <= 251; i++) {
-            if (!unlockedPokemonIds.contains(i)) {
-            db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
-                  i + ", 100, 50, 30, 0);");
-            }
+            // Ejecutamos la sentencia SQL para insertar el ataque
+            db.update("INSERT INTO Attack (name, type, damage, stamina_cost) VALUES ('" +
+                      name + "', '" + type + "', " + damage + ", " + staminaCost + ");");
         }
-
         System.out.println("Attacks insertados correctamente.");        
 
     }
