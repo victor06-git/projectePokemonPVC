@@ -18,6 +18,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
+
         // Carga vistas
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
         UtilsViews.addView(getClass(), "ViewStart", "/assets/viewStart.fxml");
@@ -29,7 +30,7 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewAttackResult", "/assets/viewAttackResult.fxml");
         UtilsViews.addView(getClass(), "ViewManagement", "/assets/viewManagement.fxml");
 
-        UtilsViews.setView("ViewMenu"); // Vista inicial
+        UtilsViews.setView("ViewStart"); // Vista inicial
 
         //ControllerManagement ctrl = (ControllerManagement) UtilsViews.getController("ViewManagement");
         //int number = 1; //Número del Pokemon a cargar

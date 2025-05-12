@@ -50,9 +50,7 @@ public class ControllerStart extends BuildDatabase implements Initializable {
             String directorioBase = new File("").getAbsolutePath(); // Directorio de trabajo actual
             String rutaRelativa = getRelativePath(directorioBase, rutaDBAbsoluta);
             System.out.println("--- RELATIVE ROUTE DB: " + rutaRelativa);
-            
-
-            BuildDatabase.main(rutaRelativa);
+            BuildDatabase.main(rutaDBAbsoluta);
             UtilsViews.setViewAnimating("ViewMenu");
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
