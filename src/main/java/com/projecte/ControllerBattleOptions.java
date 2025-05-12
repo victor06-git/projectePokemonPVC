@@ -2,12 +2,18 @@ package com.projecte;
 
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import com.utils.UtilsViews;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -39,7 +45,14 @@ public class ControllerBattleOptions implements Initializable {
     @FXML
     private Label labelSelectedMap;
 
+    @FXML
+    private Button pokemon1, pokemon2, pokemon3;
+
+    @FXML
+    private Label pickPokemon;
+
     private int currentMapSelection = 0;
+    private int idPokemon = -1;
     private Label[] maps = new Label[0];
     private int round = 1; // Variable to track the current round
 
@@ -54,6 +67,14 @@ public class ControllerBattleOptions implements Initializable {
             System.err.println("Error loading image asset: " + imagePath);
             e.printStackTrace();
         }
+
+        loadMapPaths();
+        if (!mapPaths.isEmpty()) {
+            showCurrentMap();
+        }
+
+        // Cargar los Pokémon desbloqueados en los ChoiceBox y sus imágenes
+        loadUnlockedPokemons();
     }
     
     // Getters
@@ -169,26 +190,216 @@ public class ControllerBattleOptions implements Initializable {
 
     public void toViewMenu() {
         // Change to the Menu view
-        UtilsViews.setViewAnimating("ViewStart");
+        UtilsViews.setViewAnimating("ViewMenu");
     }
 
     //Funció per canviar de vista
-    
-
     @FXML
     public void toViewBattle(MouseEvent event) {
+        if (idPokemon == -1) {
+        // Mostrar alerta si no se ha seleccionado un Pokémon
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Selección de Pokémon");
+            alert.setHeaderText(null);
+            alert.setContentText("Por favor, selecciona un Pokémon activo antes de continuar a la batalla.");
+            alert.showAndWait();
+            return; // Salir del método si no hay Pokémon seleccionado
+        }
         ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
-        ctrl.setMap("/assets/mapa/mapa2.jpg");
-        ctrl.setEnemyPokemonImage("/assets/pokemons/normal/005.gif");
-        ctrl.setPlayerPokemonImage("/assets/pokemons/back/020.gif");
-        ctrl.setEstaminaComputer("100/200");
-        ctrl.setEstaminaPlayer("200/20");
-        ctrl.setHpPlayer("50/50");
-        ctrl.setHpComputer("100/50");
-        ctrl.setEnemyHpBar(0.6);
-        ctrl.setEnemyStaminaBar(0.5);
-        ctrl.setPlayerHpBar(0.8);
+        ctrl.setMap(mapPaths.get(currentMapIndex));
+        int min = 1;
+        int max = 251;
+        Random random = new Random();
+        int randomPokemonId = random.nextInt(max - min + 1) + min;
+        // Establecer la imagen del Pokémon enemigo
+        ctrl.setEnemyPokemonImage("/assets/pokemons/normal/" + String.format("%03d", randomPokemonId) + ".gif");
+        ctrl.setPlayerPokemonImage("/assets/pokemons/back/" + (idPokemon > 100 ? idPokemon + ".gif" : "0"+ idPokemon +".gif"));
+        ctrl.setEstaminaComputer("30/30");
+        ctrl.setEstaminaPlayer("30/30");
+        ctrl.setHpPlayer("100/100");
+        ctrl.setHpComputer("100/100");
+        ctrl.setEnemyHpBar(1.0);
+        ctrl.setEnemyStaminaBar(1.0);
+        ctrl.setPlayerHpBar(1.0);
         ctrl.setPlayerStaminaBar(1.0);
         UtilsViews.setViewAnimating("ViewBattleAttack");
     }
+
+    private List<String> mapPaths = new ArrayList<>();
+    private int currentMapIndex = 0;
+
+    private void loadMapPaths() {
+        try {
+            // Ruta de la carpeta de mapas
+            String mapFolderPath = "assets/mapa";
+            java.nio.file.Path folderPath = java.nio.file.Paths.get(getClass().getClassLoader().getResource(mapFolderPath).toURI());
+
+            // Obtener todos los archivos de la carpeta
+            java.io.File folder = folderPath.toFile();
+            java.io.File[] mapFiles = folder.listFiles((dir, name) -> name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".gif"));
+
+            if (mapFiles != null) {
+                for (java.io.File mapFile : mapFiles) {
+                    mapPaths.add(mapFolderPath + "/" + mapFile.getName());
+                }
+            } else {
+                System.err.println("No se encontraron mapas en la carpeta: " + mapFolderPath);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cargar las rutas de los mapas: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void showCurrentMap() {
+    if (!mapPaths.isEmpty() && currentMapIndex >= 0 && currentMapIndex < mapPaths.size()) {
+        String currentMapPath = mapPaths.get(currentMapIndex);
+        imgSelectedMap.setImage(new Image(getClass().getClassLoader().getResourceAsStream(currentMapPath)));
+        labelSelectedMap.setText(currentMapPath.substring(currentMapPath.lastIndexOf("/") + 1, currentMapPath.lastIndexOf(".")).toUpperCase());}
+    }
+
+    @FXML
+    private void showPreviousMap(MouseEvent event) {
+        if (currentMapIndex > 0) {
+            currentMapIndex--;
+            showCurrentMap();
+        } else {
+            System.out.println("No hay mapas anteriores.");
+        }
+    }
+
+    @FXML
+    private void showNextMap(MouseEvent event) {
+        if (currentMapIndex < mapPaths.size() - 1) {
+            currentMapIndex++;
+            showCurrentMap();
+        } else {
+            System.out.println("No hay mapas siguientes.");
+        }
+    }
+
+    private void loadUnlockedPokemons() {
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
+
+        // Consulta para obtener los Pokémon desbloqueados
+        String query = """
+            SELECT p.id, p.name, p.icon_path 
+            FROM Pokemon p 
+            INNER JOIN PlayerPokemon pp ON p.id = pp.pokemon_id 
+            WHERE pp.unlocked = 1 
+            ORDER BY p.id ASC;
+        """;
+
+        // Ejecutar la consulta
+        ArrayList<HashMap<String, Object>> unlockedPokemons = db.query(query);
+
+        // Limpiar los ChoiceBox antes de llenarlos
+        choicePokemon1.getItems().clear();
+        choicePokemon2.getItems().clear();
+        choicePokemon3.getItems().clear();
+
+        // Crear un mapa para asociar nombres de Pokémon con sus rutas de imagen
+        HashMap<String, Object> pokemonImages = new HashMap<>();
+
+        // Agregar los Pokémon desbloqueados a los ChoiceBox y almacenar las rutas de las imágenes
+        for (HashMap<String, Object> pokemon : unlockedPokemons) {
+            int id = Integer.parseInt(pokemon.get("id").toString());
+            String name = pokemon.get("name").toString();
+            String iconPath = pokemon.get("icon_path").toString();
+            String formattedPokemon = "#" + id + " " + name;
+
+            choicePokemon1.getItems().add(formattedPokemon);
+            choicePokemon2.getItems().add(formattedPokemon);
+            choicePokemon3.getItems().add(formattedPokemon);
+
+            // Asociar el nombre del Pokémon con su ruta de imagen
+            pokemonImages.put(formattedPokemon, "assets/poke-icons/" + iconPath);
+            System.out.println("Pokemon: " + formattedPokemon + ", Icon Path: " + iconPath);
+        }
+
+        // Seleccionar el primer Pokémon por defecto si hay elementos
+        if (!choicePokemon1.getItems().isEmpty()) {
+            choicePokemon1.setValue(choicePokemon1.getItems().get(0));
+            updatePokemonImage(choicePokemon1.getValue(), imgPokemon1, pokemonImages);
+        }
+        if (!choicePokemon2.getItems().isEmpty()) {
+            choicePokemon2.setValue(choicePokemon2.getItems().get(0));
+            updatePokemonImage(choicePokemon2.getValue(), imgPokemon2, pokemonImages);
+        }
+        if (!choicePokemon3.getItems().isEmpty()) {
+            choicePokemon3.setValue(choicePokemon3.getItems().get(0));
+            updatePokemonImage(choicePokemon3.getValue(), imgPokemon3, pokemonImages);
+        }
+
+            // Manejar cambios en los ChoiceBox para actualizar las imágenes
+            choicePokemon1.setOnAction(event -> updatePokemonImage(choicePokemon1.getValue(), imgPokemon1, pokemonImages));
+            choicePokemon2.setOnAction(event -> updatePokemonImage(choicePokemon2.getValue(), imgPokemon2, pokemonImages));
+            choicePokemon3.setOnAction(event -> updatePokemonImage(choicePokemon3.getValue(), imgPokemon3, pokemonImages));
+
+            db.close();
+        }
+
+       private void updatePokemonImage(String selectedPokemon, ImageView imageView, HashMap<String, Object> pokemonImages) {
+            if (imageView == null) {
+                System.out.println("imageView is null for " + selectedPokemon);
+                return;
+            }
+
+            if (selectedPokemon != null && pokemonImages.containsKey(selectedPokemon)) {
+                String iconPath1 = (String) pokemonImages.get(selectedPokemon);
+                try {
+                    String imagePath = iconPath1;
+                    java.io.InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(imagePath);
+                    if (resourceStream == null) {
+                        throw new NullPointerException("Recurso no encontrado: " + imagePath);
+                    }
+
+                    Image image = new Image(resourceStream);
+                    imageView.setImage(image);
+
+                } catch (NullPointerException | IllegalArgumentException e) {
+                    System.err.println("Error cargando el recurso: " + iconPath1);
+                    e.printStackTrace();
+                }
+            } else {
+                imageView.setImage(null); // Si no hay imagen, limpiar el ImageView
+                imageView.setEffect(null); // Asegurarse de que no haya efecto si no hay imagen
+            }
+        }
+
+        @FXML	
+        public void selectPokemon1(MouseEvent event) {
+            disableButton(pokemon1);
+            enableButton(pokemon2);
+            enableButton(pokemon3);
+            String selectedPokemon = choicePokemon1.getValue();
+            this.idPokemon = Integer.parseInt(selectedPokemon.substring(1, selectedPokemon.indexOf(' ')));
+            pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+        }
+        @FXML
+        public void selectPokemon2(MouseEvent event) {
+            disableButton(pokemon2);
+            enableButton(pokemon1);
+            enableButton(pokemon3);
+            String selectedPokemon = choicePokemon2.getValue();
+            this.idPokemon = Integer.parseInt(selectedPokemon.substring(1, selectedPokemon.indexOf(' ')));
+            pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+        }
+        @FXML
+        public void selectPokemon3(MouseEvent event) {
+            disableButton(pokemon3);
+            enableButton(pokemon1);
+            enableButton(pokemon2);
+            String selectedPokemon = choicePokemon3.getValue();
+            this.idPokemon = Integer.parseInt(selectedPokemon.substring(1, selectedPokemon.indexOf(' ')));
+            pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+        }
+        private void disableButton(Button button) {
+            button.setDisable(true);
+        }
+        private void enableButton(Button button) {
+            button.setDisable(false);
+        }
+
 }

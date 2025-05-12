@@ -9,15 +9,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerMenu">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerMenu">
    <children>
       <AnchorPane prefHeight="388.0" prefWidth="600.0">
          <children>
+            <ImageView fx:id="imgBackground" fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
             <HBox prefHeight="373.0" prefWidth="233.0">
                <children>
                   <VBox prefHeight="373.0" prefWidth="233.0">
                      <children>
-                        <Button fx:id="managementButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="174.0" style="-fx-background-color: #FFD700;" text="Team Management" textFill="BLUE">
+                        <Button fx:id="managementButton" mnemonicParsing="false" onAction="#toViewManagement" prefHeight="36.0" prefWidth="174.0" style="-fx-background-color: #FFD700;" text="Team Management" textFill="BLUE">
                            <VBox.margin>
                               <Insets left="35.0" top="50.0" />
                            </VBox.margin>
@@ -33,7 +34,7 @@
                               <Font name="Noto Serif Lao Bold" size="15.0" />
                            </font>
                         </Button>
-                        <Button fx:id="newBattleButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="New Battle" textFill="BLUE">
+                        <Button fx:id="newBattleButton" mnemonicParsing="false" onAction="#toViewNewBattle" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="New Battle" textFill="BLUE">
                            <VBox.margin>
                               <Insets left="35.0" top="25.0" />
                            </VBox.margin>
