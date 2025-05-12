@@ -18,6 +18,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
+
         // Carga vistas
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
         UtilsViews.addView(getClass(), "ViewStart", "/assets/viewStart.fxml");
@@ -29,6 +30,7 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewAttackResult", "/assets/viewAttackResult.fxml");
         UtilsViews.addView(getClass(), "ViewManagement", "/assets/viewManagement.fxml");
         UtilsViews.addView(getClass(), "ViewBattleResult", "/assets/viewBattleResult.fxml");
+        UtilsViews.addView(getClass(), "ViewHistory", "/assets/viewHistory.fxml");
 
         UtilsViews.setView("ViewMenu"); // Vista inicial
 
