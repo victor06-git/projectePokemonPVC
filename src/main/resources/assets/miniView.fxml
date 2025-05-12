@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns:fx="http://javafx.com/fxml" spacing="15" style="-fx-border-color: #ccc; -fx-padding: 10;">
+    <VBox spacing="5">
+        <Label text="Equipo: Ganador" style="-fx-font-weight: bold;" />
+        <Label text="Grupo: X vs Y" />
+    </VBox>
+    
+    <VBox spacing="8">
+        <Label text="Pokémons:" />
+        <HBox spacing="5">
+            <ImageView fitWidth="40" fitHeight="40" />
+            <ImageView fitWidth="40" fitHeight="40" />
+            <ImageView fitWidth="40" fitHeight="40" />
+        </HBox>
+        <Label text="Fecha: 06/05/2025 - 14:30" />
+    </VBox>
+    
+</HBox>
