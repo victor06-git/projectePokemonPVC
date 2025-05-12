@@ -1,0 +1,136 @@
+/* ===== FUENTES PIXELADAS ===== */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+/* ===== ESTILO BASE POKÉMON ===== */
+.root {
+    -fx-background-image: url('https://imgur.com/gS9YwkC'); /* Patrón de puntos */
+    -fx-background-size: cover;
+    -fx-border-color: #383838;
+    -fx-border-width: 8px;
+    -fx-border-style: solid inside;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
+    -fx-padding: 10px;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.v-box {
+    
+    -fx-border-color: #383838;
+    -fx-border-width: 4px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-effect: innershadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 2, 2);
+    -fx-padding: 10px;
+}
+
+/* ===== BARRA DE TÍTULO ===== */
+.h-box {
+    -fx-background-color: linear-gradient(to right, #d01010, #f8a010); /* Rojo/Naranja Pokémon */
+    -fx-border-color: #383838 #383838 #f8f8f8 #383838;
+    -fx-border-width: 4px;
+    -fx-padding: 10px;
+    -fx-spacing: 15px;
+    -fx-alignment: center-left;
+    -fx-border-radius: 5px;
+}
+
+/* ===== TÍTULO PRINCIPAL ===== */
+.label {
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-font-size: 18px;
+    -fx-text-fill: #fffb02;
+    -fx-effect: dropshadow(one-pass-box, #383838, 2, 0, 0, 0);
+    -fx-padding: 5px;
+}
+
+/* ===== ICONO FLECHA ===== */
+#imgArrow {
+    -fx-effect: dropshadow(gaussian, #383838, 5, 0.5, 0, 2);
+    -fx-border-color: #f8f8f8;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+/* ===== BARRA DIVISORIA ===== */
+.pane#linea-divisoria {
+    -fx-background-radius: 0;
+    -fx-pref-height: 3px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 3, 0, 0, 1);
+}
+
+/* ===== ÁREA DE CONTENIDO ===== */
+.scroll-pane {
+    -fx-border-color: #383838;
+    -fx-border-width: 3px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.scroll-pane .viewport {
+    -fx-border-color: #a0a0a0;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+/* ===== BARRAS DE SCROLL ===== */
+.scroll-bar:horizontal, .scroll-bar:vertical {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #383838;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #d01010; /* Rojo Pokémon */
+    -fx-background-insets: 0;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: #f8a010; /* Naranja Pokémon */
+    -fx-border-color: #383838;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+
+/* ===== BOTONES POKÉMON ===== */
+.button {
+    -fx-font-family: 'VT323', monospace;
+    -fx-font-size: 22px;
+    -fx-text-fill: #383838;
+    -fx-background-color: #f8a010; /* Naranja Pokémon */
+    -fx-border-color: #383838;
+    -fx-border-width: 3px;
+    -fx-background-insets: 0;
+    -fx-padding: 5px 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 3, 0, 0, 1);
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.button:hover {
+    -fx-background-color: #f8c010; /* Amarillo Pokémon */
+    -fx-text-fill: #d01010;
+    -fx-cursor: hand;
+}
+
+.button:pressed {
+    -fx-background-color: #d01010; /* Rojo Pokémon */
+    -fx-text-fill: #f8f8f8;
+    -fx-translate-y: 1px;
+}
+
+/* ===== EFECTOS ESPECIALES ===== */
+@keyframes blink {
+    0% { -fx-opacity: 1; }
+    50% { -fx-opacity: 0.7; }
+    100% { -fx-opacity: 1; }
+}
+
+.highlight {
+    -fx-effect: dropshadow(gaussian, #f8a010, 10, 0.5, 0, 0);
+    -fx-animation: blink 1s infinite;
+    -fx-border-radius: 5px;
+}

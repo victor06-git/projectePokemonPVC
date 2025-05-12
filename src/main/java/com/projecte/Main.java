@@ -20,9 +20,14 @@ public class Main extends Application {
         // Carga vistas
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
         UtilsViews.addView(getClass(), "ViewStart", "/assets/viewStart.fxml");
-        UtilsViews.addView(getClass(), "ViewMenu", "/assets/viewMenu.fxml");
+        UtilsViews.addView(getClass(), "ViewPokeSettings", "/assets/viewPokeSettings.fxml");
+        UtilsViews.addView(getClass(), "ViewBattleAttack", "/assets/viewBattleAttack.fxml");
+        UtilsViews.addView(getClass(), "pokemonView", "/assets/pokemonView.fxml");
+        UtilsViews.addView(getClass(), "ViewBattleOptions", "/assets/viewBattleOptions.fxml");
 
-        // Mostrar ventana
+        UtilsViews.setView("ViewBattleAttack");
+
+        // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
         stage.setScene(scene);
         stage.setTitle("Pokémons PvP");
