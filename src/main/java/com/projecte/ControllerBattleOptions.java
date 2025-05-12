@@ -30,6 +30,7 @@ public class ControllerBattleOptions implements Initializable {
     public static final String STATUS_BATTLE_PREP = "battle_prep";
     public static final String STATUS_BATTLE_ENDED = "battle_ended";
     private List<String> mapPaths = new ArrayList<>();
+    private HashMap<Integer, Boolean> pokemonStatus = new HashMap<>(); // true = vivo, false = muerto
     private int currentMapIndex = 0;
 
     private HashMap<Integer, String> enemyPokemons = new HashMap<>();
@@ -236,6 +237,7 @@ public class ControllerBattleOptions implements Initializable {
 
         ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
         ctrl.setMap(mapPaths.get(currentMapIndex));
+        ctrl.setIdPokemon(idPokemon);
         ctrl.setRound(round);
         
         // Generar Pokémon enemigos aleatorios solo si no hay Pokémon enemigos existentes
@@ -306,6 +308,11 @@ public class ControllerBattleOptions implements Initializable {
         
     }
 
+    /**
+     * Método para continuar la batalla.
+     * 
+     * @param event El evento de acción del botón continuar.
+     */
     @FXML
     public void toContinueBattle(MouseEvent event) {
         if (idPokemon == -1) {
@@ -351,13 +358,13 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setPlayerPokemonLabel(pokemonNamePlayer + " Level 1");
         db.close();
 
-        // Configurar estamina y HP
         ctrl.setEstaminaComputer("30/30");
         ctrl.setEstaminaPlayer("30/30");
         ctrl.setHpPlayer("100/100");
+        // Asegurarte de que hay al menos una parte
         ctrl.setHpComputer("100/100");
-        ctrl.setEnemyHpBar(1.0);
-        ctrl.setEnemyStaminaBar(1.0);
+        ctrl.setEnemyHpBar(Double.parseDouble(ctrl.getHpComputer()) / 100.0);
+        ctrl.setEnemyStaminaBar(Double.parseDouble(ctrl.getEstaminaComputer())  / 30.0);
         ctrl.setPlayerHpBar(1.0);
         ctrl.setPlayerStaminaBar(1.0);
 
@@ -371,14 +378,11 @@ public class ControllerBattleOptions implements Initializable {
      */
     private boolean arePokemonsDifferent() {
         Set<String> selectedPokemons = new HashSet<>();
-        selectedPokemons .add(choicePokemon1.getValue());
+        selectedPokemons.add(choicePokemon1.getValue());
         selectedPokemons.add(choicePokemon2.getValue());
         selectedPokemons.add(choicePokemon3.getValue());
         return selectedPokemons.size() == 3; // Deben ser tres diferentes
     }
-
-
-    
 
     private void loadMapPaths() {
         try {
@@ -468,6 +472,8 @@ public class ControllerBattleOptions implements Initializable {
             // Asociar el nombre del Pokémon con su ruta de imagen
             pokemonImages.put(formattedPokemon, "assets/poke-icons/" + iconPath);
             System.out.println("Pokemon: " + formattedPokemon + ", Icon Path: " + iconPath);
+        
+            pokemonStatus.put(id, true); // Asumimos que todos están vivos al cargar
         }
 
         // Seleccionar el primer Pokémon por defecto si hay elementos
@@ -488,6 +494,8 @@ public class ControllerBattleOptions implements Initializable {
             choicePokemon1.setOnAction(event -> updatePokemonImage(choicePokemon1.getValue(), imgPokemon1, pokemonImages));
             choicePokemon2.setOnAction(event -> updatePokemonImage(choicePokemon2.getValue(), imgPokemon2, pokemonImages));
             choicePokemon3.setOnAction(event -> updatePokemonImage(choicePokemon3.getValue(), imgPokemon3, pokemonImages));
+
+            disableDeadPokemons();
 
             db.close();
         }
@@ -522,33 +530,71 @@ public class ControllerBattleOptions implements Initializable {
 
         @FXML	
         public void selectPokemon1(MouseEvent event) {
-            disableButton(pokemon1);
-            enableButton(pokemon2);
-            enableButton(pokemon3);
             String selectedPokemon = choicePokemon1.getValue();
-            this.idPokemon = Integer.parseInt(selectedPokemon.substring(1, selectedPokemon.indexOf(' ')));
-            pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+            int selectedId = Integer.parseInt(selectedPokemon.substring(1, selectedPokemon.indexOf(' ')));
+
+            if (pokemonStatus.getOrDefault(selectedId, true)) { // Verifica si el Pokémon seleccionado está vivo
+                disableButton(pokemon1);
+                enableButton(pokemon2);
+                enableButton(pokemon3);
+                this.idPokemon = selectedId; // Actualiza el idPokemon al seleccionado
+                pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+            } else {
+                // Si el Pokémon está muerto, mostrar un mensaje
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setTitle("Pokémon Muerto");
+                alert.setHeaderText(null);
+                alert.setContentText("Este Pokémon está muerto y no puede ser seleccionado.");
+                alert.showAndWait();
+                imgPokemon1.setEffect(new javafx.scene.effect.Shadow(10, javafx.scene.paint.Color.BLACK));
+            }
         }
-        
+
         @FXML
         public void selectPokemon2(MouseEvent event) {
-            disableButton(pokemon2);
-            enableButton(pokemon1);
-            enableButton(pokemon3);
             String selectedPokemon = choicePokemon2.getValue();
-            this.idPokemon = Integer.parseInt(selectedPokemon.substring(1, selectedPokemon.indexOf(' ')));
-            pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+            int selectedId = Integer.parseInt(selectedPokemon.substring(1, selectedPokemon.indexOf(' ')));
+
+            if (pokemonStatus.getOrDefault(selectedId, true)) { // Verifica si el Pokémon seleccionado está vivo
+                disableButton(pokemon2);
+                enableButton(pokemon1);
+                enableButton(pokemon3);
+                this.idPokemon = selectedId; // Actualiza el idPokemon al seleccionado
+                pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+            } else {
+                // Si el Pokémon está muerto, mostrar un mensaje
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setTitle("Pokémon Muerto");
+                alert.setHeaderText(null);
+                alert.setContentText("Este Pokémon está muerto y no puede ser seleccionado.");
+                alert.showAndWait();
+                imgPokemon2.setEffect(new javafx.scene.effect.Shadow(10, javafx.scene.paint.Color.BLACK));
+            }
         }
-        
+
         @FXML
         public void selectPokemon3(MouseEvent event) {
-            disableButton(pokemon3);
-            enableButton(pokemon1);
-            enableButton(pokemon2);
             String selectedPokemon = choicePokemon3.getValue();
-            this.idPokemon = Integer.parseInt(selectedPokemon.substring(1, selectedPokemon.indexOf(' ')));
-            pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+            int selectedId = Integer.parseInt(selectedPokemon.substring(1, selectedPokemon.indexOf(' ')));
+
+            if (pokemonStatus.getOrDefault(selectedId, true)) { // Verifica si el Pokémon seleccionado está vivo
+                disableButton(pokemon3);
+                enableButton(pokemon1);
+                enableButton(pokemon2);
+                this.idPokemon = selectedId; // Actualiza el idPokemon al seleccionado
+                pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+            } else {
+                // Si el Pokémon está muerto, mostrar un mensaje
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setTitle("Pokémon Muerto");
+                alert.setHeaderText(null);
+                alert.setContentText("Este Pokémon está muerto y no puede ser seleccionado.");
+                alert.showAndWait();
+                imgPokemon3.setEffect(new javafx.scene.effect.Shadow(10, javafx.scene.paint.Color.BLACK));
+            }
         }
+
+
         
         private void disableButton(Button button) {
             button.setDisable(true);
@@ -599,9 +645,41 @@ public class ControllerBattleOptions implements Initializable {
             choicePokemon1.setDisable(disable);
             choicePokemon2.setDisable(disable);
             choicePokemon3.setDisable(disable);
-            pokemon1.setDisable(disable);
-            pokemon2.setDisable(disable);
-            pokemon3.setDisable(disable);
         }      
+
+        private void disableDeadPokemons() {
+            // Deshabilitar los botones de Pokémon que están muertos
+            if (choicePokemon1.getItems().size() > 0) {
+                int id1 = Integer.parseInt(choicePokemon1.getValue().substring(1, choicePokemon1.getValue().indexOf(' ')));
+                if (!pokemonStatus.getOrDefault(id1, true)) {
+                    disableButton(pokemon1);
+                } else {
+                    enableButton(pokemon1);
+                }
+            }
+            if (choicePokemon2.getItems().size() > 0) {
+                int id2 = Integer.parseInt(choicePokemon2.getValue().substring(1, choicePokemon2.getValue().indexOf(' ')));
+                if (!pokemonStatus.getOrDefault(id2, true)) {
+                    disableButton(pokemon2);
+                } else {
+                    enableButton(pokemon2);
+                }
+            }
+            if (choicePokemon3.getItems().size() > 0) {
+                int id3 = Integer.parseInt(choicePokemon3.getValue().substring(1, choicePokemon3.getValue().indexOf(' ')));
+                if (!pokemonStatus.getOrDefault(id3, true)) {
+                    disableButton(pokemon3);
+                } else {
+                    enableButton(pokemon3);
+                }
+            }
+        }
+
+        public void markPokemonAsDead(int pokemonId) {
+            pokemonStatus.put(pokemonId, false); // Marca el Pokémon como muerto
+            disableDeadPokemons(); // Deshabilita los botones de Pokémon muertos;
+            System.out.println("Pokemon " + pokemonId + " marcado como muerto.");
+        }
+        
 
 }

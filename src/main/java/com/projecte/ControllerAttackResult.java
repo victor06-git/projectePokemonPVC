@@ -36,7 +36,7 @@ public class ControllerAttackResult {
         this.finalBattle = finalBattle;
         if (finalBattle) {
             buttonContinue.setText("Finalizar");
-            UtilsViews.setView("ViewRewards");
+            UtilsViews.setView("ViewBattleResult");
         } else {
             buttonContinue.setText("Continuar");
         }
@@ -84,7 +84,11 @@ public class ControllerAttackResult {
         if (ctrlAttack.getPlayerHpBar() == 0.0 || ctrlAttack.getPlayerStaminaBar() == 0.0 || finalBattle) {
             this.round += 1;
             ctrl.setRound(this.round);
+            if (finalBattle) {
+                UtilsViews.setView("ViewBattleResult");
+            } else {
             UtilsViews.setViewAnimating("ViewBattleOptions");
+        }
 
         } else {  
             this.round += 1;

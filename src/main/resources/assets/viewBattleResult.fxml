@@ -10,24 +10,30 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerRewards">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleResult">
    <children>
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="labelRewards" alignment="CENTER" contentDisplay="CENTER" prefHeight="51.0" prefWidth="185.0" text="REWARDS">
+                  <Label fx:id="labelRewards" alignment="CENTER" contentDisplay="CENTER" prefHeight="51.0" prefWidth="185.0" text="RESULT">
                      <font>
-                        <Font size="15.0" />
+                        <Font size="49.0" />
                      </font>
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+            <HBox alignment="CENTER" prefHeight="143.0" prefWidth="580.0" spacing="20.0">
+               <children>
+                  <Label text="Guanyador:" />
+                  <Label fx:id="labelWinner" text="Player" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="92.0" prefWidth="580.0" spacing="50.0">
                <children>
                   <Label prefHeight="20.0" prefWidth="168.0" text="Pokemons unlocked:" />
-                  <ImageView fitHeight="119.0" fitWidth="139.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fitHeight="119.0" fitWidth="139.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgPokemon1" fitHeight="119.0" fitWidth="139.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgPokemon2" fitHeight="119.0" fitWidth="139.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="31.0" prefWidth="580.0" spacing="20.0">
@@ -39,7 +45,7 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                <children>
                   <Label text="Objectes unlocked:" />
-                  <ImageView fitHeight="119.0" fitWidth="139.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="item1" fitHeight="119.0" fitWidth="139.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </HBox>
             <VBox alignment="CENTER" prefHeight="24.0" prefWidth="580.0">

@@ -48,6 +48,8 @@ public class ControllerBattleAttack {
 
     private int round = -1; // Variable to track the current round
 
+    private int idPokemon; // ID del Pokémon jugador
+
     private HashMap<Integer, String> enemyPokemons; // Para almacenar los Pokémon enemigos
     private List<Integer> enemyPokemonIds; // Para almacenar los IDs de los Pokémon enemigos
     public static final String STATUS_BATTLE_STARTED = "battle_started";
@@ -101,6 +103,10 @@ public class ControllerBattleAttack {
 
     public void setPlayerPokemonLabel(String text) {
         this.playerPokemonLabel.setText(text);
+    }
+
+    public void setIdPokemon(int idPokemon) {
+        this.idPokemon = idPokemon;
     }
 
     /**
@@ -567,6 +573,8 @@ public class ControllerBattleAttack {
         // Verificar si el jugador perdió o no quedan Pokémon enemigos
         if (playerPokemonDead() || playerPokemonOutOfStamina() || !hasMoreEnemyPokemons()) {
             ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+            ControllerBattleOptions ctrlBattle = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
+            ctrlBattle.markPokemonAsDead(idPokemon);
                       
             // Configurar los datos para la vista de resultados
             ctrl.setHpLabel(getHpComputer());
@@ -658,7 +666,7 @@ public class ControllerBattleAttack {
         }
 
         Random random = new Random();
-        int damage = random.nextInt(16) + 5; // 5 - 20 daño
+        int damage = random.nextInt(31) + 20;  
         double staminaConsumed = damage * 0.3;
         
         double currentPlayerHp = playerHpBar.getProgress();
@@ -673,10 +681,10 @@ public class ControllerBattleAttack {
         enemyStaminaBar.setProgress(newEnemyStamina);
         setEstaminaComputer((int)(newEnemyStamina * 30) + "/ 30");
 
-        // Verificar si el Pokémon enemigo actual se debilitó después del ataque
-        if (computerPokemonDead() || computerPokemonOutOfStamina()) {
-            switchToNextEnemyPokemon();
-        }
+        // // Verificar si el Pokémon enemigo actual se debilitó después del ataque
+        // if (computerPokemonDead() || computerPokemonOutOfStamina()) {
+        //     switchToNextEnemyPokemon();
+        // }
     }
 
     /**
