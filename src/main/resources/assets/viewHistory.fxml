@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fx:id="historyScroll" xmlns:fx="http://javafx.com/fxml" fitToWidth="true">
+    <content>
+        <VBox fx:id="historyContainer" spacing="10" padding="10">
+        </VBox>
+    </content>
+</ScrollPane>
