@@ -29,8 +29,9 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewMenu", "/assets/viewMenu.fxml");
         UtilsViews.addView(getClass(), "ViewAttackResult", "/assets/viewAttackResult.fxml");
         UtilsViews.addView(getClass(), "ViewManagement", "/assets/viewManagement.fxml");
+        UtilsViews.addView(getClass(), "ViewHistory", "/assets/viewHistory.fxml");
 
-        UtilsViews.setView("ViewStart"); // Vista inicial
+        UtilsViews.setView("ViewMenu"); // Vista inicial
 
         //ControllerManagement ctrl = (ControllerManagement) UtilsViews.getController("ViewManagement");
         //int number = 1; //Número del Pokemon a cargar
