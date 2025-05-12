@@ -1,6 +1,10 @@
 package com.projecte;
 
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
 import com.utils.UtilsViews;
 
 import javafx.animation.PauseTransition;
@@ -42,7 +46,13 @@ public class ControllerBattleAttack {
 
     private Label[] moves;
 
-    private int round = 2; // Variable to track the current round
+    private int round = -1; // Variable to track the current round
+
+    private HashMap<Integer, String> enemyPokemons; // Para almacenar los Pokémon enemigos
+    private List<Integer> enemyPokemonIds; // Para almacenar los IDs de los Pokémon enemigos
+    public static final String STATUS_BATTLE_STARTED = "battle_started";
+    public static final String STATUS_BATTLE_PREP = "battle_prep";
+    public static final String STATUS_BATTLE_ENDED = "battle_ended";
 
     @FXML
     public void initialize() {
@@ -83,6 +93,14 @@ public class ControllerBattleAttack {
             }
         });
         
+    }
+
+    public void setComputerPokemonLabel(String text) {
+        this.computerPokemonLabel.setText(text);
+    }
+
+    public void setPlayerPokemonLabel(String text) {
+        this.playerPokemonLabel.setText(text);
     }
 
     /**
@@ -462,18 +480,41 @@ public class ControllerBattleAttack {
      */
     private void handleAttack(int selectedMove) {
         System.out.println("Using move: " + moves[selectedMove].getText());
-
-        // Actualizar el panel de información con los detalles del ataque seleccionado
         updateAttackInfo(selectedMove);
-
-        // Mostrar el panel de información si está oculto
-        attackNameLabel.getParent().setVisible(true);
-
-        // Resetear el color del botón después de 1 segundo
-        PauseTransition pause = new PauseTransition(Duration.seconds(1));
-        pause.setOnFinished(event -> fightButton.setStyle(""));
-        pause.play();
         
+        String damageStr = attackDamageLabel.getText().replace("Daño: ", "").trim();
+        String staminaStr = estaminaLabel.getText().replace("Estamina: ", "").trim();
+        double damage = Double.parseDouble(damageStr);
+        double staminaConsumed = Double.parseDouble(staminaStr);
+        
+        double currentEnemyHp = enemyHpBar.getProgress();
+        double newEnemyHp = currentEnemyHp - (damage / 100.0);
+        newEnemyHp = Math.max(newEnemyHp, 0);
+        enemyHpBar.setProgress(newEnemyHp);
+        setHpComputer((int)(newEnemyHp * 100) + "/ 100");
+        
+        double currentPlayerStamina = playerStaminaBar.getProgress();
+        double newPlayerStamina = currentPlayerStamina - (staminaConsumed / 30.0);
+        newPlayerStamina = Math.max(newPlayerStamina, 0);
+        playerStaminaBar.setProgress(newPlayerStamina);
+        setEstaminaPlayer((int)(newPlayerStamina * 30) + "/ 30");
+    
+        attackNameLabel.getParent().setVisible(true);
+    
+        // Verificar si el Pokémon enemigo fue derrotado
+        if (computerPokemonDead() || computerPokemonOutOfStamina()) {
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.setOnFinished(event -> {
+                switchToNextEnemyPokemon();
+                // Solo atacar si el nuevo Pokémon no está debilitado
+                if (!computerPokemonDead() && !computerPokemonOutOfStamina()) {
+                    computerAttack();
+                }
+            });
+            pause.play();
+        } else {
+            computerAttack();
+        }
     }
 
     @FXML
@@ -493,8 +534,11 @@ public class ControllerBattleAttack {
 
         // Durante el cooldown, reducir gradualmente la barra de vida del jugador
         cooldown.setOnFinished(event1 -> {
-            playerStaminaBar.setProgress(0); // Bajar la estamina del jugador
             updatePlayerStatus(); // Cambiar la vista después de que la vida llegue a 0
+            ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+            ctrl.setRound(round);
+            UtilsViews.setViewAnimating("ViewAttackResult");
+            round += 1;
         });
 
         // Iniciar la transición
@@ -520,30 +564,30 @@ public class ControllerBattleAttack {
      * 
      */
     public void updatePlayerStatus() {
-        if (playerPokemonDead() || playerPokemonOutOfStamina()) {
+        // Verificar si el jugador perdió o no quedan Pokémon enemigos
+        if (playerPokemonDead() || playerPokemonOutOfStamina() || !hasMoreEnemyPokemons()) {
             ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
-            String enemyHp = getHpComputer();
-            String enemyEstamina = getEstaminaComputer();
-            ctrl.setHpLabel(enemyHp);
-            ctrl.setEstaminaLabel(enemyEstamina);
-            ctrl.setRound(this.round);
-            ctrl.setEquipLabel(playerPokemonDead() ? "Computer" : "Player");
-            String playerHp = getHpPlayer();
-            String playerEstamina = getEstaminaPlayer();
-            ctrl.setHpPlayer(playerHp);
-            ctrl.setEstaminaPlayer(playerEstamina);
+                      
+            // Configurar los datos para la vista de resultados
+            ctrl.setHpLabel(getHpComputer());
+            ctrl.setEstaminaLabel(getEstaminaComputer());
+            ctrl.setRound(round);
+            ctrl.setHpPlayer(getHpPlayer());
+            ctrl.setEstaminaPlayer(getEstaminaPlayer());
             ctrl.setStatsLabel("Ataque: " + moves[currentSelection].getText().replace("➤", "").trim());
-            ctrl.setPokemonLabel("Charmander");
-
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Información");
-            alert.setHeaderText(null);
-            alert.setContentText("¡Tu Pokémon ha sido derrotado!");
-            Platform.runLater(() -> {
-                alert.showAndWait().ifPresent(response -> {
-                    UtilsViews.setViewAnimating("ViewAttackResult");
-                });
-            });
+            ctrl.setPokemonLabel(playerPokemonLabel.getText());
+            
+        } else {
+            // Continuar la batalla normalmente
+            ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+            ctrl.setHpLabel(getHpComputer());
+            ctrl.setEstaminaLabel(getEstaminaComputer());
+            ctrl.setRound(round);
+            ctrl.setEquipLabel(playerPokemonDead() ? "Computer" : "Player");
+            ctrl.setHpPlayer(getHpPlayer());
+            ctrl.setEstaminaPlayer(getEstaminaPlayer());
+            ctrl.setStatsLabel("Ataque: " + moves[currentSelection].getText().replace("➤", "").trim());
+            ctrl.setPokemonLabel(playerPokemonLabel.getText());
         }
     }
 
@@ -567,6 +611,138 @@ public class ControllerBattleAttack {
         return playerStamina <= 0;
     }
 
+    private boolean computerPokemonDead() {
+        double computerHp = enemyHpBar.getProgress();
+        return computerHp <= 0;
+    }
+
+    private boolean computerPokemonOutOfStamina() {
+        double computerStamina = enemyStaminaBar.getProgress();
+        return computerStamina <= 0;
+    }
+
+    // Método para establecer los Pokémon enemigos
+    public void setEnemyPokemons(HashMap<Integer, String> enemyPokemons, List<Integer> enemyPokemonIds) {
+        this.enemyPokemons = enemyPokemons;
+        this.enemyPokemonIds = enemyPokemonIds;
+        // Aquí puedes agregar lógica para actualizar la interfaz con los Pokémon enemigos
+        updateEnemyPokemonDisplay();
+    }
+    // Método para actualizar la interfaz con los Pokémon enemigos
+    private void updateEnemyPokemonDisplay() {
+        // Lógica para mostrar los Pokémon enemigos en la interfaz
+        // Por ejemplo, puedes establecer las imágenes y nombres de los Pokémon enemigos
+        if (enemyPokemonIds != null && !enemyPokemonIds.isEmpty()) {
+            Integer firstEnemyId = enemyPokemonIds.get(0);
+            String enemyName = enemyPokemons.get(firstEnemyId);
+            if (enemyName != null) {
+                // Actualiza la interfaz con el nombre y la imagen del primer Pokémon enemigo
+                System.out.println("Primer Pokémon enemigo: " + enemyName);
+                // Aquí iría la lógica para actualizar la interfaz gráfica
+            } else {
+                System.out.println("No se encontró un Pokémon enemigo con ID: " + firstEnemyId);
+            }
+        } else {
+            System.out.println("No hay Pokémon enemigos disponibles.");
+        }
+    }
+
+    /**
+     * Método para que el Pokémon enemigo ataque al jugador.
+     */
+    public void computerAttack() {
+        // Verificar si el Pokémon actual está debilitado
+        if (computerPokemonDead() || computerPokemonOutOfStamina()) {
+            switchToNextEnemyPokemon();
+            return; // Salir si no hay más Pokémon
+        }
+
+        Random random = new Random();
+        int damage = random.nextInt(16) + 5; // 5 - 20 daño
+        double staminaConsumed = damage * 0.3;
+        
+        double currentPlayerHp = playerHpBar.getProgress();
+        double newPlayerHp = currentPlayerHp - (damage / 100.0);
+        newPlayerHp = Math.max(newPlayerHp, 0);
+        playerHpBar.setProgress(newPlayerHp);
+        setHpPlayer((int)(newPlayerHp * 100) + "/ 100");
+        
+        double currentEnemyStamina = enemyStaminaBar.getProgress();
+        double newEnemyStamina = currentEnemyStamina - (staminaConsumed / 30.0);
+        newEnemyStamina = Math.max(newEnemyStamina, 0);
+        enemyStaminaBar.setProgress(newEnemyStamina);
+        setEstaminaComputer((int)(newEnemyStamina * 30) + "/ 30");
+
+        // Verificar si el Pokémon enemigo actual se debilitó después del ataque
+        if (computerPokemonDead() || computerPokemonOutOfStamina()) {
+            switchToNextEnemyPokemon();
+        }
+    }
+
+    /**
+     * Método para cambiar al siguiente Pokémon enemigo disponible.
+     */
+    private void switchToNextEnemyPokemon() {
+        if (enemyPokemonIds == null || enemyPokemonIds.isEmpty()) {
+            showAlert("¡Todos los Pokémon enemigos han sido derrotados!", AlertType.INFORMATION);
+            ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
+            ctrl.setBattleStatus(STATUS_BATTLE_ENDED, round);
+            ControllerAttackResult ctrlResult = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+            UtilsViews.setViewAnimating("ViewAttackResult");
+            ctrlResult.setFinalBattle(true);
+            // Aquí podrías llamar a un método para finalizar la batalla
+            return;
+        }
+
+        // Eliminar el Pokémon actual de la lista (el primero)
+        int defeatedPokemonId = enemyPokemonIds.remove(0);
+        enemyPokemons.remove(defeatedPokemonId);
+
+        // Verificar si quedan más Pokémon
+        if (enemyPokemonIds.isEmpty()) {
+             // Mostrar alerta de victoria
+            showAlert("¡Has derrotado a todos los Pokémon enemigos!", AlertType.INFORMATION);
+
+            // Cambiar a la vista de resultados
+            Platform.runLater(() -> {
+                ControllerAttackResult ctrlResult = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+                ctrlResult.setRound(round);
+                ctrlResult.setFinalBattle(true);
+                ctrlResult.setEquipLabel("Player"); // Indica que el jugador ganó
+                ctrlResult.setHpLabel(getHpComputer());
+                ctrlResult.setEstaminaLabel(getEstaminaComputer());
+                ctrlResult.setHpPlayer(getHpPlayer());
+                ctrlResult.setEstaminaPlayer(getEstaminaPlayer());
+                ctrlResult.setStatsLabel("Ataque: " + moves[currentSelection].getText().replace("➤", "").trim());
+                ctrlResult.setPokemonLabel(playerPokemonLabel.getText());
+
+                // Cambiar a la vista de resultados
+                UtilsViews.setViewAnimating("ViewAttackResult");
+            });
+            return;
+        }
+
+        // Obtener el siguiente Pokémon
+        int nextEnemyId = enemyPokemonIds.get(0);
+        String nextEnemyName = enemyPokemons.get(nextEnemyId);
+
+        // Actualizar la interfaz con el nuevo Pokémon
+        setEnemyPokemonImage("/assets/pokemons/normal/" + String.format("%03d", nextEnemyId) + ".gif");
+        setComputerPokemonLabel(nextEnemyName);
+        
+        // Resetear las barras de vida y estamina para el nuevo Pokémon
+        setEnemyHpBar(1.0);
+        setEnemyStaminaBar(1.0);
+        setHpComputer("100/100");
+        setEstaminaComputer("30/30");
+
+        showAlert("¡El enemigo ha cambiado a " + nextEnemyName + "!", AlertType.INFORMATION);
+    }
+
+    public boolean hasMoreEnemyPokemons() {
+        return enemyPokemonIds != null && !enemyPokemonIds.isEmpty();
+    }
+
     /**
      * Método para mostrar una alerta con un mensaje específico.
      * 
@@ -578,6 +754,7 @@ public class ControllerBattleAttack {
         alert.setTitle(type == AlertType.ERROR ? "Error" : "Información");
         alert.setHeaderText(null);
         alert.setContentText(message);
-        alert.showAndWait();
+        alert.show();
     }
+
 }

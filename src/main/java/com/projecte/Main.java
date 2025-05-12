@@ -28,6 +28,7 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewMenu", "/assets/viewMenu.fxml");
         UtilsViews.addView(getClass(), "ViewAttackResult", "/assets/viewAttackResult.fxml");
         UtilsViews.addView(getClass(), "ViewManagement", "/assets/viewManagement.fxml");
+        UtilsViews.addView(getClass(), "ViewRewards", "/assets/viewRewards.fxml");
 
         UtilsViews.setView("ViewMenu"); // Vista inicial
 

@@ -16,6 +16,8 @@ public class ControllerAttackResult {
 
     private int round = -1;
 
+    private Boolean finalBattle = false;
+
     @FXML
     private void initialize() {
         
@@ -28,6 +30,16 @@ public class ControllerAttackResult {
 
     public void setHpPlayer(String hp) {
         hpPlayer.setText(hp);
+    }
+
+    public void setFinalBattle(Boolean finalBattle) {
+        this.finalBattle = finalBattle;
+        if (finalBattle) {
+            buttonContinue.setText("Finalizar");
+            UtilsViews.setView("ViewRewards");
+        } else {
+            buttonContinue.setText("Continuar");
+        }
     }
     
     public void setEstaminaPlayer(String estamina) {
@@ -69,11 +81,15 @@ public class ControllerAttackResult {
         ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
         ControllerBattleAttack ctrlAttack = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
         
-        if (ctrlAttack.getPlayerHpBar() == 0.0 || ctrlAttack.getPlayerStaminaBar() == 0.0) {
+        if (ctrlAttack.getPlayerHpBar() == 0.0 || ctrlAttack.getPlayerStaminaBar() == 0.0 || finalBattle) {
+            this.round += 1;
+            ctrl.setRound(this.round);
             UtilsViews.setViewAnimating("ViewBattleOptions");
-        } else {  
-            UtilsViews.setViewAnimating("ViewBattleAttack");
 
+        } else {  
+            this.round += 1;
+            ctrl.setRound(this.round);
+            UtilsViews.setViewAnimating("ViewBattleAttack");
         }
     }
     
