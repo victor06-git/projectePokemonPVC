@@ -12,3 +12,4 @@ com/projecte/BuildDatabase.class
 com/projecte/ControllerMenu.class
 com/projecte/ControllerBattleAttack$1.class
 com/projecte/ControllerAttackResult.class
+com/projecte/ControllerRewards.class
