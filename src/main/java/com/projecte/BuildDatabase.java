@@ -7,7 +7,7 @@ import java.util.Random;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class BuildDatabase extends Application {
+public class BuildDatabase {
 
     public static String selected_path;
 
@@ -16,11 +16,11 @@ public class BuildDatabase extends Application {
         selected_path = input_path;
         db.connect(selected_path);
 
-        // Crear las tablas necesarias sin borrar las tablas del jugador
+        // First clean and create tables
         cleanAllTables();
         createAllTables();
 
-        // Insertar Pokémon, objetos y efectividad de tipos
+        // Then insert all data
         insertAllPokemon();
         insertAllItems();
         insertAllAttacks();
@@ -80,36 +80,34 @@ public class BuildDatabase extends Application {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
-        // Primero eliminamos las tablas si existen (en orden inverso por dependencias)
-        String dropTables = """
-            DROP TABLE IF EXISTS ItemInventory;
-            DROP TABLE IF EXISTS Item;
-            DROP TABLE IF EXISTS GameStats;
-            DROP TABLE IF EXISTS PokemonAttack;
-            DROP TABLE IF EXISTS TypeEffectiveness;
-            DROP TABLE IF EXISTS PlayerPokemon;
-            DROP TABLE IF EXISTS Attack;
-            DROP TABLE IF EXISTS Pokemon;
-        """;
+        // Verificar si las tablas existen y tienen información
+        String[] tablesToCheck = {
+            "Item", "Attack", "GameStats", "PlayerPokemon", "Battle", "ItemEffect", "ItemReward"
+        };
 
-       
-        db.update(dropTables);
-    }
+        HashSet<String> tablesToPreserve = new HashSet<>();
+        for (String table : tablesToCheck) {
+            ArrayList<java.util.HashMap<String, Object>> result = db.query("SELECT COUNT(*) AS count FROM " + table + ";");
+            boolean hasData = !result.isEmpty() && ((Number) result.get(0).get("count")).intValue() > 0;
+            if (hasData) {
+                tablesToPreserve.add(table);
+            }
+        }
 
-    public static void cleanBaseTables() {
-        AppData db = AppData.getInstance();
-        db.connect(selected_path);
+        // Eliminar todas las tablas excepto las que tienen datos
+        String[] allTables = {
+            "ItemInventory", "PokemonAttack", "TypeEffectiveness", "Attack", "Pokemon", "BattlePokemon",
+            "Item", "GameStats", "PlayerPokemon", "Battle", "ItemEffect", "ItemReward"
+        };
 
-        // Primero eliminamos las tablas si existen (en orden inverso por dependencias)
-        String dropTables = """
-            DROP TABLE IF EXISTS Item;
-            DROP TABLE IF EXISTS Attack;
-            DROP TABLE IF EXISTS TypeEffectiveness;
-            DROP TABLE IF EXISTS Pokemon;
-        """;
+        StringBuilder dropTables = new StringBuilder();
+        for (String table : allTables) {
+            if (!tablesToPreserve.contains(table)) {
+                dropTables.append("DROP TABLE IF EXISTS ").append(table).append(";\n");
+            }
+        }
 
-       
-        db.update(dropTables);
+        db.update(dropTables.toString());
     }
 
     public static void createAllTables() {
@@ -176,6 +174,40 @@ public class BuildDatabase extends Application {
                     battles_played INTEGER DEFAULT 0,
                     max_win_streak INTEGER DEFAULT 0,
                     current_win_streak INTEGER DEFAULT 0
+                );
+
+                CREATE TABLE Battle (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,        
+                    date TEXT NOT NULL,                          
+                    map TEXT,                                  
+                    winner TEXT CHECK(winner IN ('Player', 'Computer'))  
+                );
+
+                CREATE TABLE BattlePokemon (
+                    battle_id INTEGER NOT NULL,                 
+                    is_player BOOLEAN NOT NULL,                 
+                    pokemon_id INTEGER NOT NULL,               
+                    PRIMARY KEY (battle_id, is_player, pokemon_id),
+                    FOREIGN KEY (battle_id) REFERENCES Battle(id),
+                    FOREIGN KEY (pokemon_id) REFERENCES PlayerPokemon(id)
+                );
+
+                CREATE TABLE ItemEffect (
+                    player_pokemon_id INTEGER NOT NULL,        
+                    item_id INTEGER NOT NULL,                   
+                    active BOOLEAN DEFAULT 1,                    
+                    PRIMARY KEY (player_pokemon_id, item_id),
+                    FOREIGN KEY (player_pokemon_id) REFERENCES PlayerPokemon(id),
+                    FOREIGN KEY (item_id) REFERENCES Item(id)
+                );
+
+                CREATE TABLE ItemReward (
+                    battle_id INTEGER NOT NULL,
+                    item_id INTEGER NOT NULL,                   
+                    quantity INTEGER DEFAULT 1,                
+                    PRIMARY KEY (battle_id, item_id),
+                    FOREIGN KEY (battle_id) REFERENCES Battle(id),
+                    FOREIGN KEY (item_id) REFERENCES Item(id)
                 );
             """;
             
@@ -442,7 +474,7 @@ public class BuildDatabase extends Application {
         };
 
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Iteramos sobre el arreglo de Pokémon para insertar uno por uno
         for (String[] pokemon : pokemons) {
@@ -474,9 +506,17 @@ public class BuildDatabase extends Application {
             String effectType = item[1];
             int effectValue = Integer.parseInt(item[2]);
 
-            // Ejecutamos la sentencia SQL para insertar el objeto
-            db.update("INSERT INTO Item (name, effect_type, effect_value) VALUES ('" +
-                      name + "', '" + effectType + "', '" + effectValue + "');");
+            // Verificar si el objeto ya existe antes de insertarlo
+            ArrayList<java.util.HashMap<String, Object>> existingItem = db.query(
+                "SELECT COUNT(*) AS count FROM Item WHERE name = '" + name + "';"
+            );
+            boolean itemExists = !existingItem.isEmpty() && ((Number) existingItem.get(0).get("count")).intValue() > 0;
+
+            if (!itemExists) {
+                // Ejecutamos la sentencia SQL para insertar el objeto
+                db.update("INSERT INTO Item (name, effect_type, effect_value) VALUES ('" +
+                          name + "', '" + effectType + "', '" + effectValue + "');");
+            }
         }
 
         System.out.println("Items insertados correctamente.");
@@ -510,7 +550,7 @@ public class BuildDatabase extends Application {
         };
 
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Iteramos sobre el arreglo de ataques para insertar uno por uno
         for (String[] attack : attacks) {
@@ -647,11 +687,13 @@ public class BuildDatabase extends Application {
     public static void buildJSON() {
         // TODO
     }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    
+    public static boolean tableExists(String tableName) {
+    AppData db = AppData.getInstance();
+    ArrayList<java.util.HashMap<String, Object>> result = db.query(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName + "';");
+    return !result.isEmpty();
+}
 
 
 }
