@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.utils.UtilsViews;
 
@@ -50,6 +51,7 @@ public class ControllerBattleAttack {
     private int round = -1; // Variable to track the current round
 
     private int idPokemon; // ID del Pokémon jugador
+    List<String> pokemonTypes; // Lista de tipos del Pokémon jugador
 
     private HashMap<Integer, String> enemyPokemons; // Para almacenar los Pokémon enemigos
     private List<Integer> enemyPokemonIds; // Para almacenar los IDs de los Pokémon enemigos
@@ -111,8 +113,47 @@ public class ControllerBattleAttack {
         this.playerPokemonLabel.setText(text);
     }
 
+    /**
+     * Método para establecer el ID del Pokémon.
+     * @param idPokemon El ID del Pokémon a establecer.
+     */
     public void setIdPokemon(int idPokemon) {
         this.idPokemon = idPokemon;
+        
+        // Obtener los tipos del Pokémon de la base de datos
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
+        
+        // Obtenemos el tipo (puede ser combinado)
+        ArrayList<HashMap<String, Object>> results = db.query(
+            "SELECT type FROM Pokemon WHERE id = " + idPokemon + ";");
+        
+        List<String> types = new ArrayList<>();
+        if (!results.isEmpty()) {
+            String type = (String) results.get(0).get("type");
+            
+            // Manejar tipos combinados (ejemplo: "fire/water")
+            if (type != null) {
+                String[] splitTypes = type.split("/"); // Separar tipos
+                for (String t : splitTypes) {
+                    if (!types.contains(t)) {
+                        types.add(t); // Agregar tipo si no está ya en la lista
+                    }
+                }
+            }
+        }
+        
+        db.close();
+        
+        System.out.println("Parsed types for Pokémon ID " + idPokemon + ": " + types); // Debugging output
+        setPokemonTypes(types);
+    }
+    
+    
+
+    public void setPokemonTypes(List<String> types) {
+        this.pokemonTypes = new ArrayList<>(types);
+        loadAttacksFromDatabase();
     }
 
     /**
@@ -461,58 +502,87 @@ public class ControllerBattleAttack {
     }
 
     /**
-     * Método para cargar los ataques del pokemon.
-     * 
-     * @param index
+     * Método para cargar los ataques del pokemon según sus tipos.
+     * Para Pokémon con dos tipos: 2 ataques de cada tipo.
+     * Para Pokémon con un tipo: 4 ataques de ese tipo.
      */
     private void loadAttacksFromDatabase() {
         AppData db = AppData.getInstance();
         db.connect("./data/pokemons.sqlite");
         
-        // Realiza la consulta para obtener los ataques
-        ArrayList<HashMap<String, Object>> attackResults = db.query(
-            "SELECT name, type, damage, stamina_cost FROM Attack LIMIT 4;");
+        ArrayList<HashMap<String, Object>> allAttacks = new ArrayList<>();
         
-        // Inicializar los arrays con el tamaño adecuado
-        int numAttacks = attackResults.size();
+        if (pokemonTypes != null && !pokemonTypes.isEmpty()) {
+            System.out.println("Loading attacks for types: " + pokemonTypes); // Debugging output
+            int attacksPerType = pokemonTypes.size() > 1 ? 2 : 4;
+            
+            for (String type : pokemonTypes) {
+                ArrayList<HashMap<String, Object>> typeAttacks = db.query(
+                    "SELECT name, type, damage, stamina_cost FROM Attack " +
+                    "WHERE type = '" + type + "' " +
+                    "ORDER BY damage DESC " +
+                    "LIMIT " + attacksPerType + ";");
+                
+                System.out.println("Attacks for type " + type + ": " + typeAttacks); // Debugging output
+                allAttacks.addAll(typeAttacks);
+            }
+            
+            if (allAttacks.size() < 4) {
+                String excludedTypes = pokemonTypes.stream()
+                    .map(t -> "'" + t + "'")
+                    .collect(Collectors.joining(","));
+                
+                ArrayList<HashMap<String, Object>> otherAttacks = db.query(
+                    "SELECT name, type, damage, stamina_cost FROM Attack " +
+                    "WHERE type NOT IN (" + excludedTypes + ") " +
+                    "ORDER BY damage DESC " +
+                    "LIMIT " + (4 - allAttacks.size()) + ";");
+                
+                allAttacks.addAll(otherAttacks);
+            }
+        } else {
+            allAttacks = db.query(
+                "SELECT name, type, damage, stamina_cost FROM Attack " +
+                "ORDER BY RANDOM() " +
+                "LIMIT 4;");
+        }
+        
+        int numAttacks = Math.min(allAttacks.size(), 4);
         attackNames = new String[numAttacks];
         attackTypes = new String[numAttacks];
         attackDamages = new String[numAttacks];
         attackStaminaCosts = new String[numAttacks];
         
-        // Llenar los arrays con los datos de los ataques
         for (int i = 0; i < numAttacks; i++) {
-            HashMap<String, Object> attack = attackResults.get(i);
+            HashMap<String, Object> attack = allAttacks.get(i);
             attackNames[i] = (String) attack.get("name");
             attackTypes[i] = (String) attack.get("type");
             attackDamages[i] = String.valueOf(attack.get("damage"));
             attackStaminaCosts[i] = String.valueOf(attack.get("stamina_cost"));
         }
         
-        db.close();
+        db .close();
         
-        // Establecer los nombres de los movimientos (sin flecha de selección)
-        setMove1(attackNames[0]);
-        setMove2(attackNames[1]);
-        setMove3(attackNames[2]);
-        setMove4(attackNames[3]);
-    }
-    
-    /**
-     * Actualiza la información mostrada para el ataque seleccionado
-     * @param index Índice del ataque seleccionado (0-3)
-     */
-    private void updateAttackInfo(int index) {
-        if (attackNames == null || attackNames.length <= index) {
-            return; // Asegurarse de que hay datos cargados
+        if (numAttacks > 0) setMove1(attackNames[0]);
+        if (numAttacks > 1) setMove2(attackNames[1]);
+        if (numAttacks > 2) setMove3(attackNames[2]);
+        if (numAttacks > 3) setMove4(attackNames[3]);
+    }  
+        /**
+         * Actualiza la información mostrada para el ataque seleccionado
+         * @param index Índice del ataque seleccionado (0-3)
+         */
+        private void updateAttackInfo(int index) {
+            if (attackNames == null || attackNames.length <= index) {
+                return; // Asegurarse de que hay datos cargados
+            }
+            
+            // Actualiza el VBox con la información del ataque
+            attackNameLabel.setText("➤ " + attackNames[index]);
+            attackTypeLabel.setText("Tipo: " + attackTypes[index]);
+            attackDamageLabel.setText("Daño: " + attackDamages[index]);
+            estaminaLabel.setText("Estamina: " + attackStaminaCosts[index]);
         }
-        
-        // Actualiza el VBox con la información del ataque
-        attackNameLabel.setText("➤ " + attackNames[index]);
-        attackTypeLabel.setText("Tipo: " + attackTypes[index]);
-        attackDamageLabel.setText("Daño: " + attackDamages[index]);
-        estaminaLabel.setText("Estamina: " + attackStaminaCosts[index]);
-    }
 
     /**
      * Function to handle the attack action.
