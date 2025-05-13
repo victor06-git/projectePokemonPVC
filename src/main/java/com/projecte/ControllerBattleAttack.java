@@ -1,6 +1,7 @@
 package com.projecte;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -55,10 +56,15 @@ public class ControllerBattleAttack {
     public static final String STATUS_BATTLE_STARTED = "battle_started";
     public static final String STATUS_BATTLE_PREP = "battle_prep";
     public static final String STATUS_BATTLE_ENDED = "battle_ended";
+    private String[] attackNames;
+    private String[] attackTypes;
+    private String[] attackDamages;
+    private String[] attackStaminaCosts;
 
     @FXML
     public void initialize() {
         moves = new Label[]{move1, move2, move3, move4};
+        loadAttacksFromDatabase();
         updateSelection();
     
         Platform.runLater(() -> movePanel.requestFocus()); // Asegura que el panel tenga foco
@@ -455,28 +461,57 @@ public class ControllerBattleAttack {
     }
 
     /**
-     * Método para actualizar la información del ataque.
+     * Método para cargar los ataques del pokemon.
      * 
      * @param index
      */
+    private void loadAttacksFromDatabase() {
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
+        
+        // Realiza la consulta para obtener los ataques
+        ArrayList<HashMap<String, Object>> attackResults = db.query(
+            "SELECT name, type, damage, stamina_cost FROM Attack LIMIT 4;");
+        
+        // Inicializar los arrays con el tamaño adecuado
+        int numAttacks = attackResults.size();
+        attackNames = new String[numAttacks];
+        attackTypes = new String[numAttacks];
+        attackDamages = new String[numAttacks];
+        attackStaminaCosts = new String[numAttacks];
+        
+        // Llenar los arrays con los datos de los ataques
+        for (int i = 0; i < numAttacks; i++) {
+            HashMap<String, Object> attack = attackResults.get(i);
+            attackNames[i] = (String) attack.get("name");
+            attackTypes[i] = (String) attack.get("type");
+            attackDamages[i] = String.valueOf(attack.get("damage"));
+            attackStaminaCosts[i] = String.valueOf(attack.get("stamina_cost"));
+        }
+        
+        db.close();
+        
+        // Establecer los nombres de los movimientos (sin flecha de selección)
+        setMove1(attackNames[0]);
+        setMove2(attackNames[1]);
+        setMove3(attackNames[2]);
+        setMove4(attackNames[3]);
+    }
+    
+    /**
+     * Actualiza la información mostrada para el ataque seleccionado
+     * @param index Índice del ataque seleccionado (0-3)
+     */
     private void updateAttackInfo(int index) {
-
-        String[] names = {"Quick Attack", "Wing Attack", "Gust", "Focus Energy"};
-        String[] types = {"Normal", "Flying", "Flying", "Normal"};
-        String[] damages = {"40", "60", "50", "20"}; 
-        String[] estaminas = {
-            "5",
-            "3",
-            "4",
-            "10"
-        };
-
+        if (attackNames == null || attackNames.length <= index) {
+            return; // Asegurarse de que hay datos cargados
+        }
+        
         // Actualiza el VBox con la información del ataque
-        attackNameLabel.setText("➤ " + names[index]);
-        attackTypeLabel.setText("Tipo: " + types[index]);
-        attackDamageLabel.setText("Daño: " + damages[index]);
-        estaminaLabel.setText("Estamina: " + estaminas[index]);
-
+        attackNameLabel.setText("➤ " + attackNames[index]);
+        attackTypeLabel.setText("Tipo: " + attackTypes[index]);
+        attackDamageLabel.setText("Daño: " + attackDamages[index]);
+        estaminaLabel.setText("Estamina: " + attackStaminaCosts[index]);
     }
 
     /**

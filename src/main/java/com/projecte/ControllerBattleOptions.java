@@ -360,6 +360,7 @@ public class ControllerBattleOptions implements Initializable {
         if (!result3.isEmpty()) {
             
         }
+        
         db.close();
         ctrl.setPlayerPokemonLabel(pokemonNamePlayer + " Level 1");
         
