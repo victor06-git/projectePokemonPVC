@@ -52,6 +52,8 @@ public class ControllerBattleAttack {
 
     private int idPokemon; // ID del Pokémon jugador
     List<String> pokemonTypes; // Lista de tipos del Pokémon jugador
+    private List<Integer> playerPokemonIds; // Para almacenar los IDs de los Pokémon del jugador
+    private HashMap<Integer, Boolean> playerPokemonStatus; 
 
     private HashMap<Integer, String> enemyPokemons; // Para almacenar los Pokémon enemigos
     private List<Integer> enemyPokemonIds; // Para almacenar los IDs de los Pokémon enemigos
@@ -684,6 +686,11 @@ public class ControllerBattleAttack {
             if (playerPokemonDead() || playerPokemonOutOfStamina()) {
                 ctrlBattle.markPokemonAsDead(idPokemon);
             }
+            ControllerBattleOptions ctrlBattleOptions = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
+            if (ctrlBattleOptions.allPokemonsDead()) {
+                ctrlBattleOptions.endGame(); // Finaliza el juego si todos los Pokémon están muertos
+                return; // Salir del método
+            }
                       
             // Configurar los datos para la vista de resultados
             ctrl.setHpLabel(getHpComputer());
@@ -771,6 +778,14 @@ public class ControllerBattleAttack {
             }
         } else {
             System.out.println("No hay Pokémon enemigos disponibles.");
+        }
+    }
+
+    public void setPlayerPokemons(List<Integer> pokemonIds) {
+        this.playerPokemonIds = pokemonIds;
+        this.playerPokemonStatus = new HashMap<>();
+        for (Integer id : pokemonIds) {
+            playerPokemonStatus.put(id, true); // Todos los Pokémon comienzan vivos
         }
     }
 

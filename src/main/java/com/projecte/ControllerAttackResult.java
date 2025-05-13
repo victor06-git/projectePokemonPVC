@@ -37,6 +37,11 @@ public class ControllerAttackResult {
         if (finalBattle) {
             buttonContinue.setText("Finalizar");
             UtilsViews.setView("ViewBattleResult");
+            ControllerBattleResult ctrl = (ControllerBattleResult) UtilsViews.getController("ViewBattleResult");
+            ctrl.setRound(this.round);
+            ctrl.unlockTwoRandomPokemons();
+            ctrl.unlockRandomItem();
+            ctrl.updateGameStatsWithRandomXP();
         } else {
             buttonContinue.setText("Continuar");
         }
@@ -86,6 +91,7 @@ public class ControllerAttackResult {
             ctrl.setRound(this.round);
             if (finalBattle) {
                 UtilsViews.setView("ViewBattleResult");
+
             } else {
             UtilsViews.setViewAnimating("ViewBattleOptions");
         }
@@ -97,4 +103,6 @@ public class ControllerAttackResult {
         }
     }
     
+
+
 }

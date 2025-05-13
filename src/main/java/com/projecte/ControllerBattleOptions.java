@@ -685,11 +685,36 @@ public class ControllerBattleOptions implements Initializable {
 
         public void markPokemonAsDead(int pokemonId) {
             pokemonStatus.put(pokemonId, false); // Marca el Pokémon como muerto
-            disableDeadPokemons(); // Deshabilita los botones de Pokémon muertos;
+            disableDeadPokemons(); // Deshabilita los botones de Pokémon muertos
             System.out.println("Pokemon " + pokemonId + " marcado como muerto.");
             this.idPokemon = -1; // Reinicia el idPokemon al no tener Pokémon activo
             pickPokemon.setText("No has elegido ningún Pokémon activo.");
+        
+            // Verificar si todos los Pokémon están muertos
+            if (allPokemonsDead()) {
+                endGame(); // Llama a un método para finalizar el juego
+            }
         }
         
+        // Método para verificar si todos los Pokémon están muertos
+        public boolean allPokemonsDead() {
+            return pokemonStatus.values().stream().allMatch(status -> !status);
+        }
+        
+        // Método para finalizar el juego
+        public void endGame() {
+            // Aquí puedes agregar la lógica para finalizar el juego, como mostrar un mensaje de derrota
+            System.out.println("¡Todos tus Pokémon han sido derrotados! Fin de la partida.");
+            // Puedes mostrar una alerta o cambiar a una vista de resultados
+            showAlert("¡Todos tus Pokémon han sido derrotados! Fin de la partida.", Alert.AlertType.INFORMATION);
+            // Cambiar a la vista de resultados o menú
+        }
 
+        private void showAlert(String message, Alert.AlertType alertType) {
+            Alert alert = new Alert(alertType);
+            alert.setTitle("Fin de la partida");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        }        
 }
