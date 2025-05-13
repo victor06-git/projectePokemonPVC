@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="107.0" prefWidth="575.0" stylesheets="@viewResultAttack.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerMiniHistory">
+   <children>
+      <ImageView fx:id="imgWin" fitHeight="71.0" fitWidth="108.0" layoutX="19.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="dateLabel" alignment="CENTER" layoutX="135.0" layoutY="9.0" prefHeight="20.0" prefWidth="118.0" text="Data / Hora" />
+      <Label layoutX="303.0" layoutY="20.0" prefHeight="20.0" prefWidth="118.0" text="Your Team:" />
+      <Label layoutX="303.0" layoutY="67.0" prefHeight="20.0" prefWidth="92.0" text="CPU Team:" />
+      <HBox alignment="CENTER" layoutX="405.0" layoutY="60.0" prefHeight="26.0" prefWidth="156.0">
+         <children>
+            <ImageView fx:id="imgPokemon4" fitHeight="26.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </HBox.margin>
+            </ImageView>
+            <ImageView fx:id="imgPokemon5" fitHeight="26.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </HBox.margin>
+            </ImageView>
+            <ImageView fx:id="imgPokemon6" fitHeight="26.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </HBox.margin>
+            </ImageView>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="405.0" layoutY="17.0" prefHeight="26.0" prefWidth="156.0">
+         <children>
+            <ImageView fx:id="imgPokemon1" fitHeight="26.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </HBox.margin>
+            </ImageView>
+            <ImageView fx:id="imgPokemon2" fitHeight="26.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </HBox.margin>
+            </ImageView>
+            <ImageView fx:id="imgPokemon3" fitHeight="26.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </HBox.margin>
+            </ImageView>
+         </children>
+      </HBox>
+      <Pane layoutX="4.0" layoutY="101.0" prefHeight="3.0" prefWidth="568.0" style="-fx-background-color: black;" />
+      <Label layoutX="148.0" layoutY="67.0" prefHeight="20.0" prefWidth="65.0" text="Map:" />
+      <Label fx:id="mapLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="200.0" layoutY="67.0" prefHeight="20.0" prefWidth="65.0" text="Map" textAlignment="RIGHT" textFill="#797777">
+         <font>
+            <Font name="DejaVu Serif Bold" size="13.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

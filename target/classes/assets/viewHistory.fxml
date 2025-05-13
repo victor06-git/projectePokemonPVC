@@ -30,7 +30,7 @@
             </HBox>
             <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="349.0" prefWidth="592.0">
                <content>
-                  <VBox fx:id="historyList" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="312.0" prefWidth="578.0">
+                  <VBox fx:id="historyList" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="312.0" prefWidth="578.0">
                      <padding>
                         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                      </padding>
@@ -39,6 +39,6 @@
             </ScrollPane>
          </children>
       </VBox>
-      <ImageView fx:id="imgBackArrow" fitHeight="65.0" fitWidth="82.0" layoutX="10.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="imgBackArrow" fitHeight="65.0" fitWidth="82.0" layoutX="10.0" layoutY="7.0" onMouseClicked="#toViewMenu" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>

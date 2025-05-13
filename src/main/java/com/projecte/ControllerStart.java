@@ -1,6 +1,7 @@
 package com.projecte;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,7 +36,7 @@ public class ControllerStart extends BuildDatabase implements Initializable {
     }
 
     @FXML
-    private void startGame() {
+    private void startGame() throws IOException {
         System.out.println("Botón Open Game pulsado");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona la base de datos");
