@@ -1,16 +1,13 @@
 package com.projecte;
 
 
-import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.projecte.BuildDatabase.*;
-import com.sun.jdi.IntegerValue;
+import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.event.ActionEvent;
@@ -66,7 +63,7 @@ public class ControllerMenu implements Initializable {
         UtilsViews.setViewAnimating("ViewStart");
     }
 
-    private void setGameStats()  {
+    public void setGameStats()  {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 

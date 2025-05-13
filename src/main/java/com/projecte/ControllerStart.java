@@ -52,6 +52,10 @@ public class ControllerStart extends BuildDatabase implements Initializable {
             String rutaRelativa = getRelativePath(directorioBase, rutaDBAbsoluta);
             System.out.println("--- RELATIVE ROUTE DB: " + rutaRelativa);
             BuildDatabase.main(rutaDBAbsoluta);
+
+            ControllerMenu controllerMenu = new ControllerMenu();
+            controllerMenu.setGameStats();
+            
             UtilsViews.setViewAnimating("ViewMenu");
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
