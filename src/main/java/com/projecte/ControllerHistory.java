@@ -26,23 +26,21 @@ public class ControllerHistory extends BuildDatabase implements Initializable {
     @FXML
     private ImageView imgBackArrow;
 
-    @FXML
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
-        AppData db = AppData.getInstance();
-        db.connect(selected_path);
+
         
         try {
             URL imageURL = getClass().getResource("/assets/image/arrow-back.gif");
             Image image = new Image(imageURL.toExternalForm());
             imgBackArrow.setImage(image);
 
-            loadHistory();
+            //loadHistory();
         } catch (Exception e) {
             System.err.println("Error loading image asset.");
             e.printStackTrace();
-        } finally {
-            db.close();
-        }
+        } 
+        
     }
 
     @FXML

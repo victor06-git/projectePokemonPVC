@@ -151,7 +151,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="battlesWonInfoLabel" text="BWinfo">
+                                          <Label fx:id="battlesPlayedInfoLabel" text="BWinfo">
                                              <padding>
                                                 <Insets right="15.0" top="15.0" />
                                              </padding>
