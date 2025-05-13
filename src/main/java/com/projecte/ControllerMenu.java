@@ -98,9 +98,9 @@ public class ControllerMenu implements Initializable {
 
 
         for (HashMap<String, Object> el : result1) {
-            Integer totalExperience = (Integer) el.get("total_experience");
-            Integer level = totalExperience / 1000;
-            Integer points = totalExperience;
+            Object totalExperience = (Object) el.get("total_experience");
+            Integer level = (Integer) totalExperience / 1000;
+            Integer points = (Integer) totalExperience;
             Integer battlesPlayed = (Integer) el.get("battles_played");
             Integer maxConsecutiveWins = (Integer) el.get("max_win_streak");
 
