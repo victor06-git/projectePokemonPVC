@@ -6,11 +6,9 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.projecte.BuildDatabase.*;
-import com.sun.jdi.IntegerValue;
+import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.event.ActionEvent;
@@ -114,6 +112,8 @@ public class ControllerMenu implements Initializable {
             int totalCaught = (int) el.get("total_caught");
             pokemonsCaughtInfoLabel.setText(String.valueOf(totalCaught));
         }
+
+        System.out.println(result1);
 
 
         db.close();
