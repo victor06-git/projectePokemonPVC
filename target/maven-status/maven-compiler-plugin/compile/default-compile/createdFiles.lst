@@ -1,5 +1,6 @@
 com/utils/UtilsViews.class
 com/projecte/AppData.class
+com/projecte/ControllerHistory$BattleRecord.class
 com/projecte/ControllerBattleOptions.class
 com/projecte/ControllerHistory.class
 com/projecte/ControllerBattleAttack.class

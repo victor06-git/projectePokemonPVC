@@ -1,20 +1,19 @@
 package com.projecte;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Map;
+import java.util.List;
+import java.util.LinkedHashMap;
 
 import com.utils.UtilsViews;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -27,81 +26,99 @@ public class ControllerHistory extends BuildDatabase implements Initializable {
     @FXML
     private ImageView imgBackArrow;
 
-    private String imgPlayer1, imgPlayer2, imgPlayer3;
-    private String imgCPU1, imgCPU2, imgCPU3;
-    
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
-
-        // Insertar Pokémon con id 1, 4 y 7 en la tabla PlayerPokemon si no existen
         AppData db = AppData.getInstance();
         db.connect(selected_path);
         
-        Path imagePath = null;
         try {
             URL imageURL = getClass().getResource("/assets/image/arrow-back.gif");
             Image image = new Image(imageURL.toExternalForm());
             imgBackArrow.setImage(image);
 
             loadHistory();
-
         } catch (Exception e) {
-            System.err.println("Error loading image asset: " + imagePath);
+            System.err.println("Error loading image asset.");
             e.printStackTrace();
+        } finally {
+            db.close();
         }
-        db.close();
     }
 
     @FXML
     private void loadHistory() throws IOException {
-        // Cargar la historia desde la base de datos
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
         URL resource = this.getClass().getResource("/assets/miniHistoryView.fxml");
 
-
-        String query = "SELECT * FROM Pokemon p " +
-            "JOIN PlayerPokemon pp ON p.id = pp.pokemon_id " +
-            "JOIN BattlePokemon bp ON pp.pokemon_id = bp.pokemon_id " +
-            "JOIN Battle b ON bp.battle_id = b.id ";
+        String query = "SELECT b.id as battle_id, b.date, b.map, b.winner, " +
+                       "p.icon_path, bp.is_player " +
+                       "FROM Battle b " +
+                       "JOIN BattlePokemon bp ON b.id = bp.battle_id " +
+                       "JOIN Pokemon p ON bp.pokemon_id = p.id " +
+                       "ORDER BY b.date DESC";
 
         ArrayList<HashMap<String, Object>> history = db.query(query);
+        System.out.println("Raw history data: " + history);
 
-        System.out.println("History: " + history);
-
-        historyList.getChildren().clear(); // Limpiar la lista de historia antes de cargar nuevos elementos
-        
-        List<String> pokeImgs = new ArrayList<>();
+        // Usamos LinkedHashMap para mantener orden de inserción (orden de fecha)
+        Map<Integer, BattleRecord> battleMap = new LinkedHashMap<>();
 
         for (HashMap<String, Object> row : history) {
-            String icon_path = (String) row.get("icon_path");
+            Integer battleId = (Integer) row.get("battle_id");
             String date = (String) row.get("date");
             String map = (String) row.get("map");
             String winner = (String) row.get("winner");
-            Integer is_player = (Integer) row.get("is_player");
+            String iconPath = (String) row.get("icon_path");
+            Integer isPlayer = (Integer) row.get("is_player");
 
-            pokeImgs.add(icon_path);
+            BattleRecord battle = battleMap.get(battleId);
+            if (battle == null) {
+                battle = new BattleRecord(date, map, winner);
+                battleMap.put(battleId, battle);
+            }
+
+            if (isPlayer != null && isPlayer == 1) {
+                if (battle.playerPokemonImages.size() < 3) {
+                    battle.playerPokemonImages.add(iconPath);
+                }
+            } else {
+                if (battle.cpuPokemonImages.size() < 3) {
+                    battle.cpuPokemonImages.add(iconPath);
+                }
+            }
         }
 
+        historyList.getChildren().clear();
 
+        for (BattleRecord battle : battleMap.values()) {
             FXMLLoader loader = new FXMLLoader(resource);
             Parent itemTemplate = loader.load();
-            ControllerMiniHistory ctrl = loader.getController(); 
+            ControllerMiniHistory ctrl = loader.getController();
 
-            ctrl.setBattleInfo(date, map, winner);
+            ctrl.setBattleInfo(battle.date, battle.map, battle.winner);
 
-            for (int i = 0; i < pokeImgs.size(); i++) {
-                String icon_path = pokeImgs.get(i);
-                ctrl.setPokeCPU(icon_path, imgPokemon+(i+1));
+            // Asignar imágenes Pokémon jugador
+            for (int i = 0; i < 3; i++) {
+                if (battle.playerPokemonImages.size() > i) {
+                    ctrl.setPlayerPokemonImage(i, battle.playerPokemonImages.get(i));
+                } else {
+                    ctrl.setPlayerPokemonImage(i, "default.png");
+                }
             }
-            
+
+            // Asignar imágenes Pokémon CPU
+            for (int i = 0; i < 3; i++) {
+                if (battle.cpuPokemonImages.size() > i) {
+                    ctrl.setCpuPokemonImage(i, battle.cpuPokemonImages.get(i));
+                } else {
+                    ctrl.setCpuPokemonImage(i, "default.png");
+                }
+            }
+
             historyList.getChildren().add(itemTemplate);
-
-        
-
-
-        System.out.println("History: " + history);
+        }
 
         db.close();
     }
@@ -110,5 +127,17 @@ public class ControllerHistory extends BuildDatabase implements Initializable {
         UtilsViews.setViewAnimating("ViewMenu");
     }
 
+    private static class BattleRecord {
+        String date;
+        String map;
+        String winner;
+        List<String> playerPokemonImages = new ArrayList<>();
+        List<String> cpuPokemonImages = new ArrayList<>();
 
+        BattleRecord(String date, String map, String winner) {
+            this.date = date;
+            this.map = map;
+            this.winner = winner;
+        }
+    }
 }
