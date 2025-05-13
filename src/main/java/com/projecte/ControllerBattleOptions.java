@@ -698,7 +698,7 @@ public class ControllerBattleOptions implements Initializable {
         
         // Método para verificar si todos los Pokémon están muertos
         public boolean allPokemonsDead() {
-            return pokemonStatus.values().stream().allMatch(status -> !status);
+            return pokemonStatus.values().stream().allMatch(status -> !status); // Verifica si todos los valores son false
         }
         
         // Método para finalizar el juego
@@ -708,6 +708,7 @@ public class ControllerBattleOptions implements Initializable {
             // Puedes mostrar una alerta o cambiar a una vista de resultados
             showAlert("¡Todos tus Pokémon han sido derrotados! Fin de la partida.", Alert.AlertType.INFORMATION);
             // Cambiar a la vista de resultados o menú
+            UtilsViews.setViewAnimating("ViewBattleResult");
         }
 
         private void showAlert(String message, Alert.AlertType alertType) {
