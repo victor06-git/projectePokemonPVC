@@ -114,7 +114,7 @@ public class ControllerBattleResult {
             db.update("UPDATE PlayerPokemon SET unlocked = 1 WHERE pokemon_id = " + secondPokemon.get("id") + ";");
 
             setPokemonImage(imgPokemon1, (String) firstPokemon.get("icon_path"));
-            setPokemonImage(item1, (String) secondPokemon.get("icon_path"));
+            setPokemonImage(imgPokemon2, (String) secondPokemon.get("icon_path"));
 
             System.out.println("Pokémon desbloqueados: " + firstPokemon.get("name") + " y " + secondPokemon.get("name"));
         } else {

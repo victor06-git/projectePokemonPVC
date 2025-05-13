@@ -715,6 +715,6 @@ public class ControllerBattleOptions implements Initializable {
             alert.setTitle("Fin de la partida");
             alert.setHeaderText(null);
             alert.setContentText(message);
-            alert.showAndWait();
+            alert.show();
         }        
 }
