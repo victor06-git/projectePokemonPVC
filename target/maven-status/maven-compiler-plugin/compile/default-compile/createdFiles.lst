@@ -2,8 +2,6 @@ com/utils/UtilsViews.class
 com/projecte/ControllerBattleResult.class
 com/projecte/AppData.class
 com/projecte/ControllerBattleOptions.class
-com/projecte/AppData.class
-com/projecte/ControllerBattleOptions.class
 com/projecte/ControllerHistory.class
 com/projecte/ControllerBattleAttack.class
 com/projecte/ControllerPokeSettings.class

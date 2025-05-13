@@ -574,7 +574,11 @@ public class ControllerBattleAttack {
         if (playerPokemonDead() || playerPokemonOutOfStamina() || !hasMoreEnemyPokemons()) {
             ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
             ControllerBattleOptions ctrlBattle = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
-            ctrlBattle.markPokemonAsDead(idPokemon);
+            // Marca el Pokémon como muerto si se quedó sin vida o estamina
+            
+            if (playerPokemonDead() || playerPokemonOutOfStamina()) {
+                ctrlBattle.markPokemonAsDead(idPokemon);
+            }
                       
             // Configurar los datos para la vista de resultados
             ctrl.setHpLabel(getHpComputer());
@@ -606,7 +610,7 @@ public class ControllerBattleAttack {
      */
     private boolean playerPokemonDead() {
         double playerHp = playerHpBar.getProgress();
-        return playerHp <= 0;
+        return playerHp <= 0.0;
     }
 
     /**
@@ -616,17 +620,27 @@ public class ControllerBattleAttack {
      */
     private boolean playerPokemonOutOfStamina() {
         double playerStamina = playerStaminaBar.getProgress();
-        return playerStamina <= 0;
+        return playerStamina <= 0.0; // Verifica si la estamina es 0 o menos
     }
 
+    /**
+     * Método para verificar si el Pokémon enemigo está muerto.
+     * 
+     * @return true si el Pokémon enemigo tiene 0 o menos HP, de lo contrario false.
+     */
     private boolean computerPokemonDead() {
         double computerHp = enemyHpBar.getProgress();
-        return computerHp <= 0;
+        return computerHp <= 0.0;
     }
 
+    /**
+     * Método para verificar si el Pokémon enemigo se quedó sin estamina.
+     * 
+     * @return true si el Pokémon enemigo tiene 0 o menos estamina, de lo contrario false.
+     */
     private boolean computerPokemonOutOfStamina() {
         double computerStamina = enemyStaminaBar.getProgress();
-        return computerStamina <= 0;
+        return computerStamina <= 0.0;
     }
 
     // Método para establecer los Pokémon enemigos

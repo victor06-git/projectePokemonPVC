@@ -35,6 +35,7 @@ public class ControllerBattleOptions implements Initializable {
 
     private HashMap<Integer, String> enemyPokemons = new HashMap<>();
     private List<Integer> enemyPokemonIds = new ArrayList<>();
+    private Set<Integer> enemyPokemonSet = new HashSet<>();
 
 
     @FXML 
@@ -242,7 +243,6 @@ public class ControllerBattleOptions implements Initializable {
         
         // Generar Pokémon enemigos aleatorios solo si no hay Pokémon enemigos existentes
         if (enemyPokemonIds.isEmpty()) {
-            Set<Integer> enemyPokemonSet = new HashSet<>();
             Random random = new Random();
             
             // Generar 3 IDs únicos de Pokémon (1-251)
@@ -325,48 +325,55 @@ public class ControllerBattleOptions implements Initializable {
             return; // Salir del método si no hay Pokémon seleccionado
         }
 
+        if (!arePokemonsDifferent()) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Selección de Pokémon");
+            alert.setHeaderText(null);
+            alert.setContentText("Los Pokémon seleccionados deben ser diferentes.");
+            alert.showAndWait();
+            return; // Salir del método si no son diferentes
+        }
+
         ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
         ctrl.setMap(mapPaths.get(currentMapIndex));
+        ctrl.setIdPokemon(idPokemon);
         ctrl.setRound(round);
 
-        // Verificar si ya existen Pokémon enemigos
-        if (!enemyPokemonIds.isEmpty()) {
-            // Establecer la imagen y el nombre del primer Pokémon enemigo
-            int firstEnemyId = enemyPokemonIds.get(0); // Obtener el primer Pokémon
-            ctrl.setEnemyPokemonImage("/assets/pokemons/normal/" + String.format("%03d", firstEnemyId) + ".gif");
-            ctrl.setComputerPokemonLabel(enemyPokemons.get(firstEnemyId));
-        } else {
-            // Si no hay Pokémon enemigos, mostrar alerta o manejar el caso
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("No hay Pokémon enemigos disponibles.");
-            alert.showAndWait();
-            return;
-        }
+        // Obtener nombres desde la BD
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");        
 
         // Establecer la imagen y el nombre del Pokémon del jugador
         ctrl.setPlayerPokemonImage("/assets/pokemons/back/" + (idPokemon > 100 ? idPokemon + ".gif" : "0" + idPokemon + ".gif"));
-        AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        
         String query2 = "SELECT name FROM Pokemon WHERE id = " + idPokemon;
+        String query3 = "SELECT max_hp, stamina FROM PlayerPokemon WHERE pokemon_id = " + idPokemon;
         ArrayList<HashMap<String, Object>> result2 = db.query(query2);
+        ArrayList<HashMap<String, Object>> result3 = db.query(query3);
         String pokemonNamePlayer = "";
+        int maxHp = (int) result3.get(0).get("max_hp");
+        int stamina = (int) result3.get(0).get("stamina");
+        
         if (!result2.isEmpty()) {
             pokemonNamePlayer = result2.get(0).get("name").toString();
         }
-        ctrl.setPlayerPokemonLabel(pokemonNamePlayer + " Level 1");
+        if (!result3.isEmpty()) {
+            
+        }
         db.close();
-
+        ctrl.setPlayerPokemonLabel(pokemonNamePlayer + " Level 1");
+        
+        
+        // Configurar estamina y HP
         ctrl.setEstaminaComputer("30/30");
-        ctrl.setEstaminaPlayer("30/30");
-        ctrl.setHpPlayer("100/100");
-        // Asegurarte de que hay al menos una parte
+        ctrl.setEstaminaPlayer(stamina + "/30");
+        ctrl.setHpPlayer(maxHp + "/100");
         ctrl.setHpComputer("100/100");
-        ctrl.setEnemyHpBar(Double.parseDouble(ctrl.getHpComputer()) / 100.0);
-        ctrl.setEnemyStaminaBar(Double.parseDouble(ctrl.getEstaminaComputer())  / 30.0);
+        ctrl.setEnemyHpBar(1.0);
+        ctrl.setEnemyStaminaBar(1.0);
         ctrl.setPlayerHpBar(1.0);
         ctrl.setPlayerStaminaBar(1.0);
+        
 
         // Cambiar a la vista de batalla
         UtilsViews.setViewAnimating("ViewBattleAttack");
@@ -679,6 +686,8 @@ public class ControllerBattleOptions implements Initializable {
             pokemonStatus.put(pokemonId, false); // Marca el Pokémon como muerto
             disableDeadPokemons(); // Deshabilita los botones de Pokémon muertos;
             System.out.println("Pokemon " + pokemonId + " marcado como muerto.");
+            this.idPokemon = -1; // Reinicia el idPokemon al no tener Pokémon activo
+            pickPokemon.setText("No has elegido ningún Pokémon activo.");
         }
         
 
