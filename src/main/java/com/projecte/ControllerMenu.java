@@ -70,46 +70,51 @@ public class ControllerMenu implements Initializable {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
-        String query = """
+        String query1 = """
             SELECT 
             total_experience, 
             battles_played, 
-            max_win_streak, 
-            (SELECT COUNT(*) FROM PlayerPokemon WHERE unlocked = 1) as total_caught 
+            max_win_streak 
             FROM GameStats
         """;
 
-        ArrayList<HashMap<String, Object>> result = db.query(query);
+        ArrayList<HashMap<String, Object>> result1 = db.query(query1);
 
+        String query2 = """
+            SELECT 
+            COUNT(*) as total_caught 
+            FROM PlayerPokemon 
+            WHERE unlocked = 1
+        """;
+
+        ArrayList<HashMap<String, Object>> result2 = db.query(query2);
+
+      
         // Check if the result is empty
-        if (result.isEmpty()) {
-            System.err.println("No data returned from the query.");
+        if (result1.isEmpty() || result2.isEmpty()) {
+            System.err.println("No data returned from the querys.");
             return; // Exit the method if no data is found
         }
 
-        System.out.println("Query returned " + result.size() + " rows.");
 
-        for (HashMap<String, Object> el : result) {
-            int totalExperience = (int) el.get("total_experience");
-            int level = totalExperience / 1000;
-            int points = totalExperience;
-            int battlesPlayed = (int) el.get("battles_played");
-            int maxConsecutiveWins = (int) el.get("max_win_streak");
-            int pokemonsCaught = (int) el.get("total_caught");
-
-            System.out.println("Stats: " +
-                    "Level: " + level +
-                    ", Points: " + points +
-                    ", Battles Played: " + battlesPlayed +
-                    ", Max Consecutive Wins: " + maxConsecutiveWins +
-                    ", Pokemons Caught: " + pokemonsCaught);
+        for (HashMap<String, Object> el : result1) {
+            Integer totalExperience = (Integer) el.get("total_experience");
+            Integer level = totalExperience / 1000;
+            Integer points = totalExperience;
+            Integer battlesPlayed = (Integer) el.get("battles_played");
+            Integer maxConsecutiveWins = (Integer) el.get("max_win_streak");
 
             levelInfoLabel.setText(String.valueOf(level));
             pointsInfoLabel.setText(String.valueOf(points));
             battlesPlayedInfoLabel.setText(String.valueOf(battlesPlayed));
-            pokemonsCaughtInfoLabel.setText(String.valueOf(pokemonsCaught));
             maxConsecutiveWinsInfoLabel.setText(String.valueOf(maxConsecutiveWins));
         }
+
+        for (HashMap<String, Object> el : result2) { 
+            int totalCaught = (int) el.get("total_caught");
+            pokemonsCaughtInfoLabel.setText(String.valueOf(totalCaught));
+        }
+
 
         db.close();
     }
