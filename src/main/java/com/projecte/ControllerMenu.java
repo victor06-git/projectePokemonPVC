@@ -36,13 +36,13 @@ public class ControllerMenu implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         Path imagePath = null;
 
+        setGameStats();
 
         try {
             URL imageURL = getClass().getResource("/assets/image/background.jpg");
             Image image = new Image(imageURL.toExternalForm());
             imgBackground.setImage(image);
 
-            setGameStats();
 
         } catch (Exception e) {
             System.err.println("Error loading image asset: " + imagePath);
@@ -66,7 +66,7 @@ public class ControllerMenu implements Initializable {
         UtilsViews.setViewAnimating("ViewStart");
     }
 
-    private void setGameStats() throws IOException {
+    private void setGameStats()  {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
