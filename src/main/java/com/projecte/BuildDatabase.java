@@ -15,103 +15,23 @@ public class BuildDatabase {
         AppData db = AppData.getInstance();
         selected_path = input_path;
         db.connect(selected_path);
-
-        // First clean and create tables
-        cleanAllTables();
-        createAllTables();
+        try {
+            // First clean and create tables
+        createOrReplaceAllTables(db);
 
         // Then insert all data
-        insertAllPokemon();
-        insertAllItems();
-        insertAllAttacks();
-        insertAllTypeEffectiveness();
-
-        // Verificar si existen registros en GameStats
-        ArrayList<java.util.HashMap<String, Object>> gameStatsResult = db.query("SELECT COUNT(*) AS count FROM GameStats;");
-        boolean hasGameStats = !gameStatsResult.isEmpty() && ((Number) gameStatsResult.get(0).get("count")).intValue() > 0;
-
-        // Verificar si existen registros en ItemInventory
-        ArrayList<java.util.HashMap<String, Object>> itemInventoryResult = db.query("SELECT COUNT(*) AS count FROM ItemInventory;");
-        boolean hasItemInventory = !itemInventoryResult.isEmpty() && ((Number) itemInventoryResult.get(0).get("count")).intValue() > 0;
-
-        // Verificar si PlayerPokemon tiene 3 o más con unlocked = 1
-        ArrayList<java.util.HashMap<String, Object>> playerPokemonResult = db.query("SELECT COUNT(*) AS count FROM PlayerPokemon WHERE unlocked = 1;");
-        int unlockedPokemonCount = playerPokemonResult.isEmpty() ? 0 : ((Number) playerPokemonResult.get(0).get("count")).intValue();
-
-        // Insertar datos iniciales si no existen
-        if (!hasGameStats) {
-            db.update("INSERT INTO GameStats (id, total_experience, battles_played, max_win_streak, current_win_streak) VALUES (1, 0, 0, 0, 0);");
+        insertAllPokemon(db);
+        insertAllItems(db);
+        insertAllAttacks(db);
+        insertAllTypeEffectiveness(db);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        if (!hasItemInventory) {
-            db.update("INSERT INTO ItemInventory (item_id, quantity) SELECT id, 0 FROM Item;");
-        }
-
-        if (unlockedPokemonCount < 3) {
-            // Si no hay suficientes Pokémon desbloqueados, insertar 3 Pokémon desbloqueados
-            Random random = new Random();
-            HashSet<Integer> unlockedPokemonIds = new HashSet<>();
-            while (unlockedPokemonIds.size() < 3) {
-                int pokemonId = random.nextInt(251) + 1; // IDs del 1 al 251
-                if (!unlockedPokemonIds.contains(pokemonId)) {
-                    unlockedPokemonIds.add(pokemonId);
-                    db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
-                          pokemonId + ", 100, 50, 30, 1);");
-
-                    System.out.println("Pokémon desbloqueado: " + pokemonId );
-                }
-            }
-
-            // Insertar el resto de los Pokémon con "unlocked" en false
-            for (int i = 1; i <= 251; i++) {
-                if (!unlockedPokemonIds.contains(i)) {
-                    db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
-                          i + ", 100, 50, 30, 0);");
-                }
-            }
-        }
-
+    
         db.close();
     }
 
-    
-
-    public static void cleanAllTables() {
-        AppData db = AppData.getInstance();
-        db.connect(selected_path);
-
-        // Verificar si las tablas existen y tienen información
-        String[] tablesToCheck = {
-            "Item", "Attack", "GameStats", "PlayerPokemon", "Battle", "ItemEffect", "ItemReward"
-        };
-
-        HashSet<String> tablesToPreserve = new HashSet<>();
-        for (String table : tablesToCheck) {
-            ArrayList<java.util.HashMap<String, Object>> result = db.query("SELECT COUNT(*) AS count FROM " + table + ";");
-            boolean hasData = !result.isEmpty() && ((Number) result.get(0).get("count")).intValue() > 0;
-            if (hasData) {
-                tablesToPreserve.add(table);
-            }
-        }
-
-        // Eliminar todas las tablas excepto las que tienen datos
-        String[] allTables = {
-            "ItemInventory", "PokemonAttack", "TypeEffectiveness", "Attack", "Pokemon", "BattlePokemon",
-            "Item", "GameStats", "PlayerPokemon", "Battle", "ItemEffect", "ItemReward"
-        };
-
-        StringBuilder dropTables = new StringBuilder();
-        for (String table : allTables) {
-            if (!tablesToPreserve.contains(table)) {
-                dropTables.append("DROP TABLE IF EXISTS ").append(table).append(";\n");
-            }
-        }
-
-        db.update(dropTables.toString());
-    }
-
-    public static void createAllTables() {
-        AppData db = AppData.getInstance();
+    public static void createOrReplaceAllTables(AppData db) {
         String createTables = """
                 CREATE TABLE IF NOT EXISTS Pokemon (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -176,14 +96,14 @@ public class BuildDatabase {
                     current_win_streak INTEGER DEFAULT 0
                 );
 
-                CREATE TABLE Battle (
+                CREATE TABLE IF NOT EXISTS  Battle (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,        
                     date TEXT NOT NULL,                          
                     map TEXT,                                  
                     winner TEXT CHECK(winner IN ('Player', 'Computer'))  
                 );
 
-                CREATE TABLE BattlePokemon (
+                CREATE TABLE IF NOT EXISTS BattlePokemon (
                     battle_id INTEGER NOT NULL,                 
                     is_player BOOLEAN NOT NULL,                 
                     pokemon_id INTEGER NOT NULL,               
@@ -192,7 +112,7 @@ public class BuildDatabase {
                     FOREIGN KEY (pokemon_id) REFERENCES PlayerPokemon(id)
                 );
 
-                CREATE TABLE ItemEffect (
+                CREATE TABLE IF NOT EXISTS ItemEffect (
                     player_pokemon_id INTEGER NOT NULL,        
                     item_id INTEGER NOT NULL,                   
                     active BOOLEAN DEFAULT 1,                    
@@ -201,7 +121,7 @@ public class BuildDatabase {
                     FOREIGN KEY (item_id) REFERENCES Item(id)
                 );
 
-                CREATE TABLE ItemReward (
+                CREATE TABLE IF NOT EXISTS ItemReward (
                     battle_id INTEGER NOT NULL,
                     item_id INTEGER NOT NULL,                   
                     quantity INTEGER DEFAULT 1,                
@@ -211,11 +131,19 @@ public class BuildDatabase {
                 );
             """;
             
-            db.update(createTables);
+            String[] tableStatements = createTables.split(";");
+            for (String statement : tableStatements) {
+                if (!statement.trim().isEmpty()) {
+                    db.update(statement.trim() + ";");
+                }
+            }
     }
 
 
-    public static void insertAllPokemon() {
+    public static void insertAllPokemon(AppData db) {
+
+        // db.update("DELETE FROM Pokemons;"); // Limpiar la tabla de Pokémon antes de insertar
+
         String[][] pokemons = {
             // Primera Generación (1-151)
             {"Bulbasaur", "Grass/Poison", "001.gif", "001.png"},
@@ -473,32 +401,29 @@ public class BuildDatabase {
             {"Celebi", "Psychic/Grass", "251.gif", "251.png"}
         };
 
-        AppData db = AppData.getInstance();
-        db.connect(selected_path);
-
-        // Iteramos sobre el arreglo de Pokémon para insertar uno por uno
         for (String[] pokemon : pokemons) {
             String name = pokemon[0];
             String type = pokemon[1];
             String imagePath = pokemon[2];
             String iconPath = pokemon[3];
 
-            // Ejecutamos la sentencia SQL para insertar el Pokémon
-            db.update("INSERT INTO Pokemon (name, type, image_path, icon_path) VALUES ('" +
+            // Verificar si el Pokémon ya existe antes de insertarlo o actualizarlo
+            db.update("INSERT OR REPLACE INTO Pokemon (name, type, image_path, icon_path) VALUES ('" +
                       name + "', '" + type + "', '" + imagePath + "', '" + iconPath + "');");
         }
 
         System.out.println("Pokémons insertados correctamente.");
     }
-    public static void insertAllItems() {
+    public static void insertAllItems(AppData db) {
+
+        // db.update("DELETE FROM Items;"); // Limpiar la tabla de objetos antes de insertar
+
         String[][] items = {
             {"X_Attack", "attack", "10"},
             {"X_Defense", "Defense", "20"},
             {"Bottle_Cap", "All", "100"},
         };
 
-        AppData db = AppData.getInstance();
-        db.connect(selected_path);
 
         // Iteramos sobre el arreglo de objetos para insertar uno por uno
         for (String[] item : items) {
@@ -506,51 +431,126 @@ public class BuildDatabase {
             String effectType = item[1];
             int effectValue = Integer.parseInt(item[2]);
 
-            // Verificar si el objeto ya existe antes de insertarlo
-            ArrayList<java.util.HashMap<String, Object>> existingItem = db.query(
-                "SELECT COUNT(*) AS count FROM Item WHERE name = '" + name + "';"
-            );
-            boolean itemExists = !existingItem.isEmpty() && ((Number) existingItem.get(0).get("count")).intValue() > 0;
-
-            if (!itemExists) {
-                // Ejecutamos la sentencia SQL para insertar el objeto
-                db.update("INSERT INTO Item (name, effect_type, effect_value) VALUES ('" +
+            db.update("INSERT OR REPLACE INTO Item (name, effect_type, effect_value) VALUES ('" +
                           name + "', '" + effectType + "', '" + effectValue + "');");
-            }
-        }
 
-        System.out.println("Items insertados correctamente.");
+            System.out.println("Items insertados correctamente.");
+        }
     }
 
-    public static void insertAllAttacks() {
+
+    public static void insertAllAttacks(AppData db) {
+        
         String[][] attacks = {
             {"Tackle", "Normal", "30", "5"},
             {"Growl", "Normal", "5", "5"},
-            {"Ember", "Fire", "30", "5"},
-            {"Water Gun", "Water", "30", "5"},
-            {"Vine Whip", "Grass", "35", "5"},
-            {"Thunder Shock", "Electric", "30", "5"},
             {"Quick Attack", "Normal", "30", "5"},
-            {"Confusion", "Psychic", "40", "5"},
+            {"Hyper Beam", "Normal", "150", "50"},
+            {"Body Slam", "Normal", "85", "40"},
+            
+            {"Ember", "Fire", "30", "5"},
             {"Flamethrower", "Fire", "45", "45"},
+            {"Fire Blast", "Fire", "110", "50"},
+            {"Heat Wave", "Fire", "95", "40"},
+            {"Inferno", "Fire", "100", "50"},
+            
+            {"Water Gun", "Water", "30", "5"},
             {"Hydro Pump", "Water", "45", "45"},
-            {"Thunderbolt", "Electric", "45", "45"},
+            {"Surf", "Water", "90", "40"},
+            {"Aqua Tail", "Water", "85", "35"},
+            {"Bubble Beam", "Water", "65", "30"},
+            
+            {"Vine Whip", "Grass", "35", "5"},
             {"Razor Leaf", "Grass", "45", "35"},
-            {"Ice Beam", "Ice", "45", "45"},
+            {"Solar Beam", "Grass", "120", "50"},
+            {"Leaf Blade", "Grass", "90", "40"},
+            {"Energy Ball", "Grass", "90", "40"},
+            
+            {"Thunder Shock", "Electric", "30", "5"},
+            {"Thunderbolt", "Electric", "45", "45"},
+            {"Thunder", "Electric", "110", "50"},
+            {"Spark", "Electric", "65", "30"},
+            {"Discharge", "Electric", "80", "40"},
+            
+            {"Confusion", "Psychic", "40", "5"},
             {"Psychic", "Psychic", "45", "45"},
+            {"Psybeam", "Psychic", "65", "30"},
+            {"Future Sight", "Psychic", "120", "50"},
+            {"Zen Headbutt", "Psychic", "80", "40"},
+            
+            {"Ice Beam", "Ice", "45", "45"},
+            {"Blizzard", "Ice", "110", "50"},
+            {"Frost Breath", "Ice", "60", "30"},
+            {"Aurora Beam", "Ice", "65", "30"},
+            {"Ice Shard", "Ice", "40", "20"},
+            
             {"Shadow Ball", "Ghost", "45", "45"},
+            {"Hex", "Ghost", "65", "30"},
+            {"Shadow Claw", "Ghost", "70", "35"},
+            {"Night Shade", "Ghost", "50", "25"},
+            {"Phantom Force", "Ghost", "90", "40"},
+            
             {"Brick Break", "Fighting", "45", "40"},
+            {"Close Combat", "Fighting", "120", "50"},
+            {"Dynamic Punch", "Fighting", "100", "50"},
+            {"Low Sweep", "Fighting", "65", "30"},
+            {"Focus Blast", "Fighting", "120", "50"},
+            
             {"Earthquake", "Ground", "45", "45"},
+            {"Mud-Slap", "Ground", "20", "10"},
+            {"Bulldoze", "Ground", "60", "30"},
+            {"Dig", "Ground", "80", "40"},
+            {"Earth Power", "Ground", "90", "40"},
+            
             {"Air Slash", "Flying", "45", "40"},
+            {"Hurricane", "Flying", "110", "50"},
+            {"Aerial Ace", "Flying", "60", "30"},
+            {"Sky Attack", "Flying", "140", "50"},
+            {"Wing Attack", "Flying", "60", "30"},
+            
             {"Sludge Bomb", "Poison", "45", "45"},
-            {"Iron Tail", "Steel", "45", "45"},
-            {"Rock Slide", "Rock", "45", "40"},
-            {"Dragon Claw", "Dragon", "45", "45"},
-            {"Dark Pulse", "Dark", "45", "45"}
-        };
+            {"Poison Jab", "Poison", "80", "40"},
+            {"Acid Spray", "Poison", "40", "20"},
+            {"Gunk Shot", "Poison", "120", "50"},
+            {"Sludge Wave", "Poison", "95", "40"},
+            
+            {"Rock Throw", "Rock", "30", "5"},
+            {"Rock Slide", "Rock", "45", "35"},
+            {"Stone Edge", "Rock", "100", "50"},
+            {"Rock Blast", "Rock", "25", "10"},
+            {"Ancient Power", "Rock", "60", "30"},
+            
+            {"Fairy Wind", "Fairy", "40", "5"},
+            {"Moonblast", "Fairy", "95", "40"},
+            {"Dazzling Gleam", "Fairy", "80", "35"},
+            {"Play Rough", "Fairy", "90", "40"},
+            {"Draining Kiss", "Fairy", "50", "25"},
 
-        AppData db = AppData.getInstance();
-        db.connect(selected_path);
+            {"Steel Wing", "Steel", "70", "35"},
+            {"Flash Cannon", "Steel", "80", "40"},
+            {"Iron Tail", "Steel", "100", "50"},
+            {"Metal Claw", "Steel", "50", "25"},
+            {"Gyro Ball", "Steel", "60", "30"},
+
+            {"Bug Bite", "Bug", "30", "5"},
+            {"X-Scissor", "Bug", "80", "40"},
+            {"Signal Beam", "Bug", "75", "35"},
+            {"Fell Stinger", "Bug", "50", "25"},
+            {"Struggle Bug", "Bug", "50", "20"},
+
+            {"Bite", "Dark", "60", "25"},
+            {"Crunch", "Dark", "80", "40"},
+            {"Foul Play", "Dark", "95", "50"},
+            {"Dark Pulse", "Dark", "80", "40"},
+            {"Night Slash", "Dark", "70", "35"},
+
+            {"Dragon Breath", "Dragon", "60", "25"},
+            {"Dragon Claw", "Dragon", "80", "40"},
+            {"Outrage", "Dragon", "120", "50"},
+            {"Dragon Pulse", "Dragon", "85", "40"},
+            {"Draco Meteor", "Dragon", "130", "50"}
+
+        };
 
         // Iteramos sobre el arreglo de ataques para insertar uno por uno
         for (String[] attack : attacks) {
@@ -560,7 +560,7 @@ public class BuildDatabase {
             int staminaCost = Integer.parseInt(attack[3]);
 
             // Ejecutamos la sentencia SQL para insertar el ataque
-            db.update("INSERT INTO Attack (name, type, damage, stamina_cost) VALUES ('" +
+            db.update("INSERT OR REPLACE INTO Attack (name, type, damage, stamina_cost) VALUES ('" +
                       name + "', '" + type + "', " + damage + ", " + staminaCost + ");");
         }
         System.out.println("Attacks insertados correctamente.");        
@@ -568,7 +568,10 @@ public class BuildDatabase {
     }
    
 
-    public static void insertAllTypeEffectiveness() {
+    public static void insertAllTypeEffectiveness(AppData db) {
+
+        // db.update("DELETE FROM TypeEffectiveness;"); // Limpiar la tabla de efectividad de tipos antes de insertar
+
         String[][] typeEffectiveness = {
             // Fire
             {"Fire", "Grass", "2.0"},
@@ -668,8 +671,6 @@ public class BuildDatabase {
             {"Fighting", "Fairy", "0.5"},
             {"Fighting", "Ghost", "0.0"}
         };
-        AppData db = AppData.getInstance();
-        db.connect(selected_path);
 
         // Iteramos sobre el arreglo de efectividad de tipos para insertar uno por uno
         for (String[] effectiveness : typeEffectiveness) {
@@ -678,22 +679,10 @@ public class BuildDatabase {
             double multiplier = Double.parseDouble(effectiveness[2]);
 
             // Ejecutamos la sentencia SQL para insertar la efectividad de tipo
-            db.update("INSERT INTO TypeEffectiveness (attack_type, target_type, multiplier) VALUES ('" +
+            db.update("INSERT OR REPLACE INTO TypeEffectiveness (attack_type, target_type, multiplier) VALUES ('" +
                       attackType + "', '" + targetType + "', '" + multiplier + "');");
         }
         System.out.println("Type effectiveness insertados correctamente.");
     }
-
-    public static void buildJSON() {
-        // TODO
-    }
-    
-    public static boolean tableExists(String tableName) {
-    AppData db = AppData.getInstance();
-    ArrayList<java.util.HashMap<String, Object>> result = db.query(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName + "';");
-    return !result.isEmpty();
-}
-
 
 }
