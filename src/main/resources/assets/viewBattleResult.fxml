@@ -38,14 +38,19 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="31.0" prefWidth="580.0" spacing="20.0">
                <children>
-                  <Label text="Nivell 1:" />
-                  <ProgressBar fx:id="nivellBar" prefWidth="200.0" progress="0.0" />
+                  <Label fx:id="levelLabel" text="Nivell 1:" />
+                  <ProgressBar fx:id="levelBar" prefWidth="200.0" progress="0.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                <children>
-                  <Label text="Objectes unlocked:" />
-                  <ImageView fx:id="item1" fitHeight="119.0" fitWidth="139.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label text="Objectes unlocked:">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
+                  <Label fx:id="item1" text="XAttack" />
+                  <Label fx:id="item2" text="XDeffense" />
+                  <Label fx:id="item3" text="BottleCap" />
                </children>
             </HBox>
             <VBox alignment="CENTER" prefHeight="24.0" prefWidth="580.0">

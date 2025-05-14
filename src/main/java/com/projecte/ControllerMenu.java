@@ -63,6 +63,26 @@ public class ControllerMenu implements Initializable {
         UtilsViews.setViewAnimating("ViewStart");
     }
 
+    public void setlevelInfoLabel(String level) {
+        levelInfoLabel.setText(level);
+    }
+
+    public void setPokemonsCaughtInfoLabel(String pokemonsCaught) {
+        pokemonsCaughtInfoLabel.setText(pokemonsCaught);
+    }
+
+    public void setPointsInfoLabel(String points) {
+        pointsInfoLabel.setText(points);
+    }
+
+    public void setBattlesPlayedInfoLabel(String battlesPlayed) {
+        battlesPlayedInfoLabel.setText(battlesPlayed);
+    }
+    
+    public void setMaxConsecutiveWinsInfoLabel(String maxConsecutiveWins) {
+        maxConsecutiveWinsInfoLabel.setText(maxConsecutiveWins);
+    }
+
     public void setGameStats() throws IOException {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
