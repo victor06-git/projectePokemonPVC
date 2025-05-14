@@ -48,11 +48,9 @@ public class ControllerStart extends BuildDatabase implements Initializable {
             String rutaDBAbsoluta = selectedFile.getAbsolutePath();
             // Obtener la ruta del directorio base (puedes cambiar esto según tu estructura)
             String directorioBase = new File("").getAbsolutePath(); // Directorio de trabajo actual
-            //String rutaRelativa = getRelativePath(directorioBase, rutaDBAbsoluta);
+            String rutaRelativa = getRelativePath(directorioBase, rutaDBAbsoluta);
             BuildDatabase.main(rutaDBAbsoluta);
             UtilsViews.setViewAnimating("ViewMenu");
-            ControllerMenu menu = new ControllerMenu();
-            menu.setGameStats();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

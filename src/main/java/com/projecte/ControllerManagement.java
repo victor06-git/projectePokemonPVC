@@ -1,5 +1,6 @@
 package com.projecte;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class ControllerManagement implements Initializable {
 
     
     @FXML
-    private Button buttonNext = new Button();
+    private Button buttonNext;
 
     @FXML
     private ChoiceBox<String> pokemons;
@@ -32,28 +33,28 @@ public class ControllerManagement implements Initializable {
     private CheckBox showUnlockedOnly;
 
     @FXML
-    private Button buttonPrevious = new Button();
+    private Button buttonPrevious;
 
     @FXML
-    private Button buttonSettings = new Button();
+    private Button buttonSettings;
 
     @FXML
-    private Label labelLevel = new Label();
+    private Label labelLevel;
     
     @FXML
-    private Label labelName = new Label();
+    private Label labelName;
     
     @FXML
-    private Label labelType = new Label();
+    private Label labelType;
     
     @FXML
-    private Label labelStamina = new Label();
+    private Label labelStamina;
     
     @FXML
-    private Label labelHp = new Label();
+    private Label labelHp;
     
     @FXML
-    private Label labelNickname = new Label();
+    private Label labelNickname;
 
     @FXML
     private ImageView imgBackArrow; //Imagen para retroceder de vista
@@ -63,12 +64,14 @@ public class ControllerManagement implements Initializable {
 
     private int number, previousNumber = -1, nextNumber = -1; //Definición de variables para control de pokemons
 
-    @FXML
+    
+    /**
+     * Método que se ejecuta al inicializar la vista.
+     * @param url URL de la vista.
+     * @param rb ResourceBundle para la localización.
+     */
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        // Insertar Pokémon con id 1, 4 y 7 en la tabla PlayerPokemon si no existen
-        AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
 
         Path imagePath = null;
         try {
@@ -87,20 +90,19 @@ public class ControllerManagement implements Initializable {
         
         // Configurar el evento de selección en el ChoiceBox
         pokemons.setOnAction(event -> {
-            String selectedPokemon = pokemons.getValue();
-            if (selectedPokemon != null) {
-                // Extraer el ID del Pokémon seleccionado (asumiendo que el formato es "#ID Nombre")
-                String[] parts = selectedPokemon.split(" ");
-                if (parts.length > 0) {
-                    try {
-                        int selectedId = Integer.parseInt(parts[0].substring(1)); // Quitar el "#" y convertir a entero
-                        loadPokemon(selectedId); // Cargar el Pokémon seleccionado
-                    } catch (NumberFormatException e) {
-                        System.err.println("Error al parsear el ID del Pokémon seleccionado: " + e.getMessage());
-                    }
+        String selectedPokemon = pokemons.getValue();
+        if (selectedPokemon != null && !selectedPokemon.isEmpty()) {
+            String[] parts = selectedPokemon.split(" ");
+            if (parts.length > 0) {
+                try {
+                    int selectedId = Integer.parseInt(parts[0].substring(1));
+                    loadPokemon(selectedId);
+                } catch (NumberFormatException e) {
+                    System.err.println("Error al parsear el ID del Pokémon seleccionado: " + e.getMessage());
                 }
             }
-        });
+        }
+    });
     }
 
     @FXML
@@ -136,7 +138,8 @@ public class ControllerManagement implements Initializable {
             query += "ORDER BY p.id ASC;";
 
         // Consulta para obtener todos los Pokémon
-        ArrayList<HashMap<String, Object>> allPokemons = db.query(query);        
+        ArrayList<HashMap<String, Object>> allPokemons = db.query(query);     
+        db.close();   
 
         pokemons.getItems().clear(); // Limpiar el ChoiceBox antes de llenarlo
 
@@ -150,27 +153,24 @@ public class ControllerManagement implements Initializable {
             pokemons.getItems().add("#" + id + " " + name);
 
            try {
-            String imagePath = "assets/poke-icons/" + iconPath;
-            java.io.InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(imagePath);
-            if (resourceStream == null) {
-                throw new NullPointerException("Recurso no encontrado: " + imagePath);
+                String imagePath = "assets/poke-icons/" + iconPath;
+                java.io.InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(imagePath);
+                if (resourceStream != null) {
+                    Image image = new Image(resourceStream);
+                    imgPokemon.setImage(image);
+                    if (!isUnlocked) {
+                        imgPokemon.setEffect(new javafx.scene.effect.Shadow(15, javafx.scene.paint.Color.BLACK));
+                    } else {
+                        imgPokemon.setEffect(null);
+                    }
+                } else {
+                    imgPokemon.setImage(null);
+                }
+            } catch (Exception e) {
+                System.err.println("Error cargando el recurso: " + iconPath);
+                e.printStackTrace();
             }
-
-            Image image = new Image(resourceStream);
-            imgPokemon.setImage(image);
-
-            // Aplicar o quitar el efecto Shadow según el estado de desbloqueo
-            if (!isUnlocked) {
-                imgPokemon.setEffect(new javafx.scene.effect.Shadow(15, javafx.scene.paint.Color.BLACK));
-            } else {
-                imgPokemon.setEffect(null); // Quitar el efecto si está desbloqueado
-            }
-
-        } catch (NullPointerException | IllegalArgumentException e) {
-            System.err.println("Error cargando el recurso: " + iconPath);
-            e.printStackTrace();
         }
-    }
 
         // Seleccionar el primer Pokémon por defecto si hay elementos
         if (!pokemons.getItems().isEmpty()) {
@@ -184,6 +184,15 @@ public class ControllerManagement implements Initializable {
                     System.err.println("Error al parsear el ID del primer Pokémon: " + e.getMessage());
                 }
             }
+        } else {
+            // Si no hay pokémon, limpia los labels e imagen
+            labelType.setText("");
+            labelName.setText("");
+            labelStamina.setText("");
+            labelHp.setText("");
+            labelNickname.setText("");
+            imgPokemon.setImage(null);
+            buttonSettings.setDisable(true);
         }
     }
 
@@ -206,7 +215,8 @@ public class ControllerManagement implements Initializable {
         String maxHp = String.valueOf(pokemon.get("max_hp"));
 
         boolean isUnlocked = pokemon.get("unlocked") != null && (int) pokemon.get("unlocked") == 1;
-
+        db.close();
+        // Si el Pokémon está desbloqueado, mostrar sus datos
         if (isUnlocked) {
                 // Si el Pokémon está desbloqueado, mostrar sus datos
                 this.labelType.setText(type);
@@ -227,7 +237,7 @@ public class ControllerManagement implements Initializable {
 
         try {
             String imagePath = "assets/poke-icons/" + iconPath;
-            java.io.InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(imagePath);
+            InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(imagePath);
             if (resourceStream == null) {
                 throw new NullPointerException("Recurso no encontrado: " + imagePath);
             }
@@ -278,13 +288,13 @@ public class ControllerManagement implements Initializable {
         ctrl.setLabelName(labelName.getText());
         ctrl.setLabelNickname(labelNickname.getText());
         ctrl.setImagePokemon(imgPokemon.getImage());
+        ctrl.setCurrentPokemonId(number);
         UtilsViews.setViewAnimating("ViewPokeSettings");
     }
 
     //Arrow back
     @FXML
     public void goBack(MouseEvent event) {
-        ControllerMenu ctrl2 = (ControllerMenu) UtilsViews.getController("ViewMenu");
         UtilsViews.setViewAnimating("ViewMenu");
     }
 
@@ -324,13 +334,16 @@ public class ControllerManagement implements Initializable {
     // Button next
     @FXML
     public void next(ActionEvent event) {
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
+        // Verificar si el número actual es válido
         if (this.number != -1) {
             // Verificar si el CheckBox está activado
             boolean showOnlyUnlocked = showUnlockedOnly.isSelected();
 
             // Si el CheckBox está activado, buscar el Pokémon desbloqueado siguiente
             if (showOnlyUnlocked) {
-                ArrayList<HashMap<String, Object>> llistaNext = AppData.getInstance().query(
+                ArrayList<HashMap<String, Object>> llistaNext = db.query(
                     String.format("SELECT p.id, p.name, p.type, p.icon_path FROM Pokemon p INNER JOIN PlayerPokemon pp ON p.id = pp.pokemon_id WHERE pp.unlocked = 1 AND p.id > '%d' ORDER BY p.id ASC LIMIT 1;", this.number)
                 );
 
@@ -349,6 +362,7 @@ public class ControllerManagement implements Initializable {
                 updateChoiceBox(nextNumber - 1);
             }
         }
+        db.close();
     }
 
     // Método auxiliar para actualizar el ChoiceBox

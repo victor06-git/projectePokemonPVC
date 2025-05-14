@@ -78,11 +78,12 @@
          <effect>
             <Glow />
          </effect></ImageView>
-      <Button fx:id="startButton" layoutX="447.0" layoutY="338.0" mnemonicParsing="false" onMouseClicked="#toViewBattle" prefHeight="36.0" prefWidth="70.0" text="Start" />
+      <Button fx:id="startButton" layoutX="416.0" layoutY="349.0" mnemonicParsing="false" onMouseClicked="#toViewBattle" prefHeight="19.0" prefWidth="70.0" text="Start" />
       <Button fx:id="pokemon1" layoutX="52.0" layoutY="267.0" mnemonicParsing="false" onMouseClicked="#selectPokemon1" text="select" />
       <Button fx:id="pokemon2" layoutX="167.0" layoutY="267.0" mnemonicParsing="false" onMouseClicked="#selectPokemon2" text="select" />
       <Button fx:id="pokemon3" layoutX="292.0" layoutY="267.0" mnemonicParsing="false" onMouseClicked="#selectPokemon3" text="select" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="36.0" layoutX="46.0" layoutY="347.0" stroke="BLACK" strokeType="INSIDE" width="359.0" />
       <Label fx:id="pickPokemon" layoutX="52.0" layoutY="352.0" prefHeight="27.0" prefWidth="346.0" text="Label" textFill="WHITE" />
+      <Button fx:id="continueButton" layoutX="501.0" layoutY="348.0" mnemonicParsing="false" onMouseClicked="#toContinueBattle" prefHeight="26.0" prefWidth="86.0" text="Continue" />
    </children>
 </AnchorPane>
