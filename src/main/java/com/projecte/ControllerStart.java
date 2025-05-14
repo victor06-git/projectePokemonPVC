@@ -3,6 +3,8 @@ package com.projecte;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.utils.UtilsViews;
@@ -10,6 +12,8 @@ import com.utils.UtilsViews;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -18,6 +22,10 @@ public class ControllerStart extends BuildDatabase implements Initializable {
 
     @FXML
     private ImageView pokemonImage;
+
+    @FXML
+
+    private Button continueButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -36,14 +44,16 @@ public class ControllerStart extends BuildDatabase implements Initializable {
     }
 
     @FXML
-    private void startGame() throws IOException {
+    private void openGame() throws IOException {
         System.out.println("Botón Open Game pulsado");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona la base de datos");
         fileChooser.getExtensionFilters().add(
             new FileChooser.ExtensionFilter("SQLite Files", "*.sqlite")
         );
+        fileChooser.setInitialDirectory(new File(Path.of("data").toAbsolutePath().toString()));
         File selectedFile = fileChooser.showOpenDialog(null);
+
         if (selectedFile != null) {
             String rutaDBAbsoluta = selectedFile.getAbsolutePath();
             // Obtener la ruta del directorio base (puedes cambiar esto según tu estructura)
@@ -64,5 +74,67 @@ public class ControllerStart extends BuildDatabase implements Initializable {
         File base = new File(basePath);
         File file = new File(absolutePath);
         return base.toURI().relativize(file.toURI()).getPath();
+    }
+
+    @FXML
+    private void exitGame() {
+        System.exit(0);
+    }
+
+    @FXML
+    private void newGame() {
+    // Mostrar diálogo para pedir el nombre de la partida
+        TextInputDialog dialog = new TextInputDialog("Nueva Partida");
+        dialog.setTitle("Nueva Partida");
+        dialog.setHeaderText("Introduce un nombre para tu nueva partida");
+        dialog.setContentText("Nombre:");
+
+        // Mostrar diálogo y procesar la respuesta
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(name -> {
+            // Limpiar el nombre para que sea válido como nombre de archivo
+            String cleanName = name.replaceAll("[^a-zA-Z0-9_]", "_");
+            if (cleanName.isEmpty()) {
+                cleanName = "nueva_partida";
+            }
+            
+            // Crear el archivo con el nombre proporcionado
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Guardar nueva partida");
+            fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("SQLite Files", "*.sqlite")
+            );
+            fileChooser.setInitialDirectory(new File(Path.of("data").toAbsolutePath().toString()));
+            fileChooser.setInitialFileName(cleanName + ".sqlite");
+            
+            File newFile = fileChooser.showSaveDialog(null);
+            if (newFile != null) {
+                BuildDatabase.main(newFile.getAbsolutePath());
+                UtilsViews.setViewAnimating("ViewMenu");
+            }
+        });
+    }   
+
+    @FXML
+    private void continueGame() {
+        // carga el que ya esta con selected_path
+        if (selected_path != null) {
+            UtilsViews.setViewAnimating("ViewMenu");
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("No hay partida guardada.");
+            alert.setContentText("Por favor, selecciona o crea una nueva partida.");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML 
+    public void visibleContinueButton(String visible) {
+        if (visible.equals("true")) {
+            continueButton.setVisible(true);
+        } else {
+            continueButton.setVisible(false);
+        }        
     }
 }
