@@ -21,7 +21,7 @@ import javafx.scene.image.ImageView;
 public class ControllerMenu implements Initializable {
 
     @FXML
-    private Label levelInfoLabel, pokemonsCaughtInfoLabel, pointsInfoLabel, battlesPlayedInfoLabel, maxConsecutiveWinsInfoLabel;
+    private  Label levelInfoLabel, pokemonsCaughtInfoLabel, pointsInfoLabel, battlesPlayedInfoLabel, maxConsecutiveWinsInfoLabel;
 
     @FXML
     private Button managementButton, battleHistoryButton, newBattleButton, exitButton;
@@ -64,56 +64,13 @@ public class ControllerMenu implements Initializable {
     }
 
     public void setGameStats()  {
-        AppData db = AppData.getInstance();
-        db.connect(selected_path);
-
-        String query1 = """
-            SELECT 
-            total_experience, 
-            battles_played, 
-            max_win_streak 
-            FROM GameStats
-        """;
-
-        ArrayList<HashMap<String, Object>> result1 = db.query(query1);
-
-        String query2 = """
-            SELECT 
-            COUNT(*) as total_caught 
-            FROM PlayerPokemon 
-            WHERE unlocked = 1
-        """;
-
-        ArrayList<HashMap<String, Object>> result2 = db.query(query2);
-
-      
-        // Check if the result is empty
-        if (result1.isEmpty() || result2.isEmpty()) {
-            System.err.println("No data returned from the querys.");
-            return; // Exit the method if no data is found
-        }
-
-
-        for (HashMap<String, Object> el : result1) {
-            Object totalExperience = (Object) el.get("total_experience");
-            Integer level = (Integer) totalExperience / 1000;
-            Integer points = (Integer) totalExperience;
-            Integer battlesPlayed = (Integer) el.get("battles_played");
-            Integer maxConsecutiveWins = (Integer) el.get("max_win_streak");
-
-            levelInfoLabel.setText(String.valueOf(level));
-            pointsInfoLabel.setText(String.valueOf(points));
-            battlesPlayedInfoLabel.setText(String.valueOf(battlesPlayed));
-            maxConsecutiveWinsInfoLabel.setText(String.valueOf(maxConsecutiveWins));
-        }
-
-        for (HashMap<String, Object> el : result2) { 
-            int totalCaught = (int) el.get("total_caught");
-            pokemonsCaughtInfoLabel.setText(String.valueOf(totalCaught));
-        }
-
-
-        db.close();
+        BuildDatabase data = new BuildDatabase();
+        HashMap<String, Object> gameStats = data.getGameStats();
+        levelInfoLabel.setText(gameStats.get("level");
+        pokemonsCaughtInfoLabel.setText(gameStats.get("pokemons_caught").get(0));
+        pointsInfoLabel.setText(gameStats.get("points").get(0));
+        battlesPlayedInfoLabel.setText(gameStats.get("battles_played").get(0));
+        maxConsecutiveWinsInfoLabel.setText(gameStats.get("max_consecutive_wins").get(0));
     }
 
 
