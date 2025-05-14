@@ -16,6 +16,10 @@ public class ControllerAttackResult {
 
     private int round = -1;
 
+    private Boolean finalBattle = false;
+
+    private String winner;
+
     @FXML
     private void initialize() {
         
@@ -28,6 +32,37 @@ public class ControllerAttackResult {
 
     public void setHpPlayer(String hp) {
         hpPlayer.setText(hp);
+    }
+
+    /**
+     * Método para establecer si es la batalla final.
+     * 
+     * @param finalBattle true si es la batalla final, false en caso contrario.
+     */
+    public void setFinalBattle(Boolean finalBattle) {
+        this.finalBattle = finalBattle;
+        if (finalBattle) {
+            buttonContinue.setText("Finalizar");
+            UtilsViews.setView("ViewBattleResult");
+            ControllerBattleResult ctrl = (ControllerBattleResult) UtilsViews.getController("ViewBattleResult");
+            ctrl.setRound(this.round);
+            ctrl.unlockTwoRandomPokemons();
+            ctrl.unlockRandomItem();
+            ctrl.updateGameStatsWithRandomXP();
+        } else {
+            buttonContinue.setText("Continuar");
+        }
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+        ControllerBattleResult ctrl = (ControllerBattleResult) UtilsViews.getController("ViewBattleResult");
+        ctrl.setWinner(winner);
+        if (winner.equals("Player")) {
+            hpPlayer.setText("Ganador: " + winner);
+        } else {
+            hpPlayer.setText("Perdedor: " + winner);
+        }
     }
     
     public void setEstaminaPlayer(String estamina) {
@@ -69,12 +104,23 @@ public class ControllerAttackResult {
         ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
         ControllerBattleAttack ctrlAttack = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
         
-        if (ctrlAttack.getPlayerHpBar() == 0.0 || ctrlAttack.getPlayerStaminaBar() == 0.0) {
-            UtilsViews.setViewAnimating("ViewBattleOptions");
-        } else {  
-            UtilsViews.setViewAnimating("ViewBattleAttack");
+        if (ctrlAttack.getPlayerHpBar() == 0.0 || ctrlAttack.getPlayerStaminaBar() == 0.0 || finalBattle) {
+            this.round += 1;
+            ctrl.setRound(this.round);
+            if (finalBattle) {
+                UtilsViews.setView("ViewBattleResult");
 
+            } else {
+            UtilsViews.setViewAnimating("ViewBattleOptions");
+        }
+
+        } else {  
+            this.round += 1;
+            ctrl.setRound(this.round);
+            UtilsViews.setViewAnimating("ViewBattleAttack");
         }
     }
     
+
+
 }

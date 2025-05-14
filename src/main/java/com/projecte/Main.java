@@ -24,11 +24,11 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewStart", "/assets/viewStart.fxml");
         UtilsViews.addView(getClass(), "ViewPokeSettings", "/assets/viewPokeSettings.fxml");
         UtilsViews.addView(getClass(), "ViewBattleAttack", "/assets/viewBattleAttack.fxml");
-        UtilsViews.addView(getClass(), "pokemonView", "/assets/pokemonView.fxml");
         UtilsViews.addView(getClass(), "ViewBattleOptions", "/assets/viewBattleOptions.fxml");
         UtilsViews.addView(getClass(), "ViewMenu", "/assets/viewMenu.fxml");
         UtilsViews.addView(getClass(), "ViewAttackResult", "/assets/viewAttackResult.fxml");
         UtilsViews.addView(getClass(), "ViewManagement", "/assets/viewManagement.fxml");
+        UtilsViews.addView(getClass(), "ViewBattleResult", "/assets/viewBattleResult.fxml");
         UtilsViews.addView(getClass(), "ViewHistory", "/assets/viewHistory.fxml");
 
         UtilsViews.setView("ViewStart"); // Vista inicial
@@ -36,8 +36,6 @@ public class Main extends Application {
         //ControllerManagement ctrl = (ControllerManagement) UtilsViews.getController("ViewManagement");
         //int number = 1; //Número del Pokemon a cargar
         //ctrl.loadPokemon(number); //Definir el número del Pokemon para la obtención de los datos en la vista PokeCard
-
-        //BuildDatabase.main("C:\\Users\\User\\Desktop\\projectePokemonPVC\\data\\pokemons.sqlite"); //Cargar la base de datos
         
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
