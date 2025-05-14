@@ -613,6 +613,16 @@ public class ControllerBattleAttack {
      * @param selectedMove
      */
     private void handleAttack(int selectedMove) {
+
+        Random random = new Random();
+        // 40% de probabilidad de fallo
+        boolean attackFails = random.nextDouble() < 0.4;
+        if (attackFails) {
+            showAlert("¡El ataque ha fallado!", AlertType.INFORMATION);
+            computerAttack(); // El enemigo ataca igualmente
+            return;
+        }
+
         System.out.println("Using move: " + moves[selectedMove].getText());
         updateAttackInfo(selectedMove);
         
@@ -634,6 +644,23 @@ public class ControllerBattleAttack {
         setEstaminaPlayer((int)(newPlayerStamina * 30) + "/ 30");
     
         attackNameLabel.getParent().setVisible(true);
+
+        // Si el jugador tiene menos del 25% de estamina, puede atacar otra vez (50% de probabilidad)
+        if (newPlayerStamina < 0.25 && random.nextBoolean()) {
+            int randomMove;
+            do {
+                randomMove = random.nextInt(attackNames.length);
+            } while (randomMove == selectedMove && attackNames.length > 1); // Asegura que sea distinto si hay más de uno
+
+            selectedMove = randomMove;
+
+            // Actualiza la info del nuevo ataque seleccionado
+            updateAttackInfo(selectedMove);
+            damageStr = attackDamageLabel.getText().replace("Daño: ", "").trim();
+            staminaStr = estaminaLabel.getText().replace("Estamina: ", "").trim();
+            damage = Double.parseDouble(damageStr);
+            staminaConsumed = Double.parseDouble(staminaStr);
+        }
     
         // Verificar si el Pokémon enemigo fue derrotado
         if (computerPokemonDead() || computerPokemonOutOfStamina()) {
@@ -818,32 +845,37 @@ public class ControllerBattleAttack {
      * Método para que el Pokémon enemigo ataque al jugador.
      */
     public void computerAttack() {
-        // Verificar si el Pokémon actual está debilitado
+        // Si el Pokémon enemigo está muerto o sin estamina, cambiar al siguiente
         if (computerPokemonDead() || computerPokemonOutOfStamina()) {
             switchToNextEnemyPokemon();
-            return; // Salir si no hay más Pokémon
+            return;
         }
 
         Random random = new Random();
-        int damage = random.nextInt(31) + 20;  
-        double staminaConsumed = damage * 0.3;
-        
+
+        // 20% de probabilidad de fallo
+        boolean attackFails = random.nextDouble() < 0.2;
+        if (attackFails) {
+            showAlert("¡El ataque del enemigo ha fallado!", AlertType.INFORMATION);
+            return;
+        }
+
+        // Daño aleatorio entre 50 y 100
+        int damage = random.nextInt(51) + 50;
+        // Estamina consumida proporcional al daño (puedes ajustar la fórmula)
+        double staminaConsumed = damage / 2.0;
+
         double currentPlayerHp = playerHpBar.getProgress();
         double newPlayerHp = currentPlayerHp - (damage / 100.0);
         newPlayerHp = Math.max(newPlayerHp, 0);
         playerHpBar.setProgress(newPlayerHp);
         setHpPlayer((int)(newPlayerHp * 100) + "/ 100");
-        
+
         double currentEnemyStamina = enemyStaminaBar.getProgress();
         double newEnemyStamina = currentEnemyStamina - (staminaConsumed / 30.0);
         newEnemyStamina = Math.max(newEnemyStamina, 0);
         enemyStaminaBar.setProgress(newEnemyStamina);
         setEstaminaComputer((int)(newEnemyStamina * 30) + "/ 30");
-
-        // // Verificar si el Pokémon enemigo actual se debilitó después del ataque
-        // if (computerPokemonDead() || computerPokemonOutOfStamina()) {
-        //     switchToNextEnemyPokemon();
-        // }
     }
 
     /**
