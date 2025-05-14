@@ -93,6 +93,7 @@ public class ControllerBattleOptions implements Initializable {
 
         // Cargar los Pokémon desbloqueados en los ChoiceBox y sus imágenes
         loadUnlockedPokemons();
+        
     }
     
     // Getters
@@ -249,7 +250,7 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setIdPokemon(idPokemon);
         ctrl.setRound(round);
 
-        
+        selectedPokemonIds.clear();
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon1));
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon2));
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon3));
@@ -498,6 +499,7 @@ public class ControllerBattleOptions implements Initializable {
 
         // Ejecutar la consulta
         ArrayList<HashMap<String, Object>> unlockedPokemons = db.query(query);
+        System.out.println("Pokémon desbloqueados encontrados: " + unlockedPokemons.size());
 
         // Limpiar los ChoiceBox antes de llenarlos
         choicePokemon1.getItems().clear();
@@ -799,14 +801,48 @@ public class ControllerBattleOptions implements Initializable {
         // Método para finalizar el juego
         public void endGame() {
             Platform.runLater(() -> {
-                ControllerAttackResult ctrlResult = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+                
                 ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
-
                 if (areAllPokemonsDead()) {
                     winner = "Computer"; // El jugador perdió
                 } else if (!ctrl.hasMoreEnemyPokemons()) {
                     winner = "Player"; // El jugador ganó
                 }
+
+                try {
+                    AppData db = AppData.getInstance();
+                    db.connect(selected_path);
+
+                    // Obtener el nombre del mapa jugado
+                    String mapName = "";
+                    if (!mapPaths.isEmpty() && currentMapIndex >= 0 && currentMapIndex < mapPaths.size()) {
+                        String mapPath = mapPaths.get(currentMapIndex);
+                        mapName = mapPath.substring(mapPath.lastIndexOf("/") + 1, mapPath.lastIndexOf("."));
+                    }
+
+                    // Obtener fecha y hora actual
+                    java.time.LocalDateTime now = java.time.LocalDateTime.now();
+                    String dateTime = now.toString(); // Formato ISO
+
+                    // Determinar el ganador
+                    String battleWinner = winner != null ? winner : "Computer";
+
+                    // Insertar en la tabla Battle
+                    String insertBattle = String.format(
+                        "INSERT INTO Battle (date, map, winner) VALUES ('%s', '%s', '%s');",
+                        dateTime, mapName, battleWinner
+                    );
+                    db.update(insertBattle);
+
+                    db.close();
+                } catch (Exception e) {
+                    System.err.println("Error al guardar la batalla en la base de datos:");
+                    e.printStackTrace();
+                }
+
+                ControllerAttackResult ctrlResult = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+                
+                
                 ctrlResult.setWinner(winner); // Establecer el ganador en el controlador de resultados
                 ctrlResult.setRound(round);
                 ctrlResult.setFinalBattle(true);
