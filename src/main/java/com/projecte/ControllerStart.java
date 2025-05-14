@@ -56,7 +56,11 @@ public class ControllerStart extends BuildDatabase implements Initializable {
             ControllerMenu controllerMenu = new ControllerMenu();
             controllerMenu.setGameStats();
             
-            UtilsViews.setViewAnimating("ViewMenu");
+            try {
+                UtilsViews.setViewAnimating("ViewMenu");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
