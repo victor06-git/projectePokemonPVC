@@ -26,7 +26,7 @@ public class BuildDatabase {
             db.close();
         }
     }
-    public HashMap<String, Object> getGameStats() {
+    public HashMap<String, String> getGameStats() {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
@@ -43,19 +43,21 @@ public class BuildDatabase {
         stats.putAll(result2.get(0));
         
         int totalExperience = (int) stats.get("total_experience");
+        int level = totalExperience / 1000;
         int battlesPlayed = (int) stats.get("battles_played");
         int maxWinStreak = (int) stats.get("max_win_streak");
         int currentWinStreak = (int) stats.get("current_win_streak");
         int pokemonsCaught = (int) stats.get("count");
+        
 
-        HashMap<String, Object> gameStats = new HashMap<>();
+        HashMap<String, String> gameStats = new HashMap<>();
 
-        gameStats.put("total_experience", totalExperience);
-        gameStats.put("battles_played", battlesPlayed);
-        gameStats.put("max_win_streak", maxWinStreak);
-        gameStats.put("current_win_streak", currentWinStreak);
-        gameStats.put("level", (int) Math.floor(Math.sqrt(totalExperience / 100)));
-        gameStats.put("pokemons_caught", pokemonsCaught);
+        gameStats.put("total_experience", String.valueOf(totalExperience));
+        gameStats.put("battles_played", String.valueOf(battlesPlayed));
+        gameStats.put("max_win_streak", String.valueOf(maxWinStreak));
+        gameStats.put("current_win_streak", String.valueOf(currentWinStreak));
+        gameStats.put("level", String.valueOf(level));
+        gameStats.put("pokemons_caught", String.valueOf(pokemonsCaught));
         db.close();
         return gameStats;
     }
@@ -576,9 +578,9 @@ public class BuildDatabase {
             {"Draco Meteor", "Dragon", "130", "50"}
         };
 
-        for (String[] attack : attacks) {
+         for (String[] attack : attacks) {
             db.update("INSERT OR REPLACE INTO Attack (name, type, damage, stamina_cost) VALUES ('" +
-                    attack[0] + "', '" + attack[1] + "', " + attack[2] + ", " + attack[3] + ");");
+                attack[0] + "', '" + attack[1] + "', " + attack[2] + ", " + attack[3] + ");");
         }
         System.out.println("Attacks insertados correctamente.");      
         
@@ -586,8 +588,11 @@ public class BuildDatabase {
     }
 
     private static void assignRandomAttacksToPokemon(AppData db) {
-        ArrayList<HashMap<String, Object>> pokeTypes = db.query("SELECT id, type FROM Pokemon");
-        ArrayList<HashMap<String, Object>> attackTypes = db.query("SELECT id, type FROM Attack");
+        // Primero limpiamos los ataques existentes
+        db.update("DELETE FROM PokemonAttack;");
+        
+        // Luego el resto de la lógica original
+        ArrayList<HashMap<String, Object>> pokeTypes = db.query("SELECT id, type FROM Pokemon");        ArrayList<HashMap<String, Object>> attackTypes = db.query("SELECT id, type FROM Attack");
         Random rand = new Random();
         
         for (HashMap<String, Object> pokeType : pokeTypes) {
@@ -751,7 +756,12 @@ public class BuildDatabase {
     }
 
     private static void cleanAndRecreateTable(AppData db, String tableName) {
-        db.update("DROP TABLE IF EXISTS " + tableName + ";");
-        createOrReplaceAllTables(db);
+    // Solo elimina la tabla específica y la recrea si es necesario
+        if(tableName.equals("PokemonAttack")) {
+            db.update("DELETE FROM PokemonAttack;");
+        } else {
+            db.update("DROP TABLE IF EXISTS " + tableName + ";");
+            createOrReplaceAllTables(db);
+        }
     }
 }

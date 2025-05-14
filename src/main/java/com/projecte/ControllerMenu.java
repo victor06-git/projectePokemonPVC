@@ -65,12 +65,24 @@ public class ControllerMenu implements Initializable {
 
     public void setGameStats()  {
         BuildDatabase data = new BuildDatabase();
-        HashMap<String, Object> gameStats = data.getGameStats();
-        levelInfoLabel.setText(gameStats.get("level");
-        pokemonsCaughtInfoLabel.setText(gameStats.get("pokemons_caught").get(0));
-        pointsInfoLabel.setText(gameStats.get("points").get(0));
-        battlesPlayedInfoLabel.setText(gameStats.get("battles_played").get(0));
-        maxConsecutiveWinsInfoLabel.setText(gameStats.get("max_consecutive_wins").get(0));
+        HashMap<String, String> gameStats = data.getGameStats();
+
+        System.out.println(gameStats);
+        if (levelInfoLabel != null) {
+            levelInfoLabel.setText(gameStats.get("level"));
+        }
+        if (pokemonsCaughtInfoLabel != null) {
+            pokemonsCaughtInfoLabel.setText(gameStats.get("pokemons_caught"));
+        }
+        if (pointsInfoLabel != null) {
+            pointsInfoLabel.setText(gameStats.get("points"));
+        }
+        if (battlesPlayedInfoLabel != null) {
+            battlesPlayedInfoLabel.setText(gameStats.get("battles_played"));
+        }
+        if (maxConsecutiveWinsInfoLabel != null) {
+            maxConsecutiveWinsInfoLabel.setText(gameStats.get("max_consecutive_wins"));
+        }
     }
 
 
