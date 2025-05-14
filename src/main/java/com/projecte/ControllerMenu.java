@@ -21,7 +21,19 @@ import javafx.scene.image.ImageView;
 public class ControllerMenu implements Initializable {
 
     @FXML
-    private  Label levelInfoLabel, pokemonsCaughtInfoLabel, pointsInfoLabel, battlesPlayedInfoLabel, maxConsecutiveWinsInfoLabel;
+    private Label levelInfoLabel;
+
+    @FXML
+    private Label pointsInfoLabel;
+    
+    @FXML
+    private Label battlesPlayedInfoLabel;
+
+    @FXML
+    private Label maxConsecutiveWinsInfoLabel; 
+    
+    @FXML
+    private Label pokemonsCaughtInfoLabel;
 
     @FXML
     private Button managementButton, battleHistoryButton, newBattleButton, exitButton;
@@ -64,25 +76,17 @@ public class ControllerMenu implements Initializable {
     }
 
     public void setGameStats()  {
-        BuildDatabase data = new BuildDatabase();
-        HashMap<String, String> gameStats = data.getGameStats();
+        BuildDatabase build = new BuildDatabase();
+
+        HashMap<String, Integer> gameStats = build.getGameStats();
 
         System.out.println(gameStats);
-        if (levelInfoLabel != null) {
-            levelInfoLabel.setText(gameStats.get("level"));
-        }
-        if (pokemonsCaughtInfoLabel != null) {
-            pokemonsCaughtInfoLabel.setText(gameStats.get("pokemons_caught"));
-        }
-        if (pointsInfoLabel != null) {
-            pointsInfoLabel.setText(gameStats.get("points"));
-        }
-        if (battlesPlayedInfoLabel != null) {
-            battlesPlayedInfoLabel.setText(gameStats.get("battles_played"));
-        }
-        if (maxConsecutiveWinsInfoLabel != null) {
-            maxConsecutiveWinsInfoLabel.setText(gameStats.get("max_consecutive_wins"));
-        }
+        
+            levelInfoLabel.setText(gameStats.get("level").toString());
+            pointsInfoLabel.setText(gameStats.get("total_experience").toString());
+            battlesPlayedInfoLabel.setText(gameStats.get("battles_played").toString());
+            maxConsecutiveWinsInfoLabel.setText(gameStats.get("max_win_streak").toString());
+            pokemonsCaughtInfoLabel.setText(gameStats.get("pokemons_caught").toString());
     }
 
 

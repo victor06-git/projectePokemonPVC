@@ -15,7 +15,6 @@ public class BuildDatabase {
         
         try {
             createOrReplaceAllTables(db);
-            db.update("INSERT OR REPLACE INTO GameStats (id, total_experience, current_win_streak) VALUES (1, 2857, 3 );");
             insertAllPokemon(db);
             insertAllItems(db);
             insertAllAttacks(db);
@@ -26,12 +25,12 @@ public class BuildDatabase {
             db.close();
         }
     }
-    public HashMap<String, String> getGameStats() {
+    public HashMap<String, Integer> getGameStats() {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
-        ArrayList<HashMap<String, Object>> result = db.query("SELECT * FROM GameStats WHERE id = 1");
-        ArrayList<HashMap<String, Object>> result2 = db.query("SELECT count(*) as count FROM PlayerPokemon WHERE unlocked = 1");
+        ArrayList<HashMap<String, Object>> result = db.query("SELECT * FROM GameStats;");
+        ArrayList<HashMap<String, Object>> result2 = db.query("SELECT count(*) as count FROM PlayerPokemon WHERE unlocked = 1;");
 
         if (result.isEmpty() || result2.isEmpty()) {
             System.out.println("No se encontraron estadísticas del juego.");
@@ -41,24 +40,28 @@ public class BuildDatabase {
 
         HashMap<String, Object> stats = new HashMap<>(result.get(0));
         stats.putAll(result2.get(0));
+
+        System.out.println("Objects: " + stats);
         
-        int totalExperience = (int) stats.get("total_experience");
-        int level = totalExperience / 1000;
-        int battlesPlayed = (int) stats.get("battles_played");
-        int maxWinStreak = (int) stats.get("max_win_streak");
-        int currentWinStreak = (int) stats.get("current_win_streak");
-        int pokemonsCaught = (int) stats.get("count");
+        Integer totalExperience = (Integer) stats.get("total_experience");
+        Integer level = totalExperience / 1000;
+        Integer battlesPlayed = (Integer) stats.get("battles_played");
+        Integer maxWinStreak = (Integer) stats.get("max_win_streak");
+        Integer currentWinStreak = (Integer) stats.get("current_win_streak");
+        Integer pokemonsCaught = (Integer) stats.get("count");
         
 
-        HashMap<String, String> gameStats = new HashMap<>();
+        HashMap<String, Integer> gameStats = new HashMap<>();
 
-        gameStats.put("total_experience", String.valueOf(totalExperience));
-        gameStats.put("battles_played", String.valueOf(battlesPlayed));
-        gameStats.put("max_win_streak", String.valueOf(maxWinStreak));
-        gameStats.put("current_win_streak", String.valueOf(currentWinStreak));
-        gameStats.put("level", String.valueOf(level));
-        gameStats.put("pokemons_caught", String.valueOf(pokemonsCaught));
+        gameStats.put("total_experience", totalExperience);
+        gameStats.put("battles_played", battlesPlayed);
+        gameStats.put("max_win_streak", maxWinStreak);
+        gameStats.put("current_win_streak", currentWinStreak);
+        gameStats.put("level", level);
+        gameStats.put("pokemons_caught", pokemonsCaught);
+    
         db.close();
+
         return gameStats;
     }
 
@@ -438,7 +441,12 @@ public class BuildDatabase {
     }
 
     public static void insertAllItems(AppData db) {
-        cleanAndRecreateTable(db, "Item");
+        if (db == null) {
+            System.out.println("Error: db is null");
+            return;
+        } else if (db.query("SELECT count(*) FROM Item;").isEmpty()) {
+            cleanAndRecreateTable(db, "Item");
+        }
         // cleanAndRecreateTable(db, "ItemInventory");
         
         String[][] items = {
