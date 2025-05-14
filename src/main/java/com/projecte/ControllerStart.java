@@ -83,7 +83,7 @@ public class ControllerStart extends BuildDatabase implements Initializable {
 
     @FXML
     private void newGame() {
-    // Mostrar diálogo para pedir el nombre de la partida
+        // Mostrar diálogo para pedir el nombre de la partida
         TextInputDialog dialog = new TextInputDialog("Nueva Partida");
         dialog.setTitle("Nueva Partida");
         dialog.setHeaderText("Introduce un nombre para tu nueva partida");
@@ -97,44 +97,58 @@ public class ControllerStart extends BuildDatabase implements Initializable {
             if (cleanName.isEmpty()) {
                 cleanName = "nueva_partida";
             }
-            
-            // Crear el archivo con el nombre proporcionado
+
+            // Configurar FileChooser
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Guardar nueva partida");
             fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("SQLite Files", "*.sqlite")
             );
-            fileChooser.setInitialDirectory(new File(Path.of("data").toAbsolutePath().toString()));
-            fileChooser.setInitialFileName(cleanName + ".sqlite");
             
-            File newFile = fileChooser.showSaveDialog(null);
-            if (newFile != null) {
-                BuildDatabase.main(newFile.getAbsolutePath());
+            // Establecer directorio data
+            File dataDir = new File(Path.of("data").toAbsolutePath().toString());
+            if (!dataDir.exists()) {
+                dataDir.mkdirs();
+            }
+            fileChooser.setInitialDirectory(dataDir);
+            
+            // Generar nombre único inicial
+            String baseName = cleanName;
+            String fileName = baseName + ".sqlite";
+            File file = new File(dataDir, fileName);
+            int counter = 1;
+            
+            while (file.exists()) {
+                fileName = baseName + "_" + counter + ".sqlite";
+                file = new File(dataDir, fileName);
+                counter++;
+            }
+            
+            fileChooser.setInitialFileName(fileName);
+            
+            // Guardar automáticamente sin mostrar el diálogo
+            File selectedFile = file;
+            // Asegurarse de que tiene la extensión correcta
+            if (!selectedFile.getName().toLowerCase().endsWith(".sqlite")) {
+                selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".sqlite");
+            }
+                
+                BuildDatabase.main(selectedFile.getAbsolutePath());
+                BuildDatabase.insertBaseStats();
                 UtilsViews.setViewAnimating("ViewMenu");
             }
-        });
-    }   
+        );
+    }
 
     @FXML
     private void continueGame() {
-        // carga el que ya esta con selected_path
-        if (selected_path != null) {
-            UtilsViews.setViewAnimating("ViewMenu");
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("No hay partida guardada.");
-            alert.setContentText("Por favor, selecciona o crea una nueva partida.");
-            alert.showAndWait();
-        }
+        UtilsViews.setViewAnimating("ViewMenu");
+        
     }
 
     @FXML 
-    public void visibleContinueButton(String visible) {
-        if (visible.equals("true")) {
-            continueButton.setVisible(true);
-        } else {
-            continueButton.setVisible(false);
-        }        
+    public void setVisibleContinueButton(Boolean visible) {
+        continueButton.setVisible(visible);
+          
     }
 }

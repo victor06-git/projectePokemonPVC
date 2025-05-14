@@ -29,9 +29,9 @@
             <HBox prefHeight="347.0" prefWidth="590.0" />
             <HBox alignment="TOP_CENTER" prefHeight="67.0" prefWidth="586.0" spacing="15.0">
                <children>
-                  <Button mnemonicParsing="false" onMouseClicked="#openGame" style="-fx-base: #00ff15;" text="New Game" />
+                  <Button mnemonicParsing="false" onMouseClicked="#newGame" style="-fx-base: #00ff15;" text="New Game" />
                   <Button mnemonicParsing="false" onMouseClicked="#openGame" style="-fx-base: #00a2ff;" text="Open Game" />
-                  <Button fx:id="continueButton" disable="true" mnemonicParsing="false" onMouseClicked="#continueGame" style="-fx-base: #eeff00;" text="Continue" />
+                  <Button fx:id="continueButton" mnemonicParsing="false" onMouseClicked="#continueGame" style="-fx-base: #eeff00;" text="Continue" visible="false" />
                   <HBox alignment="TOP_RIGHT" prefHeight="35.0" prefWidth="253.0">
                      <children>
                         <Button mnemonicParsing="false" onMouseClicked="#exitGame" style="-fx-base: red;" text="Exit" />
