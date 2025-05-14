@@ -62,7 +62,9 @@ public class ControllerMenu implements Initializable {
     }
 
     public void toViewStart(ActionEvent event) {
+        ControllerStart ctrl = (ControllerStart) UtilsViews.getController("ViewStart");
         UtilsViews.setViewAnimating("ViewStart");
+        ctrl.setVisibleContinueButton(true);
     }
 
     public void setlevelInfoLabel(String level) {
@@ -87,7 +89,7 @@ public class ControllerMenu implements Initializable {
 
     public void loadGameStats() {
             AppData db = AppData.getInstance();
-            db.connect("./data/pokemons.sqlite");
+            db.connect(selected_path);
 
             ArrayList<HashMap<String, Object>> stats = db.query(
                 "SELECT total_experience, battles_played, max_win_streak FROM GameStats WHERE id = 1"

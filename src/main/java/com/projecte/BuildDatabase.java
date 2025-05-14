@@ -25,6 +25,14 @@ public class BuildDatabase {
             db.close();
         }
     }
+    public static void insertBaseStats() {
+        AppData db = AppData.getInstance();
+        db.connect(selected_path);
+
+        db.update("INSERT INTO GameStats  (id) VALUES (1);");
+        db.close();
+    }
+
     public HashMap<String, Integer> getGameStats() {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
