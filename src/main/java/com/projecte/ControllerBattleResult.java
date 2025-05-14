@@ -47,13 +47,7 @@ public class ControllerBattleResult {
         loadGameStats();
         UtilsViews.setView("ViewMenu");
         ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
-        ControllerMenu ctrlMenu = (ControllerMenu) UtilsViews.getController("ViewMenu");
         ctrl.setBattleStatus(STATUS_BATTLE_ENDED, round);
-        ctrlMenu.setBattlesPlayedInfoLabel(String.valueOf(battlesPlayed));
-        ctrlMenu.setlevelInfoLabel(String.valueOf(level));
-        ctrlMenu.setPokemonsCaughtInfoLabel(String.valueOf(pokemonsCaught));
-        ctrlMenu.setPointsInfoLabel(String.valueOf(totalExperience));
-        ctrlMenu.setMaxConsecutiveWinsInfoLabel(String.valueOf(maxWinStreak));
     }
 
     public void setRound(int round) {
@@ -89,7 +83,6 @@ public class ControllerBattleResult {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Selecciona dos Pokémon aleatorios que no estén desbloqueados (isUnlocked = 0)
