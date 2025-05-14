@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.event.ActionEvent;
@@ -92,7 +93,7 @@ public class ControllerBattleResult {
      */
     public ArrayList<HashMap<String, Object>> unlockTwoRandomPokemons() {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Consulta para obtener todos los Pokémon no desbloqueados
         ArrayList<java.util.HashMap<String, Object>> lockedPokemons = db.query(
@@ -142,7 +143,7 @@ public class ControllerBattleResult {
          */
         public void unlockRandomItem() {
             AppData db = AppData.getInstance();
-            db.connect("./data/pokemons.sqlite");
+            db.connect(selected_path);
         
             Random random = new Random();
         
@@ -194,7 +195,7 @@ public class ControllerBattleResult {
 
         public void updateGameStatsWithRandomXP() {
             AppData db = AppData.getInstance();
-            db.connect("./data/pokemons.sqlite");
+            db.connect(selected_path);
 
             // Generar un número aleatorio entre 500 y 1000
             Random random = new Random();
@@ -274,7 +275,7 @@ public class ControllerBattleResult {
 
         public void loadGameStats() {
             AppData db = AppData.getInstance();
-            db.connect("./data/pokemons.sqlite");
+            db.connect(selected_path);
 
             ArrayList<HashMap<String, Object>> stats = db.query(
                 "SELECT total_experience, battles_played, max_win_streak FROM GameStats WHERE id = 1"

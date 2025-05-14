@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.application.Platform;
@@ -266,7 +267,7 @@ public class ControllerBattleOptions implements Initializable {
             
             // Obtener nombres desde la BD
             AppData db = AppData.getInstance();
-            db.connect("./data/pokemons.sqlite");
+            db.connect(selected_path);
             
             enemyPokemonIds.clear();
             enemyPokemons.clear();
@@ -367,7 +368,7 @@ public class ControllerBattleOptions implements Initializable {
 
         // Obtener nombres desde la BD
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");        
+        db.connect(selected_path);        
 
         // Establecer la imagen y el nombre del Pokémon del jugador
         ctrl.setPlayerPokemonImage("/assets/pokemons/back/" + (idPokemon > 100 ? idPokemon + ".gif" : "0" + idPokemon + ".gif"));
@@ -484,7 +485,7 @@ public class ControllerBattleOptions implements Initializable {
 
     private void loadUnlockedPokemons() {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Consulta para obtener los Pokémon desbloqueados
         String query = """
