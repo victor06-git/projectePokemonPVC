@@ -2,6 +2,8 @@ package com.projecte;
 
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.utils.UtilsViews;
 
@@ -127,40 +129,30 @@ public class ControllerPokeSettings {
     }
 
     private int getItemQuantityByName(String itemName) {
-    String query = """
-        SELECT 
-            ii.quantity
-        FROM 
-            Item i
-        LEFT JOIN 
-            ItemInventory ii
-        ON 
-            i.id = ii.item_id
-        WHERE 
-            i.name = ?;
-    """;
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
 
-    try (java.sql.Connection connection = java.sql.DriverManager.getConnection("jdbc:sqlite:your_database_path.db");
-         java.sql.PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        String query = String.format(
+            "SELECT ii.quantity " +
+            "FROM Item i " +
+            "RIGHT JOIN ItemInventory ii ON i.id = ii.item_id " +
+            "WHERE i.name = '%s';", itemName
+        );
 
-        preparedStatement.setString(1, itemName);
+        ArrayList<HashMap<String, Object>> result = db.query(query);
 
-        try (java.sql.ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
-                return resultSet.getInt("quantity");
-            }
+        db.close();
+
+        if (!result.isEmpty()) {
+            return ((Number) result.get(0).get("quantity")).intValue();
         }
-    } catch (java.sql.SQLException e) {
-        System.err.println("Error al consultar la base de datos: " + e.getMessage());
-        e.printStackTrace();
-    }
-
-    return 0; // Retorna 0 si no se encuentra el ítem o hay un error
+        return 0;
     }
 
     @FXML
     private void updatePokemon(ActionEvent event) {
         AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
 
         // Obtener el nuevo nickname desde el TextField
         String newNickname = nicknameText.getText();
@@ -254,6 +246,8 @@ public class ControllerPokeSettings {
     private void updateItemQuantity(String itemName, int newQuantity) {
     
         AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
+
         db.update(String.format(
             "UPDATE ItemInventory " +
             "SET quantity = %d " +
@@ -263,32 +257,25 @@ public class ControllerPokeSettings {
         db.close();
         }
 
-        private void addItemEffectToPokemon(int pokemonId, String itemName) {
-            AppData db = AppData.getInstance();
-            db.connect("./data/pokemons.sqlite");
+    private void addItemEffectToPokemon(int pokemonId, String itemName) {
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
 
-            // Obtener el id del item por su nombre
-            String query = "SELECT id FROM Item WHERE name = ?";
-            int itemId = -1;
-            try (java.sql.Connection connection = java.sql.DriverManager.getConnection("jdbc:sqlite:./data/pokemons.sqlite");
-                java.sql.PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, itemName);
-                try (java.sql.ResultSet resultSet = preparedStatement.executeQuery()) {
-                    if (resultSet.next()) {
-                        itemId = resultSet.getInt("id");
-                    }
-                }
-            } catch (java.sql.SQLException e) {
-                System.err.println("Error al obtener el id del item: " + e.getMessage());
-                e.printStackTrace();
-            }
+        // Obtener el id del item por su nombre usando AppData
+        ArrayList<HashMap<String, Object>> result = db.query(
+            "SELECT id FROM Item WHERE name = '" + itemName + "'"
+        );
+        int itemId = -1;
+        if (!result.isEmpty()) {
+            itemId = ((Number) result.get(0).get("id")).intValue();
+        }
 
-            if (itemId != -1) {
-                // Insertar o actualizar el efecto en ItemEffect
-                db.update("INSERT OR REPLACE INTO ItemEffect (player_pokemon_id, item_id, active) VALUES (" +
-                        pokemonId + ", " + itemId + ", 1);");
-            }
+        if (itemId != -1) {
+            // Insertar o actualizar el efecto en ItemEffect
+            db.update("INSERT OR REPLACE INTO ItemEffect (player_pokemon_id, item_id, active) VALUES (" +
+                    pokemonId + ", " + itemId + ", 1);");
+        }
 
-            db.close();
+        db.close();
     }
 }
