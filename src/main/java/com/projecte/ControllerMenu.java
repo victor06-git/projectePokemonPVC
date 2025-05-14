@@ -64,7 +64,7 @@ public class ControllerMenu implements Initializable {
         UtilsViews.setViewAnimating("ViewStart");
     }
 
-    private void setGameStats() throws IOException {
+    public void setGameStats() throws IOException {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 

@@ -34,6 +34,7 @@ public class ControllerBattleResult {
     private ProgressBar nivellBar;
 
     private int round = -1;
+    private String winner;
     
     @FXML
     private void toContinue(ActionEvent event) {
@@ -46,6 +47,11 @@ public class ControllerBattleResult {
 
     public void setRound(int round) {
         this.round = round;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+        labelWinner.setText("Ganador: " + winner); // Mostrar el ganador en la etiqueta
     }
 
     /**

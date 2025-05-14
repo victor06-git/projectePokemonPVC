@@ -18,6 +18,8 @@ public class ControllerAttackResult {
 
     private Boolean finalBattle = false;
 
+    private String winner;
+
     @FXML
     private void initialize() {
         
@@ -44,6 +46,17 @@ public class ControllerAttackResult {
             ctrl.updateGameStatsWithRandomXP();
         } else {
             buttonContinue.setText("Continuar");
+        }
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+        ControllerBattleResult ctrl = (ControllerBattleResult) UtilsViews.getController("ViewBattleResult");
+        ctrl.setWinner(winner);
+        if (winner.equals("Player")) {
+            hpPlayer.setText("Ganador: " + winner);
+        } else {
+            hpPlayer.setText("Perdedor: " + winner);
         }
     }
     

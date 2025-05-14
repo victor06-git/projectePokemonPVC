@@ -53,7 +53,7 @@ public class ControllerBattleAttack {
     private int idPokemon; // ID del Pokémon jugador
     List<String> pokemonTypes; // Lista de tipos del Pokémon jugador
     private List<Integer> playerPokemonIds; // Para almacenar los IDs de los Pokémon del jugador
-    private HashMap<Integer, Boolean> playerPokemonStatus; 
+    private HashMap<Integer, Boolean> playerPokemonStatus = new HashMap<>();
 
     private HashMap<Integer, String> enemyPokemons; // Para almacenar los Pokémon enemigos
     private List<Integer> enemyPokemonIds; // Para almacenar los IDs de los Pokémon enemigos
@@ -687,7 +687,7 @@ public class ControllerBattleAttack {
                 ctrlBattle.markPokemonAsDead(idPokemon);
             }
             ControllerBattleOptions ctrlBattleOptions = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
-            if (ctrlBattleOptions.allPokemonsDead()) {
+            if (ctrlBattleOptions.areAllPokemonsDead()) {
                 ctrlBattleOptions.endGame(); // Finaliza el juego si todos los Pokémon están muertos
                 return; // Salir del método
             }
@@ -782,11 +782,15 @@ public class ControllerBattleAttack {
     }
 
     public void setPlayerPokemons(List<Integer> pokemonIds) {
+        ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
         this.playerPokemonIds = pokemonIds;
+        System.out.println("IDs de Pokémon del jugador: " + playerPokemonIds);
         this.playerPokemonStatus = new HashMap<>();
         for (Integer id : pokemonIds) {
             playerPokemonStatus.put(id, true); // Todos los Pokémon comienzan vivos
         }
+        ctrl.setPokemonStatus(playerPokemonStatus);
+        System.out.println("Estado de los Pokémon del jugador: " + playerPokemonStatus);
     }
 
     /**

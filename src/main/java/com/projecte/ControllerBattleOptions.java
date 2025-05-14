@@ -12,6 +12,7 @@ import java.util.Set;
 
 import com.utils.UtilsViews;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -34,6 +35,7 @@ public class ControllerBattleOptions implements Initializable {
     private int currentMapIndex = 0;
 
     private HashMap<Integer, String> enemyPokemons = new HashMap<>();
+    private List<Integer> selectedPokemonIds = new ArrayList<>();
     private List<Integer> enemyPokemonIds = new ArrayList<>();
     private Set<Integer> enemyPokemonSet = new HashSet<>();
 
@@ -69,6 +71,7 @@ public class ControllerBattleOptions implements Initializable {
     private int idPokemon = -1;
     private Label[] maps = new Label[0];
     private int round = 1; // Variable to track the current round
+    private String winner;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -206,6 +209,10 @@ public class ControllerBattleOptions implements Initializable {
         this.imgArrowBack = imgArrowBack;
     }
 
+    public void setPokemonStatus(HashMap<Integer, Boolean> pokemonStatus) {
+        this.pokemonStatus = pokemonStatus;
+    }
+
     public void toViewMenu() {
         // Change to the Menu view
         UtilsViews.setViewAnimating("ViewMenu");
@@ -240,6 +247,13 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setMap(mapPaths.get(currentMapIndex));
         ctrl.setIdPokemon(idPokemon);
         ctrl.setRound(round);
+
+        
+        selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon1));
+        selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon2));
+        selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon3));
+
+        ctrl.setPlayerPokemons(selectedPokemonIds);
         
         // Generar Pokémon enemigos aleatorios solo si no hay Pokémon enemigos existentes
         if (enemyPokemonIds.isEmpty()) {
@@ -306,6 +320,17 @@ public class ControllerBattleOptions implements Initializable {
         // Cambiar a la vista de batalla
         UtilsViews.setViewAnimating("ViewBattleAttack");
         
+    }
+
+    /**
+     * Método para obtener el ID del Pokémon seleccionado en un ChoiceBox.
+     * 
+     * @param choiceBox El ChoiceBox que contiene los Pokémon.
+     * @return El ID del Pokémon seleccionado.
+     */
+    private int getPokemonIdFromChoiceBox(ChoiceBox<String> choiceBox) {
+        String selectedPokemon = choiceBox.getValue();
+        return Integer.parseInt(selectedPokemon.substring(1, selectedPokemon.indexOf(' ')));
     }
 
     /**
@@ -392,6 +417,9 @@ public class ControllerBattleOptions implements Initializable {
         return selectedPokemons.size() == 3; // Deben ser tres diferentes
     }
 
+    /**
+     * Método para cargar las rutas de los mapas desde la carpeta assets/mapa.
+     */
     private void loadMapPaths() {
         try {
             // Ruta de la carpeta de mapas
@@ -422,6 +450,10 @@ public class ControllerBattleOptions implements Initializable {
         labelSelectedMap.setText(currentMapPath.substring(currentMapPath.lastIndexOf("/") + 1, currentMapPath.lastIndexOf(".")).toUpperCase());}
     }
 
+    /**
+     * Método para mostrar el mapa anterior.
+     * @param event El evento de acción del mouse.
+     */
     @FXML
     private void showPreviousMap(MouseEvent event) {
         if (currentMapIndex > 0) {
@@ -432,6 +464,10 @@ public class ControllerBattleOptions implements Initializable {
         }
     }
 
+    /**
+     * Método para mostrar el siguiente mapa.
+     * @param event El evento de acción del mouse.
+     */
     @FXML
     private void showNextMap(MouseEvent event) {
         if (currentMapIndex < mapPaths.size() - 1) {
@@ -481,7 +517,6 @@ public class ControllerBattleOptions implements Initializable {
             pokemonImages.put(formattedPokemon, "assets/poke-icons/" + iconPath);
             System.out.println("Pokemon: " + formattedPokemon + ", Icon Path: " + iconPath);
         
-            pokemonStatus.put(id, true); // Asumimos que todos están vivos al cargar
         }
 
         // Seleccionar el primer Pokémon por defecto si hay elementos
@@ -638,11 +673,53 @@ public class ControllerBattleOptions implements Initializable {
                     startButton.setDisable(false);
                     continueButton.setDisable(true);
                     disablePokemonSelection(false); // Habilitar selección de Pokémon
-                    //showBattleResults(); // Mostrar resultados de la batalla
+                    resetBattleState(); // Reiniciar el estado de la batalla
                     break;
                 default:
                     break;
             }
+        }
+
+        // Método para restaurar el estado de la batalla para una nueva partida
+        private void resetBattleState() {
+            // Reiniciar el estado de los Pokémon
+            pokemonStatus.clear();
+            selectedPokemonIds.clear();
+            enemyPokemonIds.clear();
+            enemyPokemonSet.clear();
+            enemyPokemons.clear();
+
+            nextMap.setText(">>");
+            previousMap.setText("<<");
+
+            // Reiniciar los ChoiceBox
+            choicePokemon1.getItems().clear();
+            choicePokemon2.getItems().clear();
+            choicePokemon3.getItems().clear();
+
+            // Reiniciar las imágenes de los Pokémon
+            imgPokemon1.setImage(null);
+            imgPokemon2.setImage(null);
+            imgPokemon3.setImage(null);
+
+            // Reiniciar el texto de selección de Pokémon
+            pickPokemon.setText("Selecciona un Pokémon activo");
+
+            // Reiniciar el ID del Pokémon seleccionado
+            idPokemon = -1;
+
+            // Reiniciar el mapa seleccionado
+            currentMapIndex = 0;
+            showCurrentMap();
+
+            // Habilitar los botones y ChoiceBox
+            enableButton(pokemon1);
+            enableButton(pokemon2);
+            enableButton(pokemon3);
+            disablePokemonSelection(false);
+
+            // Reiniciar las variables de la batalla
+            round = 1;
         }
         
         /**
@@ -691,24 +768,54 @@ public class ControllerBattleOptions implements Initializable {
             pickPokemon.setText("No has elegido ningún Pokémon activo.");
         
             // Verificar si todos los Pokémon están muertos
-            if (allPokemonsDead()) {
+            if (areAllPokemonsDead()) {
                 endGame(); // Llama a un método para finalizar el juego
             }
         }
         
         // Método para verificar si todos los Pokémon están muertos
-        public boolean allPokemonsDead() {
-            return pokemonStatus.values().stream().allMatch(status -> !status); // Verifica si todos los valores son false
+        // Método para verificar si todos los Pokémon están muertos
+        public boolean areAllPokemonsDead() {
+            System.out.println("Estado de los Pokémon: " + pokemonStatus);
+
+            // Verificar si todos los valores en pokemonStatus son false
+            for (boolean isAlive : pokemonStatus.values()) {
+                if (isAlive) {
+                    // Si al menos un Pokémon está vivo, devolver false
+                    return false;
+                }
+            }
+
+            // Si todos los Pokémon están muertos, devolver true
+            return true;
         }
+        
         
         // Método para finalizar el juego
         public void endGame() {
-            // Aquí puedes agregar la lógica para finalizar el juego, como mostrar un mensaje de derrota
-            System.out.println("¡Todos tus Pokémon han sido derrotados! Fin de la partida.");
-            // Puedes mostrar una alerta o cambiar a una vista de resultados
-            showAlert("¡Todos tus Pokémon han sido derrotados! Fin de la partida.", Alert.AlertType.INFORMATION);
-            // Cambiar a la vista de resultados o menú
-            UtilsViews.setViewAnimating("ViewBattleResult");
+            Platform.runLater(() -> {
+                ControllerAttackResult ctrlResult = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+                ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
+
+                if (areAllPokemonsDead()) {
+                    winner = "Computer"; // El jugador perdió
+                } else if (!ctrl.hasMoreEnemyPokemons()) {
+                    winner = "Player"; // El jugador ganó
+                }
+                ctrlResult.setWinner(winner); // Establecer el ganador en el controlador de resultados
+                ctrlResult.setRound(round);
+                ctrlResult.setFinalBattle(true);
+                ctrlResult.setEquipLabel("Player"); // Indica que el jugador ganó
+                ctrlResult.setHpLabel(ctrl.getHpComputer());
+                ctrlResult.setEstaminaLabel(ctrl.getEstaminaComputer());
+                ctrlResult.setHpPlayer(ctrl.getHpPlayer());
+                ctrlResult.setEstaminaPlayer(ctrl.getEstaminaPlayer());
+                //ctrlResult.setStatsLabel("Ataque: " + moves[currentSelection].getText().replace("➤", "").trim());
+                //ctrlResult.setPokemonLabel(playerPokemonLabel.getText());
+
+                // Cambiar a la vista de resultados
+                UtilsViews.setViewAnimating("ViewAttackResult");
+            });
         }
 
         private void showAlert(String message, Alert.AlertType alertType) {

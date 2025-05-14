@@ -140,7 +140,7 @@
                                     </HBox>
                                     <HBox prefHeight="50.0" prefWidth="201.0">
                                        <children>
-                                          <Label text="Battles won: ">
+                                          <Label text="Battles played: ">
                                              <padding>
                                                 <Insets right="5.0" top="15.0" />
                                              </padding>
