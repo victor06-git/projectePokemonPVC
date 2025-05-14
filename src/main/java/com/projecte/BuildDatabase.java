@@ -1,34 +1,68 @@
 package com.projecte;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
-
 public class BuildDatabase {
-
     public static String selected_path;
 
     public static void main(String input_path) {
         AppData db = AppData.getInstance();
         selected_path = input_path;
         db.connect(selected_path);
+        
         try {
-            // First clean and create tables
-        createOrReplaceAllTables(db);
-
-        // Then insert all data
-        insertAllPokemon(db);
-        insertAllItems(db);
-        insertAllAttacks(db);
-        insertAllTypeEffectiveness(db);
+            createOrReplaceAllTables(db);
+            insertAllPokemon(db);
+            insertAllItems(db);
+            insertAllAttacks(db);
+            insertAllTypeEffectiveness(db);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            db.close();
         }
+    }
+    public HashMap<String, Integer> getGameStats() {
+        AppData db = AppData.getInstance();
+        db.connect(selected_path);
+
+        ArrayList<HashMap<String, Object>> result = db.query("SELECT * FROM GameStats;");
+        ArrayList<HashMap<String, Object>> result2 = db.query("SELECT count(*) as count FROM PlayerPokemon WHERE unlocked = 1;");
+
+        if (result.isEmpty() || result2.isEmpty()) {
+            System.out.println("No se encontraron estadísticas del juego.");
+            return null;
+        }
+
+
+        HashMap<String, Object> stats = new HashMap<>(result.get(0));
+        stats.putAll(result2.get(0));
+
+        System.out.println("Objects: " + stats);
+        
+        Integer totalExperience = (Integer) stats.get("total_experience");
+        Integer level = totalExperience / 1000;
+        Integer battlesPlayed = (Integer) stats.get("battles_played");
+        Integer maxWinStreak = (Integer) stats.get("max_win_streak");
+        Integer currentWinStreak = (Integer) stats.get("current_win_streak");
+        Integer pokemonsCaught = (Integer) stats.get("count");
+        
+
+        HashMap<String, Integer> gameStats = new HashMap<>();
+
+        gameStats.put("total_experience", totalExperience);
+        gameStats.put("battles_played", battlesPlayed);
+        gameStats.put("max_win_streak", maxWinStreak);
+        gameStats.put("current_win_streak", currentWinStreak);
+        gameStats.put("level", level);
+        gameStats.put("pokemons_caught", pokemonsCaught);
     
         db.close();
+
+        return gameStats;
     }
 
     public static void createOrReplaceAllTables(AppData db) {
@@ -96,7 +130,7 @@ public class BuildDatabase {
                     current_win_streak INTEGER DEFAULT 0
                 );
 
-                CREATE TABLE IF NOT EXISTS  Battle (
+                CREATE TABLE IF NOT EXISTS Battle (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,        
                     date TEXT NOT NULL,                          
                     map TEXT,                                  
@@ -131,22 +165,20 @@ public class BuildDatabase {
                 );
             """;
             
-            String[] tableStatements = createTables.split(";");
-            for (String statement : tableStatements) {
-                if (!statement.trim().isEmpty()) {
-                    db.update(statement.trim() + ";");
-                }
+        String[] tableStatements = createTables.split(";");
+        for (String statement : tableStatements) {
+            if (!statement.trim().isEmpty()) {
+                db.update(statement.trim() + ";");
             }
+        }
     }
 
-
     public static void insertAllPokemon(AppData db) {
-
-        // db.update("DELETE FROM Pokemons;"); // Limpiar la tabla de Pokémon antes de insertar
+        cleanAndRecreateTable(db, "Pokemon");
 
         String[][] pokemons = {
             // Primera Generación (1-151)
-            {"Bulbasaur", "Grass/Poison", "001.gif", "001.png"},
+           	{"Bulbasaur", "Grass/Poison", "001.gif", "001.png"},
             {"Ivysaur", "Grass/Poison", "002.gif", "002.png"},
             {"Venusaur", "Grass/Poison", "003.gif", "003.png"},
             {"Charmander", "Fire", "004.gif", "004.png"},
@@ -402,45 +434,48 @@ public class BuildDatabase {
         };
 
         for (String[] pokemon : pokemons) {
-            String name = pokemon[0];
-            String type = pokemon[1];
-            String imagePath = pokemon[2];
-            String iconPath = pokemon[3];
-
-            // Verificar si el Pokémon ya existe antes de insertarlo o actualizarlo
-            db.update("INSERT OR REPLACE INTO Pokemon (name, type, image_path, icon_path) VALUES ('" +
-                      name + "', '" + type + "', '" + imagePath + "', '" + iconPath + "');");
+            db.update("INSERT INTO Pokemon (name, type, image_path, icon_path) VALUES ('" +
+                    pokemon[0] + "', '" + pokemon[1] + "', '" + pokemon[2] + "', '" + pokemon[3] + "');");
         }
-
         System.out.println("Pokémons insertados correctamente.");
     }
+
     public static void insertAllItems(AppData db) {
-
-        // db.update("DELETE FROM Items;"); // Limpiar la tabla de objetos antes de insertar
-
+        if (db == null) {
+            System.out.println("Error: db is null");
+            return;
+        } else if (db.query("SELECT count(*) FROM Item;").isEmpty()) {
+            cleanAndRecreateTable(db, "Item");
+        }
+        // cleanAndRecreateTable(db, "ItemInventory");
+        
         String[][] items = {
             {"X_Attack", "attack", "10"},
-            {"X_Defense", "Defense", "20"},
-            {"Bottle_Cap", "All", "100"},
+            {"X_Defense", "defense", "20"},
+            {"Bottle_Cap", "all", "100"}
         };
 
 
-        // Iteramos sobre el arreglo de objetos para insertar uno por uno
+
         for (String[] item : items) {
-            String name = item[0];
-            String effectType = item[1];
-            int effectValue = Integer.parseInt(item[2]);
-
             db.update("INSERT OR REPLACE INTO Item (name, effect_type, effect_value) VALUES ('" +
-                          name + "', '" + effectType + "', '" + effectValue + "');");
-
-            System.out.println("Items insertados correctamente.");
+                    item[0] + "', '" + item[1] + "', '" + item[2] + "');");
         }
+
+        // Insertar los items en ItemInventory con cantidad 0
+        ArrayList<HashMap<String, Object>> itemRows = db.query("SELECT id FROM Item");
+        for (HashMap<String, Object> row : itemRows) {
+            int itemId = (int) row.get("id");
+            db.update("INSERT OR REPLACE INTO ItemInventory (item_id, quantity) VALUES (" + itemId + ", 0);");
+        }
+
+        System.out.println("Items insertados correctamente.");
     }
 
-
     public static void insertAllAttacks(AppData db) {
-        
+        cleanAndRecreateTable(db, "Attack");
+        // cleanAndRecreateTable(db, "PokemonAttack");
+
         String[][] attacks = {
             {"Tackle", "Normal", "30", "5"},
             {"Growl", "Normal", "5", "5"},
@@ -549,140 +584,192 @@ public class BuildDatabase {
             {"Outrage", "Dragon", "120", "50"},
             {"Dragon Pulse", "Dragon", "85", "40"},
             {"Draco Meteor", "Dragon", "130", "50"}
-
         };
 
-        // Iteramos sobre el arreglo de ataques para insertar uno por uno
-        for (String[] attack : attacks) {
-            String name = attack[0];
-            String type = attack[1];
-            int damage = Integer.parseInt(attack[2]);
-            int staminaCost = Integer.parseInt(attack[3]);
-
-            // Ejecutamos la sentencia SQL para insertar el ataque
+         for (String[] attack : attacks) {
             db.update("INSERT OR REPLACE INTO Attack (name, type, damage, stamina_cost) VALUES ('" +
-                      name + "', '" + type + "', " + damage + ", " + staminaCost + ");");
+                attack[0] + "', '" + attack[1] + "', " + attack[2] + ", " + attack[3] + ");");
         }
-        System.out.println("Attacks insertados correctamente.");        
-
+        System.out.println("Attacks insertados correctamente.");      
+        
+        assignRandomAttacksToPokemon(db);
     }
-   
+
+    private static void assignRandomAttacksToPokemon(AppData db) {
+        // Primero limpiamos los ataques existentes
+        db.update("DELETE FROM PokemonAttack;");
+        
+        // Luego el resto de la lógica original
+        ArrayList<HashMap<String, Object>> pokeTypes = db.query("SELECT id, type FROM Pokemon");        ArrayList<HashMap<String, Object>> attackTypes = db.query("SELECT id, type FROM Attack");
+        Random rand = new Random();
+        
+        for (HashMap<String, Object> pokeType : pokeTypes) {
+            int pokeId = (int) pokeType.get("id");
+            String pokeTypeStr = (String) pokeType.get("type");
+            String[] types = pokeTypeStr.split("/");
+
+            ArrayList<Integer> selectedAttackIds = new ArrayList<>();
+            int maxAttacks = 4;
+            int attacksPerType = types.length == 2 ? 2 : 4;
+
+            for (String type : types) {
+                ArrayList<Integer> matchingAttacks = getMatchingAttacks(attackTypes, type);
+                HashSet<Integer> chosen = selectRandomAttacks(matchingAttacks, attacksPerType, rand);
+                selectedAttackIds.addAll(chosen);
+            }
+
+            limitAttacks(selectedAttackIds, maxAttacks, rand);
+            insertSelectedAttacks(db, pokeId, selectedAttackIds);
+        }
+        System.out.println("Ataques asignados a Pokémon correctamente.");
+    }
+
+    private static ArrayList<Integer> getMatchingAttacks(ArrayList<HashMap<String, Object>> attackTypes, String type) {
+        ArrayList<Integer> matchingAttacks = new ArrayList<>();
+        for (HashMap<String, Object> attackType : attackTypes) {
+            if (((String) attackType.get("type")).equals(type)) {
+                matchingAttacks.add((int) attackType.get("id"));
+            }
+        }
+        return matchingAttacks;
+    }
+
+    private static HashSet<Integer> selectRandomAttacks(ArrayList<Integer> matchingAttacks, int attacksPerType, Random rand) {
+        HashSet<Integer> chosen = new HashSet<>();
+        while (chosen.size() < Math.min(attacksPerType, matchingAttacks.size())) {
+            chosen.add(matchingAttacks.get(rand.nextInt(matchingAttacks.size())));
+        }
+        return chosen;
+    }
+
+    private static void limitAttacks(ArrayList<Integer> selectedAttackIds, int maxAttacks, Random rand) {
+        while (selectedAttackIds.size() > maxAttacks) {
+            selectedAttackIds.remove(rand.nextInt(selectedAttackIds.size()));
+        }
+    }
+
+    private static void insertSelectedAttacks(AppData db, int pokeId, ArrayList<Integer> selectedAttackIds) {
+        for (int attackId : selectedAttackIds) {
+            db.update("INSERT OR REPLACE INTO PokemonAttack (pokemon_id, attack_id) VALUES (" +
+                pokeId + ", " + attackId + ");");
+        }
+    }
 
     public static void insertAllTypeEffectiveness(AppData db) {
-
-        // db.update("DELETE FROM TypeEffectiveness;"); // Limpiar la tabla de efectividad de tipos antes de insertar
-
         String[][] typeEffectiveness = {
             // Fire
-            {"Fire", "Grass", "2.0"},
-            {"Fire", "Bug", "2.0"},
-            {"Fire", "Ice", "2.0"},
-            {"Fire", "Steel", "2.0"},
-            {"Fire", "Fire", "0.5"},
-            {"Fire", "Water", "0.5"},
-            {"Fire", "Rock", "0.5"},
-            {"Fire", "Dragon", "0.5"},
+                {"Fire", "Grass", "2.0"},
+                {"Fire", "Bug", "2.0"},
+                {"Fire", "Ice", "2.0"},
+                {"Fire", "Steel", "2.0"},
+                {"Fire", "Fire", "0.5"},
+                {"Fire", "Water", "0.5"},
+                {"Fire", "Rock", "0.5"},
+                {"Fire", "Dragon", "0.5"},
 
-            // Water
-            {"Water", "Fire", "2.0"},
-            {"Water", "Ground", "2.0"},
-            {"Water", "Rock", "2.0"},
-            {"Water", "Water", "0.5"},
-            {"Water", "Grass", "0.5"},
-            {"Water", "Dragon", "0.5"},
+                // Water
+                {"Water", "Fire", "2.0"},
+                {"Water", "Ground", "2.0"},
+                {"Water", "Rock", "2.0"},
+                {"Water", "Water", "0.5"},
+                {"Water", "Grass", "0.5"},
+                {"Water", "Dragon", "0.5"},
 
-            // Grass
-            {"Grass", "Water", "2.0"},
-            {"Grass", "Ground", "2.0"},
-            {"Grass", "Rock", "2.0"},
-            {"Grass", "Fire", "0.5"},
-            {"Grass", "Grass", "0.5"},
-            {"Grass", "Bug", "0.5"},
-            {"Grass", "Flying", "0.5"},
-            {"Grass", "Poison", "0.5"},
-            {"Grass", "Dragon", "0.5"},
-            {"Grass", "Steel", "0.5"},
+                // Grass
+                {"Grass", "Water", "2.0"},
+                {"Grass", "Ground", "2.0"},
+                {"Grass", "Rock", "2.0"},
+                {"Grass", "Fire", "0.5"},
+                {"Grass", "Grass", "0.5"},
+                {"Grass", "Bug", "0.5"},
+                {"Grass", "Flying", "0.5"},
+                {"Grass", "Poison", "0.5"},
+                {"Grass", "Dragon", "0.5"},
+                {"Grass", "Steel", "0.5"},
 
-            // Electric
-            {"Electric", "Water", "2.0"},
-            {"Electric", "Flying", "2.0"},
-            {"Electric", "Electric", "0.5"},
-            {"Electric", "Grass", "0.5"},
-            {"Electric", "Dragon", "0.5"},
-            {"Electric", "Ground", "0.0"},
+                // Electric
+                {"Electric", "Water", "2.0"},
+                {"Electric", "Flying", "2.0"},
+                {"Electric", "Electric", "0.5"},
+                {"Electric", "Grass", "0.5"},
+                {"Electric", "Dragon", "0.5"},
+                {"Electric", "Ground", "0.0"},
 
-            // Ground
-            {"Ground", "Fire", "2.0"},
-            {"Ground", "Electric", "2.0"},
-            {"Ground", "Poison", "2.0"},
-            {"Ground", "Rock", "2.0"},
-            {"Ground", "Steel", "2.0"},
-            {"Ground", "Grass", "0.5"},
-            {"Ground", "Bug", "0.5"},
-            {"Ground", "Flying", "0.0"},
+                // Ground
+                {"Ground", "Fire", "2.0"},
+                {"Ground", "Electric", "2.0"},
+                {"Ground", "Poison", "2.0"},
+                {"Ground", "Rock", "2.0"},
+                {"Ground", "Steel", "2.0"},
+                {"Ground", "Grass", "0.5"},
+                {"Ground", "Bug", "0.5"},
+                {"Ground", "Flying", "0.0"},
 
-            // Ice
-            {"Ice", "Grass", "2.0"},
-            {"Ice", "Ground", "2.0"},
-            {"Ice", "Flying", "2.0"},
-            {"Ice", "Dragon", "2.0"},
-            {"Ice", "Fire", "0.5"},
-            {"Ice", "Water", "0.5"},
-            {"Ice", "Ice", "0.5"},
-            {"Ice", "Steel", "0.5"},
+                // Ice
+                {"Ice", "Grass", "2.0"},
+                {"Ice", "Ground", "2.0"},
+                {"Ice", "Flying", "2.0"},
+                {"Ice", "Dragon", "2.0"},
+                {"Ice", "Fire", "0.5"},
+                {"Ice", "Water", "0.5"},
+                {"Ice", "Ice", "0.5"},
+                {"Ice", "Steel", "0.5"},
 
-            // Psychic
-            {"Psychic", "Fighting", "2.0"},
-            {"Psychic", "Poison", "2.0"},
-            {"Psychic", "Psychic", "0.5"},
-            {"Psychic", "Steel", "0.5"},
-            {"Psychic", "Dark", "0.0"},
+                // Psychic
+                {"Psychic", "Fighting", "2.0"},
+                {"Psychic", "Poison", "2.0"},
+                {"Psychic", "Psychic", "0.5"},
+                {"Psychic", "Steel", "0.5"},
+                {"Psychic", "Dark", "0.0"},
 
-            // Dark
-            {"Dark", "Psychic", "2.0"},
-            {"Dark", "Ghost", "2.0"},
-            {"Dark", "Fighting", "0.5"},
-            {"Dark", "Dark", "0.5"},
-            {"Dark", "Fairy", "0.5"},
+                // Dark
+                {"Dark", "Psychic", "2.0"},
+                {"Dark", "Ghost", "2.0"},
+                {"Dark", "Fighting", "0.5"},
+                {"Dark", "Dark", "0.5"},
+                {"Dark", "Fairy", "0.5"},
 
-            // Fairy
-            {"Fairy", "Fighting", "2.0"},
-            {"Fairy", "Dragon", "2.0"},
-            {"Fairy", "Dark", "2.0"},
-            {"Fairy", "Fire", "0.5"},
-            {"Fairy", "Poison", "0.5"},
-            {"Fairy", "Steel", "0.5"},
+                // Fairy
+                {"Fairy", "Fighting", "2.0"},
+                {"Fairy", "Dragon", "2.0"},
+                {"Fairy", "Dark", "2.0"},
+                {"Fairy", "Fire", "0.5"},
+                {"Fairy", "Poison", "0.5"},
+                {"Fairy", "Steel", "0.5"},
 
-            // Ghost
-            {"Ghost", "Psychic", "2.0"},
-            {"Ghost", "Ghost", "2.0"},
-            {"Ghost", "Dark", "0.5"},
-            {"Ghost", "Normal", "0.0"},
+                // Ghost
+                {"Ghost", "Psychic", "2.0"},
+                {"Ghost", "Ghost", "2.0"},
+                {"Ghost", "Dark", "0.5"},
+                {"Ghost", "Normal", "0.0"},
 
-            // Fighting
-            {"Fighting", "Normal", "2.0"},
-            {"Fighting", "Ice", "2.0"},
-            {"Fighting", "Rock", "2.0"},
-            {"Fighting", "Dark", "2.0"},
-            {"Fighting", "Steel", "2.0"},
-            {"Fighting", "Poison", "0.5"},
-            {"Fighting", "Flying", "0.5"},
-            {"Fighting", "Psychic", "0.5"},
-            {"Fighting", "Fairy", "0.5"},
-            {"Fighting", "Ghost", "0.0"}
+                // Fighting
+                {"Fighting", "Normal", "2.0"},
+                {"Fighting", "Ice", "2.0"},
+                {"Fighting", "Rock", "2.0"},
+                {"Fighting", "Dark", "2.0"},
+                {"Fighting", "Steel", "2.0"},
+                {"Fighting", "Poison", "0.5"},
+                {"Fighting", "Flying", "0.5"},
+                {"Fighting", "Psychic", "0.5"},
+                {"Fighting", "Fairy", "0.5"},
+                {"Fighting", "Ghost", "0.0"}
         };
 
-        // Iteramos sobre el arreglo de efectividad de tipos para insertar uno por uno
         for (String[] effectiveness : typeEffectiveness) {
-            String attackType = effectiveness[0];
-            String targetType = effectiveness[1];
-            double multiplier = Double.parseDouble(effectiveness[2]);
-
-            // Ejecutamos la sentencia SQL para insertar la efectividad de tipo
             db.update("INSERT OR REPLACE INTO TypeEffectiveness (attack_type, target_type, multiplier) VALUES ('" +
-                      attackType + "', '" + targetType + "', '" + multiplier + "');");
+                    effectiveness[0] + "', '" + effectiveness[1] + "', '" + effectiveness[2] + "');");
         }
         System.out.println("Type effectiveness insertados correctamente.");
     }
 
+    private static void cleanAndRecreateTable(AppData db, String tableName) {
+    // Solo elimina la tabla específica y la recrea si es necesario
+        if(tableName.equals("PokemonAttack")) {
+            db.update("DELETE FROM PokemonAttack;");
+        } else {
+            db.update("DROP TABLE IF EXISTS " + tableName + ";");
+            createOrReplaceAllTables(db);
+        }
+    }
 }

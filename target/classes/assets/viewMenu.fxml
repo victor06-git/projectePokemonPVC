@@ -73,7 +73,7 @@
                            <children>
                               <VBox prefHeight="335.0" prefWidth="131.0">
                                  <children>
-                                    <HBox prefHeight="325.0" prefWidth="105.0">
+                                    <HBox prefHeight="325.0" prefWidth="86.0">
                                        <children>
                                           <ImageView fitHeight="201.0" fitWidth="116.0" pickOnBounds="true" preserveRatio="true">
                                              <HBox.margin>
@@ -84,7 +84,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="335.0" prefWidth="201.0">
+                              <VBox prefHeight="340.0" prefWidth="267.0">
                                  <children>
                                     <HBox prefHeight="50.0" prefWidth="201.0">
                                        <children>
@@ -163,7 +163,7 @@
                                     </HBox>
                                     <HBox prefHeight="50.0" prefWidth="201.0">
                                        <children>
-                                          <Label text="Max consecutive wins:">
+                                          <Label prefHeight="36.0" prefWidth="115.0" text="Max win streak:">
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin>
@@ -174,7 +174,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="maxConsecutiveWinsInfoLabel" text="McwInfo">
+                                          <Label fx:id="maxConsecutiveWinsInfoLabel" prefHeight="36.0" prefWidth="62.0" text="McwInfo">
                                              <HBox.margin>
                                                 <Insets left="5.0" />
                                              </HBox.margin>

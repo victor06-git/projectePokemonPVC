@@ -18,7 +18,7 @@
                </font>
             </Label>
             <ImageView fx:id="pokemonImage" fitHeight="288.0" fitWidth="585.0" pickOnBounds="true" preserveRatio="true" />
-            <Button mnemonicParsing="false" onAction="#startGame" style="-fx-base: #4b9ae9;" text="Open Game" />
+            <Button mnemonicParsing="false" onMouseClicked="#startGame" style="-fx-base: #4b9ae9;" text="Open Game" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
