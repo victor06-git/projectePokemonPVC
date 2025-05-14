@@ -46,11 +46,9 @@ public class ControllerStart extends BuildDatabase implements Initializable {
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             String rutaDBAbsoluta = selectedFile.getAbsolutePath();
-            System.out.println("--- ABSOLUTE ROUTE DB: " + rutaDBAbsoluta);
             // Obtener la ruta del directorio base (puedes cambiar esto según tu estructura)
             String directorioBase = new File("").getAbsolutePath(); // Directorio de trabajo actual
             String rutaRelativa = getRelativePath(directorioBase, rutaDBAbsoluta);
-            System.out.println("--- RELATIVE ROUTE DB: " + rutaRelativa);
             BuildDatabase.main(rutaDBAbsoluta);
             UtilsViews.setViewAnimating("ViewMenu");
         } else {

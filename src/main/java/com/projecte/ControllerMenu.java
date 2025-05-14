@@ -1,6 +1,5 @@
 package com.projecte;
 
-
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -53,7 +52,7 @@ public class ControllerMenu implements Initializable {
     }
 
     public void toViewBattleHistory(ActionEvent event) {
-        UtilsViews.setViewAnimating("ViewBattleHistory");
+        UtilsViews.setViewAnimating("ViewHistory");
     }
     
     public void toViewNewBattle(ActionEvent event) {

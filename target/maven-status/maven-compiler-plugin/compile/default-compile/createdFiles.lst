@@ -6,7 +6,6 @@ com/projecte/ControllerBattleOptions.class
 com/projecte/ControllerHistory.class
 com/projecte/ControllerBattleAttack.class
 com/projecte/ControllerPokeSettings.class
-com/projecte/ControllerPokemonView.class
 com/projecte/ControllerStart.class
 com/projecte/Main.class
 com/projecte/ControllerManagement.class

@@ -288,6 +288,7 @@ public class ControllerManagement implements Initializable {
         ctrl.setLabelName(labelName.getText());
         ctrl.setLabelNickname(labelNickname.getText());
         ctrl.setImagePokemon(imgPokemon.getImage());
+        ctrl.setCurrentPokemonId(number);
         UtilsViews.setViewAnimating("ViewPokeSettings");
     }
 

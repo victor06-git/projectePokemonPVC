@@ -34,6 +34,11 @@ public class ControllerAttackResult {
         hpPlayer.setText(hp);
     }
 
+    /**
+     * Método para establecer si es la batalla final.
+     * 
+     * @param finalBattle true si es la batalla final, false en caso contrario.
+     */
     public void setFinalBattle(Boolean finalBattle) {
         this.finalBattle = finalBattle;
         if (finalBattle) {

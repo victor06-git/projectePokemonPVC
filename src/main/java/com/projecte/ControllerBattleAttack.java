@@ -271,6 +271,14 @@ public class ControllerBattleAttack {
     }
 
     /**
+     * Método para obtener la barra de vida del enemigo.
+     * @return ProgressBar de la barra de vida del enemigo.
+     */
+    public ProgressBar getEnemyHpBar() {
+        return enemyHpBar;
+    }
+
+    /**
      * Método para obtener la barra de stamina del enemigo.
      * @return ProgressBar de la barra de stamina del enemigo.
      */
@@ -901,6 +909,35 @@ public class ControllerBattleAttack {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.show();
+    }
+
+    public void insertBattlePokemons() {
+        AppData db = AppData.getInstance();
+        db.connect("./data/pokemons.sqlite");
+
+        // Obtener el último battle_id insertado
+        ArrayList<HashMap<String, Object>> result = db.query("SELECT id FROM Battle ORDER BY id DESC LIMIT 1;");
+        if (result.isEmpty()) {
+            System.err.println("No hay batallas registradas.");
+            db.close();
+            return;
+        }
+        
+        int battleId = ((Number) result.get(0).get("id")).intValue();
+
+        // Insertar los Pokémon del jugador
+        for (Integer playerPokemonId : playerPokemonStatus.keySet()) {
+            db.update("INSERT INTO BattlePokemon (battle_id, is_player, pokemon_id) VALUES (" +
+                    battleId + ", 1, " + playerPokemonId + ");");
+        }
+
+        // Insertar los Pokémon enemigos
+        for (Integer enemyPokemonId : enemyPokemons.keySet()) {
+            db.update("INSERT INTO BattlePokemon (battle_id, is_player, pokemon_id) VALUES (" +
+                    battleId + ", 0, " + enemyPokemonId + ");");
+        }
+
+        db.close();
     }
 
 }

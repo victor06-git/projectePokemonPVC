@@ -28,6 +28,13 @@ public class ControllerPokeSettings {
 
     @FXML
     private Button buttonAttack, buttonDeffense, buttonBottle;
+
+    private int currentPokemonId;
+
+    @FXML
+    public void setCurrentPokemonId(int id) {
+        this.currentPokemonId = id;
+    }
     
     // Método que se llama al inicializar el controlador
     @FXML
@@ -210,6 +217,7 @@ public class ControllerPokeSettings {
             System.out.println("Usando X_Attack. Cantidad restante: " + (quantity - 1));
             updateItemQuantity("X_Attack", quantity - 1);
             setLabelAttack(); // Actualizar la etiqueta de cantidad
+            addItemEffectToPokemon(currentPokemonId, "X_Attack");
         } else {
             showAlert("Error", "No tienes suficientes X_Attack.", Alert.AlertType.ERROR);
         }
@@ -223,6 +231,7 @@ public class ControllerPokeSettings {
             System.out.println("Usando X_Defense. Cantidad restante: " + (quantity - 1));
             updateItemQuantity("X_Defense", quantity - 1);
             setLabelDeffense(); // Actualizar la etiqueta de cantidad
+            addItemEffectToPokemon(currentPokemonId, "X_Defense");
         } else {
             showAlert("Error", "No tienes suficientes X_Defense.", Alert.AlertType.ERROR);
         }
@@ -236,6 +245,7 @@ public class ControllerPokeSettings {
             System.out.println("Usando Bottle_Cap. Cantidad restante: " + (quantity - 1));
             updateItemQuantity("Bottle_Cap", quantity - 1);
             setLabelBottleCap(); // Actualizar la etiqueta de cantidad
+            addItemEffectToPokemon(currentPokemonId, "Bottle_Cap");
         } else {
             showAlert("Error", "No tienes suficientes Bottle_Cap.", Alert.AlertType.ERROR);
         }
@@ -243,14 +253,42 @@ public class ControllerPokeSettings {
 
     private void updateItemQuantity(String itemName, int newQuantity) {
     
-    AppData db = AppData.getInstance();
-    db.update(String.format(
-        "UPDATE ItemInventory " +
-        "SET quantity = %d " +
-        "WHERE item_id = (SELECT id FROM Item WHERE name = '%s')",
-                newQuantity, itemName
-            ));
-    db.close();
-    }
+        AppData db = AppData.getInstance();
+        db.update(String.format(
+            "UPDATE ItemInventory " +
+            "SET quantity = %d " +
+            "WHERE item_id = (SELECT id FROM Item WHERE name = '%s')",
+                    newQuantity, itemName
+                ));
+        db.close();
+        }
 
+        private void addItemEffectToPokemon(int pokemonId, String itemName) {
+            AppData db = AppData.getInstance();
+            db.connect("./data/pokemons.sqlite");
+
+            // Obtener el id del item por su nombre
+            String query = "SELECT id FROM Item WHERE name = ?";
+            int itemId = -1;
+            try (java.sql.Connection connection = java.sql.DriverManager.getConnection("jdbc:sqlite:./data/pokemons.sqlite");
+                java.sql.PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, itemName);
+                try (java.sql.ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        itemId = resultSet.getInt("id");
+                    }
+                }
+            } catch (java.sql.SQLException e) {
+                System.err.println("Error al obtener el id del item: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            if (itemId != -1) {
+                // Insertar o actualizar el efecto en ItemEffect
+                db.update("INSERT OR REPLACE INTO ItemEffect (player_pokemon_id, item_id, active) VALUES (" +
+                        pokemonId + ", " + itemId + ", 1);");
+            }
+
+            db.close();
+    }
 }

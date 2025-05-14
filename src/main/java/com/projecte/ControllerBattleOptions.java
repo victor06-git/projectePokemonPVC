@@ -318,6 +318,7 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setPlayerStaminaBar(1.0);
     }
         // Cambiar a la vista de batalla
+        ctrl.insertBattlePokemons();
         UtilsViews.setViewAnimating("ViewBattleAttack");
         
     }
@@ -391,15 +392,18 @@ public class ControllerBattleOptions implements Initializable {
         
         
         // Configurar estamina y HP
-        ctrl.setEstaminaComputer("30/30");
+        double enemyHp = ctrl.getEnemyHpBar().getProgress();
+        double enemyStamina = ctrl.getEnemyStaminaBar().getProgress();
+        String computerHp = ctrl.getHpComputer();
+        String computerStamina = ctrl.getEstaminaComputer();
+        ctrl.setEstaminaComputer(computerStamina);
         ctrl.setEstaminaPlayer(stamina + "/30");
         ctrl.setHpPlayer(maxHp + "/100");
-        ctrl.setHpComputer("100/100");
-        ctrl.setEnemyHpBar(1.0);
-        ctrl.setEnemyStaminaBar(1.0);
+        ctrl.setHpComputer(computerHp);
+        ctrl.setEnemyHpBar(enemyHp);
+        ctrl.setEnemyStaminaBar(enemyStamina);
         ctrl.setPlayerHpBar(1.0);
         ctrl.setPlayerStaminaBar(1.0);
-        
 
         // Cambiar a la vista de batalla
         UtilsViews.setViewAnimating("ViewBattleAttack");
