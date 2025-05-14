@@ -519,50 +519,63 @@ public class ControllerBattleAttack {
     private void loadAttacksFromDatabase() {
         AppData db = AppData.getInstance();
         db.connect("./data/pokemons.sqlite");
-        
+
         ArrayList<HashMap<String, Object>> allAttacks = new ArrayList<>();
-        
-        if (pokemonTypes != null && !pokemonTypes.isEmpty()) {
-            System.out.println("Loading attacks for types: " + pokemonTypes); // Debugging output
-            int attacksPerType = pokemonTypes.size() > 1 ? 2 : 4;
-            
-            for (String type : pokemonTypes) {
-                ArrayList<HashMap<String, Object>> typeAttacks = db.query(
-                    "SELECT name, type, damage, stamina_cost FROM Attack " +
-                    "WHERE type = '" + type + "' " +
-                    "ORDER BY damage DESC " +
-                    "LIMIT " + attacksPerType + ";");
-                
-                System.out.println("Attacks for type " + type + ": " + typeAttacks); // Debugging output
-                allAttacks.addAll(typeAttacks);
+
+        // Primero intentamos obtener los ataques definidos en PokemonAttack
+        if (idPokemon > 0) {
+            String query = """
+                SELECT a.name, a.type, a.damage, a.stamina_cost
+                FROM PokemonAttack pa
+                JOIN Attack a ON pa.attack_id = a.id
+                WHERE pa.pokemon_id = ?
+                """;
+            ArrayList<HashMap<String, Object>> definedAttacks = db.query(
+                query.replace("?", String.valueOf(idPokemon))
+            );
+
+            if (!definedAttacks.isEmpty()) {
+                allAttacks.addAll(definedAttacks);
             }
-            
-            if (allAttacks.size() < 4) {
-                String excludedTypes = pokemonTypes.stream()
-                    .map(t -> "'" + t + "'")
-                    .collect(Collectors.joining(","));
-                
-                ArrayList<HashMap<String, Object>> otherAttacks = db.query(
-                    "SELECT name, type, damage, stamina_cost FROM Attack " +
-                    "WHERE type NOT IN (" + excludedTypes + ") " +
-                    "ORDER BY damage DESC " +
-                    "LIMIT " + (4 - allAttacks.size()) + ";");
-                
-                allAttacks.addAll(otherAttacks);
-            }
-        } else {
-            allAttacks = db.query(
-                "SELECT name, type, damage, stamina_cost FROM Attack " +
-                "ORDER BY RANDOM() " +
-                "LIMIT 4;");
         }
-        
+
+        // Si no hay ataques definidos, usar el comportamiento anterior
+        if (allAttacks.isEmpty()) {
+            if (pokemonTypes != null && !pokemonTypes.isEmpty()) {
+                int attacksPerType = pokemonTypes.size() > 1 ? 2 : 4;
+                for (String type : pokemonTypes) {
+                    ArrayList<HashMap<String, Object>> typeAttacks = db.query(
+                        "SELECT name, type, damage, stamina_cost FROM Attack " +
+                        "WHERE type = '" + type + "' " +
+                        "ORDER BY damage DESC " +
+                        "LIMIT " + attacksPerType + ";");
+                    allAttacks.addAll(typeAttacks);
+                }
+                if (allAttacks.size() < 4) {
+                    String excludedTypes = pokemonTypes.stream()
+                        .map(t -> "'" + t + "'")
+                        .collect(Collectors.joining(","));
+                    ArrayList<HashMap<String, Object>> otherAttacks = db.query(
+                        "SELECT name, type, damage, stamina_cost FROM Attack " +
+                        "WHERE type NOT IN (" + excludedTypes + ") " +
+                        "ORDER BY damage DESC " +
+                        "LIMIT " + (4 - allAttacks.size()) + ";");
+                    allAttacks.addAll(otherAttacks);
+                }
+            } else {
+                allAttacks = db.query(
+                    "SELECT name, type, damage, stamina_cost FROM Attack " +
+                    "ORDER BY RANDOM() " +
+                    "LIMIT 4;");
+            }
+        }
+
         int numAttacks = Math.min(allAttacks.size(), 4);
         attackNames = new String[numAttacks];
         attackTypes = new String[numAttacks];
         attackDamages = new String[numAttacks];
         attackStaminaCosts = new String[numAttacks];
-        
+
         for (int i = 0; i < numAttacks; i++) {
             HashMap<String, Object> attack = allAttacks.get(i);
             attackNames[i] = (String) attack.get("name");
@@ -570,14 +583,14 @@ public class ControllerBattleAttack {
             attackDamages[i] = String.valueOf(attack.get("damage"));
             attackStaminaCosts[i] = String.valueOf(attack.get("stamina_cost"));
         }
-        
-        db .close();
-        
+
+        db.close();
+
         if (numAttacks > 0) setMove1(attackNames[0]);
         if (numAttacks > 1) setMove2(attackNames[1]);
         if (numAttacks > 2) setMove3(attackNames[2]);
         if (numAttacks > 3) setMove4(attackNames[3]);
-    }  
+    }
         /**
          * Actualiza la información mostrada para el ataque seleccionado
          * @param index Índice del ataque seleccionado (0-3)
@@ -600,6 +613,16 @@ public class ControllerBattleAttack {
      * @param selectedMove
      */
     private void handleAttack(int selectedMove) {
+
+        Random random = new Random();
+        // 40% de probabilidad de fallo
+        boolean attackFails = random.nextDouble() < 0.4;
+        if (attackFails) {
+            showAlert("¡El ataque ha fallado!", AlertType.INFORMATION);
+            computerAttack(); // El enemigo ataca igualmente
+            return;
+        }
+
         System.out.println("Using move: " + moves[selectedMove].getText());
         updateAttackInfo(selectedMove);
         
@@ -621,6 +644,23 @@ public class ControllerBattleAttack {
         setEstaminaPlayer((int)(newPlayerStamina * 30) + "/ 30");
     
         attackNameLabel.getParent().setVisible(true);
+
+        // Si el jugador tiene menos del 25% de estamina, puede atacar otra vez (50% de probabilidad)
+        if (newPlayerStamina < 0.25 && random.nextBoolean()) {
+            int randomMove;
+            do {
+                randomMove = random.nextInt(attackNames.length);
+            } while (randomMove == selectedMove && attackNames.length > 1); // Asegura que sea distinto si hay más de uno
+
+            selectedMove = randomMove;
+
+            // Actualiza la info del nuevo ataque seleccionado
+            updateAttackInfo(selectedMove);
+            damageStr = attackDamageLabel.getText().replace("Daño: ", "").trim();
+            staminaStr = estaminaLabel.getText().replace("Estamina: ", "").trim();
+            damage = Double.parseDouble(damageStr);
+            staminaConsumed = Double.parseDouble(staminaStr);
+        }
     
         // Verificar si el Pokémon enemigo fue derrotado
         if (computerPokemonDead() || computerPokemonOutOfStamina()) {
@@ -805,32 +845,37 @@ public class ControllerBattleAttack {
      * Método para que el Pokémon enemigo ataque al jugador.
      */
     public void computerAttack() {
-        // Verificar si el Pokémon actual está debilitado
+        // Si el Pokémon enemigo está muerto o sin estamina, cambiar al siguiente
         if (computerPokemonDead() || computerPokemonOutOfStamina()) {
             switchToNextEnemyPokemon();
-            return; // Salir si no hay más Pokémon
+            return;
         }
 
         Random random = new Random();
-        int damage = random.nextInt(31) + 20;  
-        double staminaConsumed = damage * 0.3;
-        
+
+        // 20% de probabilidad de fallo
+        boolean attackFails = random.nextDouble() < 0.2;
+        if (attackFails) {
+            showAlert("¡El ataque del enemigo ha fallado!", AlertType.INFORMATION);
+            return;
+        }
+
+        // Daño aleatorio entre 50 y 100
+        int damage = random.nextInt(51) + 50;
+        // Estamina consumida proporcional al daño (puedes ajustar la fórmula)
+        double staminaConsumed = damage / 2.0;
+
         double currentPlayerHp = playerHpBar.getProgress();
         double newPlayerHp = currentPlayerHp - (damage / 100.0);
         newPlayerHp = Math.max(newPlayerHp, 0);
         playerHpBar.setProgress(newPlayerHp);
         setHpPlayer((int)(newPlayerHp * 100) + "/ 100");
-        
+
         double currentEnemyStamina = enemyStaminaBar.getProgress();
         double newEnemyStamina = currentEnemyStamina - (staminaConsumed / 30.0);
         newEnemyStamina = Math.max(newEnemyStamina, 0);
         enemyStaminaBar.setProgress(newEnemyStamina);
         setEstaminaComputer((int)(newEnemyStamina * 30) + "/ 30");
-
-        // // Verificar si el Pokémon enemigo actual se debilitó después del ataque
-        // if (computerPokemonDead() || computerPokemonOutOfStamina()) {
-        //     switchToNextEnemyPokemon();
-        // }
     }
 
     /**
@@ -911,6 +956,10 @@ public class ControllerBattleAttack {
         alert.show();
     }
 
+    /**
+     * Método para insertar los Pokémon de la batalla en la base de datos.
+     * Este método se llama al finalizar la batalla.
+     */
     public void insertBattlePokemons() {
         AppData db = AppData.getInstance();
         db.connect("./data/pokemons.sqlite");

@@ -5,20 +5,46 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerStart">
    <children>
+      <ImageView fx:id="pokemonImage" fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label minHeight="50.0" text="Pokémon PvC">
-               <font>
-                  <Font size="46.0" />
-               </font>
-            </Label>
-            <ImageView fx:id="pokemonImage" fitHeight="288.0" fitWidth="585.0" pickOnBounds="true" preserveRatio="true" />
-            <Button mnemonicParsing="false" onAction="#startGame" style="-fx-base: #4b9ae9;" text="Open Game" />
+            <HBox prefHeight="347.0" prefWidth="590.0">
+               <children>
+                  <Label minHeight="50.0" prefHeight="173.0" prefWidth="578.0" text="Pokémon PvC">
+                     <font>
+                        <Font size="46.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </HBox>
+            <HBox prefHeight="347.0" prefWidth="590.0" />
+            <HBox alignment="TOP_CENTER" prefHeight="67.0" prefWidth="586.0" spacing="15.0">
+               <children>
+                  <Button mnemonicParsing="false" onMouseClicked="#newGame" style="-fx-base: #00ff15;" text="New Game" />
+                  <Button mnemonicParsing="false" onMouseClicked="#openGame" style="-fx-base: #00a2ff;" text="Open Game" />
+                  <Button fx:id="continueButton" mnemonicParsing="false" onMouseClicked="#continueGame" style="-fx-base: #eeff00;" text="Continue" visible="false" />
+                  <HBox alignment="TOP_RIGHT" prefHeight="35.0" prefWidth="253.0">
+                     <children>
+                        <Button mnemonicParsing="false" onMouseClicked="#exitGame" style="-fx-base: red;" text="Exit" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </VBox.margin>
+            </HBox>
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
