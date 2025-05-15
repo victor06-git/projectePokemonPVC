@@ -608,6 +608,8 @@ public class ControllerBattleOptions implements Initializable {
                 enableButton(pokemon3);
                 this.idPokemon = selectedId; // Actualiza el idPokemon al seleccionado
                 pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+                ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
+                ctrl.setIdPokemon(this.idPokemon); // Esto recargará los ataques correctos
             } else {
                 // Si el Pokémon está muerto, mostrar un mensaje
                 Alert alert = new Alert(AlertType.WARNING);

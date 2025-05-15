@@ -592,12 +592,18 @@ public class ControllerBattleAttack {
             attackStaminaCosts[i] = String.valueOf(attack.get("stamina_cost"));
         }
 
+        setMove1(attackNames[0]);
+        setMove2(attackNames[1]);
+        setMove3(attackNames[2]);
+        setMove4(attackNames[3]);
+
         db.close();
 
         if (numAttacks > 0) setMove1(attackNames[0]);
         if (numAttacks > 1) setMove2(attackNames[1]);
         if (numAttacks > 2) setMove3(attackNames[2]);
         if (numAttacks > 3) setMove4(attackNames[3]);
+        System.out.println(numAttacks + " attacks loaded: " + attackNames[0] + ", " + attackNames[1] + ", " + attackNames[2] + ", " + attackNames[3]);
     }
         /**
          * Actualiza la información mostrada para el ataque seleccionado
