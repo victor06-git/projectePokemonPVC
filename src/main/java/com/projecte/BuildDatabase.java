@@ -16,9 +16,11 @@ public class BuildDatabase {
         try {
             createOrReplaceAllTables(db);
             insertAllPokemon(db);
+            insertAllPlayerPokemon(db);
             insertAllItems(db);
             insertAllAttacks(db);
             insertAllTypeEffectiveness(db);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -41,15 +43,13 @@ public class BuildDatabase {
         ArrayList<HashMap<String, Object>> result2 = db.query("SELECT count(*) as count FROM PlayerPokemon WHERE unlocked = 1;");
 
         if (result.isEmpty() || result2.isEmpty()) {
-            System.out.println("No se encontraron estadísticas del juego.");
+            System.out.println("No stats found.");
             return null;
         }
 
 
         HashMap<String, Object> stats = new HashMap<>(result.get(0));
         stats.putAll(result2.get(0));
-
-        System.out.println("Objects: " + stats);
         
         Integer totalExperience = (Integer) stats.get("total_experience");
         Integer level = totalExperience / 1000;
@@ -71,6 +71,44 @@ public class BuildDatabase {
         db.close();
 
         return gameStats;
+    }
+
+    public static void insertAllPlayerPokemon(AppData db) {
+
+        ArrayList<HashMap<String, Object>> result = db.query("SELECT count(*) as count FROM PlayerPokemon;");
+        
+        if (!result.get(0).get("count").equals(251)) {
+            String PokemonsPokedex = "SELECT id FROM Pokemon";
+            ArrayList<HashMap<String, Object>> pokemons = db.query(PokemonsPokedex);
+            HashSet<Integer> usedIds = new HashSet<>();
+            Random random = new Random();
+
+            // Elegir 3 IDs aleatorios para desbloquear
+            ArrayList<Integer> allIds = new ArrayList<>();
+            for (HashMap<String, Object> pokemon : pokemons) {
+                allIds.add((int) pokemon.get("id"));
+            }
+            HashSet<Integer> unlockedIds = new HashSet<>();
+            while (unlockedIds.size() < 3) {
+                unlockedIds.add(allIds.get(random.nextInt(allIds.size())));
+            }
+
+            for (HashMap<String, Object> pokemon : pokemons) {
+                int id = (int) pokemon.get("id");
+                if (!usedIds.contains(id)) {
+                    usedIds.add(id);
+                    String nickname = "Pokemon_" + id;
+                    int maxHp = random.nextInt(100) + 1;
+                    int attack = random.nextInt(100) + 1;
+                    int stamina = random.nextInt(100) + 1;
+                    int unlocked = unlockedIds.contains(id) ? 1 : 0;
+                    db.update("INSERT INTO PlayerPokemon (pokemon_id, nickname, max_hp, attack, stamina, unlocked) VALUES (" +
+                            id + ", '" + nickname + "', " + maxHp + ", " + attack + ", " + stamina + ", " + unlocked + ");");
+                }
+            }
+        }
+        
+        
     }
 
     public static void createOrReplaceAllTables(AppData db) {
@@ -445,7 +483,6 @@ public class BuildDatabase {
             db.update("INSERT INTO Pokemon (name, type, image_path, icon_path) VALUES ('" +
                     pokemon[0] + "', '" + pokemon[1] + "', '" + pokemon[2] + "', '" + pokemon[3] + "');");
         }
-        System.out.println("Pokémons insertados correctamente.");
     }
 
     public static void insertAllItems(AppData db) {
@@ -477,7 +514,6 @@ public class BuildDatabase {
             db.update("INSERT OR REPLACE INTO ItemInventory (item_id, quantity) VALUES (" + itemId + ", 0);");
         }
 
-        System.out.println("Items insertados correctamente.");
     }
 
     public static void insertAllAttacks(AppData db) {
@@ -598,7 +634,6 @@ public class BuildDatabase {
             db.update("INSERT OR REPLACE INTO Attack (name, type, damage, stamina_cost) VALUES ('" +
                 attack[0] + "', '" + attack[1] + "', " + attack[2] + ", " + attack[3] + ");");
         }
-        System.out.println("Attacks insertados correctamente.");      
         
         assignRandomAttacksToPokemon(db);
     }
@@ -629,7 +664,6 @@ public class BuildDatabase {
             limitAttacks(selectedAttackIds, maxAttacks, rand);
             insertSelectedAttacks(db, pokeId, selectedAttackIds);
         }
-        System.out.println("Ataques asignados a Pokémon correctamente.");
     }
 
     private static ArrayList<Integer> getMatchingAttacks(ArrayList<HashMap<String, Object>> attackTypes, String type) {
@@ -768,7 +802,6 @@ public class BuildDatabase {
             db.update("INSERT OR REPLACE INTO TypeEffectiveness (attack_type, target_type, multiplier) VALUES ('" +
                     effectiveness[0] + "', '" + effectiveness[1] + "', '" + effectiveness[2] + "');");
         }
-        System.out.println("Type effectiveness insertados correctamente.");
     }
 
     private static void cleanAndRecreateTable(AppData db, String tableName) {
