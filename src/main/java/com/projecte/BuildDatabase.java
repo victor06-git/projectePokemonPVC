@@ -97,13 +97,12 @@ public class BuildDatabase {
                 int id = (int) pokemon.get("id");
                 if (!usedIds.contains(id)) {
                     usedIds.add(id);
-                    String nickname = "Pokemon_" + id;
                     int maxHp = random.nextInt(100) + 1;
                     int attack = random.nextInt(100) + 1;
                     int stamina = random.nextInt(100) + 1;
                     int unlocked = unlockedIds.contains(id) ? 1 : 0;
-                    db.update("INSERT INTO PlayerPokemon (pokemon_id, nickname, max_hp, attack, stamina, unlocked) VALUES (" +
-                            id + ", '" + nickname + "', " + maxHp + ", " + attack + ", " + stamina + ", " + unlocked + ");");
+                    db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
+                            id + ", '" + "', " + maxHp + ", " + attack + ", " + stamina + ", " + unlocked + ");");
                 }
             }
         }
