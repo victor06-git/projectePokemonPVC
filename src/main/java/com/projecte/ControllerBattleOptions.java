@@ -2,6 +2,8 @@ package com.projecte;
 
 import java.net.URL;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,6 +41,7 @@ public class ControllerBattleOptions implements Initializable {
     private List<Integer> selectedPokemonIds = new ArrayList<>();
     private List<Integer> enemyPokemonIds = new ArrayList<>();
     private Set<Integer> enemyPokemonSet = new HashSet<>();
+    private int battleId = -1;
 
 
     @FXML 
@@ -249,6 +252,12 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setIdPokemon(idPokemon);
         ctrl.setRound(round);
 
+        String mapName = mapPaths.get(currentMapIndex);
+        mapName = mapName.substring(mapName.lastIndexOf("/") + 1, mapName.lastIndexOf(".")); // Solo el nombre del mapa
+        this.battleId = insertBattleWithoutWinner(mapName);
+        ctrl.setBattleId(battleId);
+        
+
         selectedPokemonIds.clear();
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon1));
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon2));
@@ -288,7 +297,7 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setEnemyPokemons(enemyPokemons, enemyPokemonIds);
 
         // Establecer la imagen y el nombre del Pokémon del jugador
-        ctrl.setPlayerPokemonImage("/assets/pokemons/back/" + (idPokemon > 100 ? idPokemon + ".gif" : "0" + idPokemon + ".gif"));
+        ctrl.setPlayerPokemonImage("/assets/pokemons/back/" + String.format("%03d", idPokemon) + ".gif");
         
         String query2 = "SELECT name FROM Pokemon WHERE id = " + idPokemon;
         String query3 = "SELECT max_hp, stamina FROM PlayerPokemon WHERE pokemon_id = " + idPokemon;
@@ -365,13 +374,14 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setMap(mapPaths.get(currentMapIndex));
         ctrl.setIdPokemon(idPokemon);
         ctrl.setRound(round);
+        
 
         // Obtener nombres desde la BD
         AppData db = AppData.getInstance();
         db.connect(selected_path);        
 
         // Establecer la imagen y el nombre del Pokémon del jugador
-        ctrl.setPlayerPokemonImage("/assets/pokemons/back/" + (idPokemon > 100 ? idPokemon + ".gif" : "0" + idPokemon + ".gif"));
+        ctrl.setPlayerPokemonImage("/assets/pokemons/back/" + String.format("%03d", idPokemon) + ".gif");
         
         String query2 = "SELECT name FROM Pokemon WHERE id = " + idPokemon;
         String query3 = "SELECT max_hp, stamina FROM PlayerPokemon WHERE pokemon_id = " + idPokemon;
@@ -811,37 +821,6 @@ public class ControllerBattleOptions implements Initializable {
                     winner = "Player"; // El jugador ganó
                 }
 
-                try {
-                    AppData db = AppData.getInstance();
-                    db.connect(selected_path);
-
-                    // Obtener el nombre del mapa jugado
-                    String mapName = "";
-                    if (!mapPaths.isEmpty() && currentMapIndex >= 0 && currentMapIndex < mapPaths.size()) {
-                        String mapPath = mapPaths.get(currentMapIndex);
-                        mapName = mapPath.substring(mapPath.lastIndexOf("/") + 1, mapPath.lastIndexOf("."));
-                    }
-
-                    // Obtener fecha y hora actual
-                    java.time.LocalDateTime now = java.time.LocalDateTime.now();
-                    String dateTime = now.toString(); // Formato ISO
-
-                    // Determinar el ganador
-                    String battleWinner = winner != null ? winner : "Computer";
-
-                    // Insertar en la tabla Battle
-                    String insertBattle = String.format(
-                        "INSERT INTO Battle (date, map, winner) VALUES ('%s', '%s', '%s');",
-                        dateTime, mapName, battleWinner
-                    );
-                    db.update(insertBattle);
-
-                    db.close();
-                } catch (Exception e) {
-                    System.err.println("Error al guardar la batalla en la base de datos:");
-                    e.printStackTrace();
-                }
-
                 ControllerAttackResult ctrlResult = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
                 
                 
@@ -859,13 +838,36 @@ public class ControllerBattleOptions implements Initializable {
                 // Cambiar a la vista de resultados
                 UtilsViews.setViewAnimating("ViewAttackResult");
             });
-        }
+        } 
+        
+        /**
+         * Inserta una nueva batalla en la tabla Battle con el mapa y la fecha/hora actual.
+         * El campo winner se deja vacío (NULL) para actualizarlo después.
+         * Devuelve el id de la batalla insertada.
+         */
+        public int insertBattleWithoutWinner(String mapName) {
+            AppData db = AppData.getInstance();
+            db.connect(selected_path);
 
-        private void showAlert(String message, Alert.AlertType alertType) {
-            Alert alert = new Alert(alertType);
-            alert.setTitle("Fin de la partida");
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            alert.show();
-        }        
+            // Obtener fecha y hora actual en formato ISO
+            LocalDateTime now = java.time.LocalDateTime.now();
+            DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            String dateTime = now.format(formatter);
+
+            // Insertar la batalla sin winner
+            String insertBattle = String.format(
+                "INSERT INTO Battle (date, map, winner) VALUES ('%s', '%s', NULL);",
+                dateTime, mapName
+            );
+            db.update(insertBattle);
+
+            // Obtener el id de la última batalla insertada
+            ArrayList<HashMap<String, Object>> result = db.query("SELECT last_insert_rowid() as id;");
+            db.close();
+
+            if (!result.isEmpty()) {
+                return ((Number) result.get(0).get("id")).intValue();
+            }
+            return -1;
+        }
 }

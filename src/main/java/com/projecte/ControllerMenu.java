@@ -127,7 +127,4 @@ public class ControllerMenu implements Initializable {
 
             db.close();
         }
-
-
-
 }
