@@ -264,6 +264,8 @@ public class ControllerBattleOptions implements Initializable {
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon3));
 
         ctrl.setPlayerPokemons(selectedPokemonIds);
+        ctrl.applyItemEffectsToPlayerPokemons(selectedPokemonIds);
+        ctrl.putOutEffectsToPlayerPokemons(selectedPokemonIds);
         
         // Generar Pokémon enemigos aleatorios solo si no hay Pokémon enemigos existentes
         if (enemyPokemonIds.isEmpty()) {
@@ -666,7 +668,7 @@ public class ControllerBattleOptions implements Initializable {
         public void setBattleStatus(String status, int round) {
             this.round = round;
             ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
-        
+            ControllerBattleAttack ctrlBattle = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
             // Deshabilitar la selección de mapa y Pokémon según el estado de la batalla
             switch (status) {
                 case STATUS_BATTLE_STARTED:
@@ -691,6 +693,7 @@ public class ControllerBattleOptions implements Initializable {
                     continueButton.setDisable(true);
                     disablePokemonSelection(false); // Habilitar selección de Pokémon
                     resetBattleState(); // Reiniciar el estado de la batalla
+                    ctrlBattle.resetBattleAttackState(); // Reiniciar el estado de la batalla
                     break;
                 default:
                     break;

@@ -48,8 +48,8 @@ public class ControllerBattleResult implements  Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         URL imageURL = null;
-        System.out.println("Valor run: " + run);
         try {
             imageURL = getClass().getResource("/assets/result/finish.jpg");
             Image image = new Image(imageURL.toExternalForm());
@@ -62,12 +62,18 @@ public class ControllerBattleResult implements  Initializable{
 
     @FXML
     private void toContinue(ActionEvent event) {
+        
         // Acción al hacer clic en el botón "Recoger recompensas"
-        UtilsViews.setView("ViewMenu");
+        ControllerAttackResult ctrl_2 = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
         ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
+        ControllerBattleAttack ctrlAttack = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
         ctrl.setBattleStatus(STATUS_BATTLE_ENDED, round);
         ctrl.setBattleStatus(STATUS_BATTLE_PREP, round = 1);
         updateBattleWinner(battleId, winner);
+        ctrl.resetBattleState();
+        ctrlAttack.resetBattleAttackState();
+        ctrl_2.setFinalBattle(false);
+        UtilsViews.setView("ViewMenu");
     }
 
     public void setRound(int round) {

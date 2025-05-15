@@ -778,7 +778,11 @@ public class ControllerBattleAttack {
                 ctrlBattleOptions.endGame(); // Finaliza el juego si todos los Pokémon están muertos
                 return; // Salir del método
             }
-                      
+
+            if (computerPokemonDead() || computerPokemonOutOfStamina()) {
+                switchToNextEnemyPokemon();
+                return; // Importante: salir para evitar doble cambio de vista
+            }  
             // Configurar los datos para la vista de resultados
             ctrl.setHpLabel(getHpComputer());
             ctrl.setEstaminaLabel(getEstaminaComputer());
@@ -871,7 +875,7 @@ public class ControllerBattleAttack {
     public void setPlayerPokemons(List<Integer> pokemonIds) {
         ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
         this.playerPokemonIds = pokemonIds;
-        System.out.println("IDs de Pokémon del jugador: " + playerPokemonIds);
+        //System.out.println("IDs de Pokémon del jugador: " + playerPokemonIds);
         this.playerPokemonStatus = new HashMap<>();
         for (Integer id : pokemonIds) {
             playerPokemonStatus.put(id, true); // Todos los Pokémon comienzan vivos
@@ -1075,6 +1079,87 @@ public class ControllerBattleAttack {
             return ((Number) result.get(0).get("multiplier")).doubleValue();
         }
         return 1.0; //Default effectiveness
+    }
+
+    public void resetBattleAttackState() {
+            round = 0;
+            idPokemon = -1;
+            playerPokemonIds = new ArrayList<>();
+            playerPokemonStatus = new HashMap<>();
+            enemyPokemons = new HashMap<>();
+            enemyPokemonIds = new ArrayList<>();
+            typeEffectiveness = 1.0;
+            run = false;
+            // Resetea barras y labels si es necesario
+            if (playerHpBar != null) playerHpBar.setProgress(1.0);
+            if (playerStaminaBar != null) playerStaminaBar.setProgress(1.0);
+            if (enemyHpBar != null) enemyHpBar.setProgress(1.0);
+            if (enemyStaminaBar != null) enemyStaminaBar.setProgress(1.0);
+    }
+
+    //Función para obtener de la tabla ItemEffect si hay Pokemons con objetos
+    public void applyItemEffectsToPlayerPokemons(List<Integer> playerPokemonIds) {
+       AppData db = AppData.getInstance();
+        db.connect(selected_path);
+
+        for (Integer pokemonId : playerPokemonIds) {
+            // Consulta los items activos para este Pokémon
+            String query = """
+                SELECT i.name
+                FROM ItemEffect ie
+                JOIN Item i ON ie.item_id = i.id
+                WHERE ie.player_pokemon_id = %d AND ie.active = 1
+            """.formatted(pokemonId);
+
+        ArrayList<HashMap<String, Object>> effects = db.query(query);
+
+        int extraDamage = 0;
+        for (HashMap<String, Object> effect : effects) {
+            String itemName = (String) effect.get("name");
+            if ("X_Attack".equals(itemName)) {
+                extraDamage += 20;
+            } else if ("Bottle_Cap".equals(itemName)) {
+                extraDamage += 30;
+            }
+        }
+
+        if (extraDamage > 0) {
+            // Sube el daño de todos los ataques definidos para este Pokémon
+            String updateDamage = """
+                UPDATE Attack
+                SET damage = damage + %d
+                WHERE id IN (
+                    SELECT attack_id FROM PokemonAttack WHERE pokemon_id = %d
+                );
+            """.formatted(extraDamage, pokemonId);
+            db.update(updateDamage);
+        }
+
+        // Desactiva los efectos después de aplicarlos
+        String query2 = """
+            UPDATE ItemEffect
+            SET active = 0
+            WHERE player_pokemon_id = %d AND active = 1
+        """.formatted(pokemonId);
+        db.update(query2);
+    }
+    db.close();
+    }
+
+    public void putOutEffectsToPlayerPokemons(List<Integer> playerPokemonIds) {
+        AppData db = AppData.getInstance();
+        db.connect(selected_path);
+
+        for (Integer pokemonId : playerPokemonIds) {
+            // Consulta los items activos para este Pokémon
+            String query = """
+                UPDATE PlayerPokemon
+                SET attack = 50, max_hp = 100, stamina = 30
+                WHERE id = %d
+            """.formatted(pokemonId);
+            db.update(query);
+        }
+        db.close();
     }
 
 }
