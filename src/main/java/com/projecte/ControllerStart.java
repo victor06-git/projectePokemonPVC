@@ -29,7 +29,7 @@ public class ControllerStart extends BuildDatabase implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("Pantalla de inicio cargada");
+        //System.out.println("Pantalla de inicio cargada");
 
         // Solo cargar imagen, nada de cargar vistas aquí
         String imagePath = "data/pokemonstart.png";
@@ -61,6 +61,8 @@ public class ControllerStart extends BuildDatabase implements Initializable {
             String rutaRelativa = getRelativePath(directorioBase, rutaDBAbsoluta);
             BuildDatabase.main(rutaDBAbsoluta);
             UtilsViews.setViewAnimating("ViewMenu");
+            ControllerMenu ctrl = (ControllerMenu) UtilsViews.getController("ViewMenu");
+            ctrl.loadGameStats();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -136,6 +138,8 @@ public class ControllerStart extends BuildDatabase implements Initializable {
                 BuildDatabase.main(selectedFile.getAbsolutePath());
                 BuildDatabase.insertBaseStats();
                 UtilsViews.setViewAnimating("ViewMenu");
+                ControllerMenu ctrl = (ControllerMenu) UtilsViews.getController("ViewMenu");
+                ctrl.loadGameStats();
             }
         );
     }
@@ -143,7 +147,8 @@ public class ControllerStart extends BuildDatabase implements Initializable {
     @FXML
     private void continueGame() {
         UtilsViews.setViewAnimating("ViewMenu");
-        
+        ControllerMenu ctrl = (ControllerMenu) UtilsViews.getController("ViewMenu");
+        ctrl.loadGameStats();
     }
 
     @FXML 

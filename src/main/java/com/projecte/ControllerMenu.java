@@ -38,14 +38,13 @@ public class ControllerMenu implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Path imagePath = null;
+        loadGameStats();
 
+        try {            
 
-        try {
             URL imageURL = getClass().getResource("/assets/image/background.jpg");
             Image image = new Image(imageURL.toExternalForm());
             imgBackground.setImage(image);
-
-            loadGameStats();
 
         } catch (Exception e) {
             System.err.println("Error loading image asset: " + imagePath);
@@ -58,6 +57,8 @@ public class ControllerMenu implements Initializable {
     }
 
     public void toViewBattleHistory(ActionEvent event) {
+        ControllerHistory ctrl = (ControllerHistory) UtilsViews.getController("ViewHistory");
+        ctrl.loadHistory();
         UtilsViews.setViewAnimating("ViewHistory");
     }
     

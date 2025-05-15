@@ -283,6 +283,7 @@ public class ControllerManagement implements Initializable {
     @FXML
     public void editPokemon(ActionEvent event) {
         ControllerPokeSettings ctrl = (ControllerPokeSettings) UtilsViews.getController("ViewPokeSettings");
+        ctrl.updateItems();
         ctrl.setLabelName(labelName.getText());
         ctrl.setLabelNickname(labelNickname.getText());
         ctrl.setImagePokemon(imgPokemon.getImage());

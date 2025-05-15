@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.event.ActionEvent;
@@ -130,17 +131,16 @@ public class ControllerPokeSettings {
 
     private int getItemQuantityByName(String itemName) {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
-        String query = String.format(
-            "SELECT ii.quantity " +
-            "FROM Item i " +
-            "RIGHT JOIN ItemInventory ii ON i.id = ii.item_id " +
-            "WHERE i.name = '%s';", itemName
-        );
+        String query = """
+            SELECT COALESCE(ii.quantity, 0) as quantity
+            FROM Item i
+            LEFT JOIN ItemInventory ii ON i.id = ii.item_id
+            WHERE i.name = '%s';
+        """.formatted(itemName);
 
         ArrayList<HashMap<String, Object>> result = db.query(query);
-
         db.close();
 
         if (!result.isEmpty()) {
@@ -152,7 +152,7 @@ public class ControllerPokeSettings {
     @FXML
     private void updatePokemon(ActionEvent event) {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Obtener el nuevo nickname desde el TextField
         String newNickname = nicknameText.getText();
@@ -246,24 +246,23 @@ public class ControllerPokeSettings {
     private void updateItemQuantity(String itemName, int newQuantity) {
     
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
+        // Actualiza la cantidad
+        db.update("""
+            UPDATE ItemInventory
+            SET quantity = %d
+            WHERE item_id = (SELECT id FROM Item WHERE name = '%s');
+        """.formatted(newQuantity, itemName));
 
-        db.update(String.format(
-            "UPDATE ItemInventory " +
-            "SET quantity = %d " +
-            "WHERE item_id = (SELECT id FROM Item WHERE name = '%s')",
-                    newQuantity, itemName
-                ));
         db.close();
-        }
+    }
 
     private void addItemEffectToPokemon(int pokemonId, String itemName) {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
-        // Obtener el id del item por su nombre usando AppData
         ArrayList<HashMap<String, Object>> result = db.query(
-            "SELECT id FROM Item WHERE name = '" + itemName + "'"
+        "SELECT id FROM Item WHERE name = '" + itemName + "'"
         );
         int itemId = -1;
         if (!result.isEmpty()) {
@@ -271,9 +270,38 @@ public class ControllerPokeSettings {
         }
 
         if (itemId != -1) {
-            // Insertar o actualizar el efecto en ItemEffect
-            db.update("INSERT OR REPLACE INTO ItemEffect (player_pokemon_id, item_id, active) VALUES (" +
-                    pokemonId + ", " + itemId + ", 1);");
+            // Insertar o actualizar el efecto en ItemEffect como activo
+            db.update("""
+                INSERT INTO ItemEffect (player_pokemon_id, item_id, active)
+                VALUES (%d, %d, 1)
+                ON CONFLICT(player_pokemon_id, item_id) DO UPDATE SET active = 1;
+            """.formatted(pokemonId, itemId));
+        }
+
+        db.close();
+    }
+
+    public void updateItems() {
+       AppData db = AppData.getInstance();
+        db.connect(selected_path);
+
+        String query = """
+            SELECT i.name, COALESCE(ii.quantity, 0) as quantity
+            FROM Item i
+            LEFT JOIN ItemInventory ii ON i.id = ii.item_id
+            WHERE i.name IN ('X_Attack', 'X_Defense', 'Bottle_Cap');
+        """;
+
+        ArrayList<HashMap<String, Object>> result = db.query(query);
+
+        for (HashMap<String, Object> row : result) {
+            String name = (String) row.get("name");
+            int quantity = ((Number) row.get("quantity")).intValue();
+            switch (name) {
+                case "X_Attack" -> numberAttack.setText(String.valueOf(quantity));
+                case "X_Defense" -> numberDeffense.setText(String.valueOf(quantity));
+                case "Bottle_Cap" -> numberBottleCap.setText(String.valueOf(quantity));
+            }
         }
 
         db.close();
