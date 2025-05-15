@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.application.Platform;
@@ -76,6 +77,8 @@ public class ControllerBattleOptions implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Path imagePath = null;
+        // Cargar los Pokémon desbloqueados en los ChoiceBox y sus imágenes
+        loadUnlockedPokemons();
         try {
             URL imageURL = getClass().getResource("/assets/image/arrow-back.gif");
             Image image = new Image(imageURL.toExternalForm());
@@ -89,9 +92,7 @@ public class ControllerBattleOptions implements Initializable {
         if (!mapPaths.isEmpty()) {
             showCurrentMap();
         }
-
-        // Cargar los Pokémon desbloqueados en los ChoiceBox y sus imágenes
-        loadUnlockedPokemons();
+        
     }
     
     // Getters
@@ -248,7 +249,7 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setIdPokemon(idPokemon);
         ctrl.setRound(round);
 
-        
+        selectedPokemonIds.clear();
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon1));
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon2));
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon3));
@@ -266,7 +267,7 @@ public class ControllerBattleOptions implements Initializable {
             
             // Obtener nombres desde la BD
             AppData db = AppData.getInstance();
-            db.connect("./data/pokemons.sqlite");
+            db.connect(selected_path);
             
             enemyPokemonIds.clear();
             enemyPokemons.clear();
@@ -367,7 +368,7 @@ public class ControllerBattleOptions implements Initializable {
 
         // Obtener nombres desde la BD
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");        
+        db.connect(selected_path);        
 
         // Establecer la imagen y el nombre del Pokémon del jugador
         ctrl.setPlayerPokemonImage("/assets/pokemons/back/" + (idPokemon > 100 ? idPokemon + ".gif" : "0" + idPokemon + ".gif"));
@@ -484,7 +485,7 @@ public class ControllerBattleOptions implements Initializable {
 
     private void loadUnlockedPokemons() {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Consulta para obtener los Pokémon desbloqueados
         String query = """
@@ -497,6 +498,7 @@ public class ControllerBattleOptions implements Initializable {
 
         // Ejecutar la consulta
         ArrayList<HashMap<String, Object>> unlockedPokemons = db.query(query);
+        //System.out.println("Pokémon desbloqueados encontrados: " + unlockedPokemons.size());
 
         // Limpiar los ChoiceBox antes de llenarlos
         choicePokemon1.getItems().clear();
@@ -685,7 +687,7 @@ public class ControllerBattleOptions implements Initializable {
         }
 
         // Método para restaurar el estado de la batalla para una nueva partida
-        private void resetBattleState() {
+        public void resetBattleState() {
             // Reiniciar el estado de los Pokémon
             pokemonStatus.clear();
             selectedPokemonIds.clear();
@@ -724,6 +726,8 @@ public class ControllerBattleOptions implements Initializable {
 
             // Reiniciar las variables de la batalla
             round = 1;
+            winner = null;
+            loadUnlockedPokemons(); // Recargar los Pokémon desbloqueados
         }
         
         /**
@@ -798,14 +802,48 @@ public class ControllerBattleOptions implements Initializable {
         // Método para finalizar el juego
         public void endGame() {
             Platform.runLater(() -> {
-                ControllerAttackResult ctrlResult = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+                
                 ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
-
                 if (areAllPokemonsDead()) {
                     winner = "Computer"; // El jugador perdió
                 } else if (!ctrl.hasMoreEnemyPokemons()) {
                     winner = "Player"; // El jugador ganó
                 }
+
+                try {
+                    AppData db = AppData.getInstance();
+                    db.connect(selected_path);
+
+                    // Obtener el nombre del mapa jugado
+                    String mapName = "";
+                    if (!mapPaths.isEmpty() && currentMapIndex >= 0 && currentMapIndex < mapPaths.size()) {
+                        String mapPath = mapPaths.get(currentMapIndex);
+                        mapName = mapPath.substring(mapPath.lastIndexOf("/") + 1, mapPath.lastIndexOf("."));
+                    }
+
+                    // Obtener fecha y hora actual
+                    java.time.LocalDateTime now = java.time.LocalDateTime.now();
+                    String dateTime = now.toString(); // Formato ISO
+
+                    // Determinar el ganador
+                    String battleWinner = winner != null ? winner : "Computer";
+
+                    // Insertar en la tabla Battle
+                    String insertBattle = String.format(
+                        "INSERT INTO Battle (date, map, winner) VALUES ('%s', '%s', '%s');",
+                        dateTime, mapName, battleWinner
+                    );
+                    db.update(insertBattle);
+
+                    db.close();
+                } catch (Exception e) {
+                    System.err.println("Error al guardar la batalla en la base de datos:");
+                    e.printStackTrace();
+                }
+
+                ControllerAttackResult ctrlResult = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+                
+                
                 ctrlResult.setWinner(winner); // Establecer el ganador en el controlador de resultados
                 ctrlResult.setRound(round);
                 ctrlResult.setFinalBattle(true);

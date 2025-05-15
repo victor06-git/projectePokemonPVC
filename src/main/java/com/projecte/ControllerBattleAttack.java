@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.animation.PauseTransition;
@@ -124,8 +125,8 @@ public class ControllerBattleAttack {
         
         // Obtener los tipos del Pokémon de la base de datos
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
-        
+        db.connect(selected_path);
+
         // Obtenemos el tipo (puede ser combinado)
         ArrayList<HashMap<String, Object>> results = db.query(
             "SELECT type FROM Pokemon WHERE id = " + idPokemon + ";");
@@ -518,7 +519,7 @@ public class ControllerBattleAttack {
      */
     private void loadAttacksFromDatabase() {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         ArrayList<HashMap<String, Object>> allAttacks = new ArrayList<>();
 
@@ -962,7 +963,7 @@ public class ControllerBattleAttack {
      */
     public void insertBattlePokemons() {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Obtener el último battle_id insertado
         ArrayList<HashMap<String, Object>> result = db.query("SELECT id FROM Battle ORDER BY id DESC LIMIT 1;");

@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.event.ActionEvent;
@@ -130,7 +131,7 @@ public class ControllerPokeSettings {
 
     private int getItemQuantityByName(String itemName) {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         String query = String.format(
             "SELECT ii.quantity " +
@@ -152,7 +153,7 @@ public class ControllerPokeSettings {
     @FXML
     private void updatePokemon(ActionEvent event) {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Obtener el nuevo nickname desde el TextField
         String newNickname = nicknameText.getText();
@@ -246,7 +247,7 @@ public class ControllerPokeSettings {
     private void updateItemQuantity(String itemName, int newQuantity) {
     
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         db.update(String.format(
             "UPDATE ItemInventory " +
@@ -259,7 +260,7 @@ public class ControllerPokeSettings {
 
     private void addItemEffectToPokemon(int pokemonId, String itemName) {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Obtener el id del item por su nombre usando AppData
         ArrayList<HashMap<String, Object>> result = db.query(
