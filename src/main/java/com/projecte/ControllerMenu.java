@@ -65,6 +65,8 @@ public class ControllerMenu implements Initializable {
     }
     
     public void toViewNewBattle(ActionEvent event) {
+        ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
+        ctrl.loadUnlockedPokemons();
         UtilsViews.setViewAnimating("ViewBattleOptions");
     }
 

@@ -483,7 +483,7 @@ public class ControllerBattleOptions implements Initializable {
         }
     }
 
-    private void loadUnlockedPokemons() {
+    public void loadUnlockedPokemons() {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
@@ -673,7 +673,7 @@ public class ControllerBattleOptions implements Initializable {
                     startButton.setDisable(false);
                     continueButton.setDisable(true);
                     disablePokemonSelection(false); // Habilitar selección de Pokémon
-                    loadUnlockedPokemons(); // Recargar Pokémon desbloqueados
+                    loadUnlockedPokemons(); // Recargar los Pokémon desbloqueados
                     break;
                 case STATUS_BATTLE_ENDED:
                     imgArrowBack.setDisable(false);
