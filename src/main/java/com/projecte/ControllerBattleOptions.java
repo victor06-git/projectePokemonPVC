@@ -77,6 +77,8 @@ public class ControllerBattleOptions implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Path imagePath = null;
+        // Cargar los Pokémon desbloqueados en los ChoiceBox y sus imágenes
+        loadUnlockedPokemons();
         try {
             URL imageURL = getClass().getResource("/assets/image/arrow-back.gif");
             Image image = new Image(imageURL.toExternalForm());
@@ -90,9 +92,6 @@ public class ControllerBattleOptions implements Initializable {
         if (!mapPaths.isEmpty()) {
             showCurrentMap();
         }
-
-        // Cargar los Pokémon desbloqueados en los ChoiceBox y sus imágenes
-        loadUnlockedPokemons();
         
     }
     
@@ -499,7 +498,7 @@ public class ControllerBattleOptions implements Initializable {
 
         // Ejecutar la consulta
         ArrayList<HashMap<String, Object>> unlockedPokemons = db.query(query);
-        System.out.println("Pokémon desbloqueados encontrados: " + unlockedPokemons.size());
+        //System.out.println("Pokémon desbloqueados encontrados: " + unlockedPokemons.size());
 
         // Limpiar los ChoiceBox antes de llenarlos
         choicePokemon1.getItems().clear();
@@ -688,7 +687,7 @@ public class ControllerBattleOptions implements Initializable {
         }
 
         // Método para restaurar el estado de la batalla para una nueva partida
-        private void resetBattleState() {
+        public void resetBattleState() {
             // Reiniciar el estado de los Pokémon
             pokemonStatus.clear();
             selectedPokemonIds.clear();
@@ -727,6 +726,8 @@ public class ControllerBattleOptions implements Initializable {
 
             // Reiniciar las variables de la batalla
             round = 1;
+            winner = null;
+            loadUnlockedPokemons(); // Recargar los Pokémon desbloqueados
         }
         
         /**

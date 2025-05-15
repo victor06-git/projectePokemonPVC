@@ -1,6 +1,5 @@
 package com.projecte;
 
-import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -30,6 +29,11 @@ public class ControllerMenu implements Initializable {
 
     @FXML
     private ImageView imgBackground;
+    
+    public static final String STATUS_BATTLE_STARTED = "battle_started";
+    public static final String STATUS_BATTLE_PREP = "battle_prep";
+    public static final String STATUS_BATTLE_ENDED = "battle_ended";
+    private int round = 1;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -58,6 +62,9 @@ public class ControllerMenu implements Initializable {
     }
     
     public void toViewNewBattle(ActionEvent event) {
+        ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
+        ctrl.resetBattleState();
+        ctrl.setBattleStatus(STATUS_BATTLE_PREP, round=1);
         UtilsViews.setViewAnimating("ViewBattleOptions");
     }
 
