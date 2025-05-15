@@ -66,6 +66,7 @@ public class ControllerBattleAttack {
     private String[] attackDamages;
     private String[] attackStaminaCosts;
     private int battleId; // ID de la batalla actual
+    private boolean run; // Variable para indicar si el jugador ha huido
 
     @FXML
     public void initialize() {
@@ -725,18 +726,23 @@ public class ControllerBattleAttack {
             runButton.setStyle("-fx-background-color: #ffcc00; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0); -fx-font-weight: bold;");
             
             ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+            ControllerBattleOptions ctrl2 = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
+            ctrl2.setBattleStatus(STATUS_BATTLE_ENDED, round);
+            
+            this.run = true;
+            ctrl.setRun(this.run);
+
             ctrl.setWinner("Computer");
             ctrl.setBattleId(battleId);
             ctrl.setFinalBattle(true); // Esto hará que se muestre BattleResult y no se sume XP
-            boolean run = true;
-            if (run) {
+            System.out.println("Valor run: " + this.run);
+            if (this.run) {
                 showAlert("¡Has huido de la batalla!", AlertType.INFORMATION);
             } else {
                 showAlert("¡No has podido huir de la batalla!", AlertType.INFORMATION);
             }
             // Cambiar a la vista de resultados de batalla
-            ctrl.setRun(run);
-            UtilsViews.setView("ViewBattleResult");
+            UtilsViews.setView("ViewAttackResult");
         });
         pause.play();
     }

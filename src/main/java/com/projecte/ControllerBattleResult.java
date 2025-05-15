@@ -43,12 +43,13 @@ public class ControllerBattleResult implements  Initializable{
     private int round = -1;
     private String winner;
     private int battleId;
-    private boolean run = false;
+    private boolean run;
     private int randomXP = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         URL imageURL = null;
+        System.out.println("Valor run: " + run);
         try {
             imageURL = getClass().getResource("/assets/result/finish.jpg");
             Image image = new Image(imageURL.toExternalForm());
@@ -58,8 +59,7 @@ public class ControllerBattleResult implements  Initializable{
             e.printStackTrace();
         }
     }
-    
-    
+
     @FXML
     private void toContinue(ActionEvent event) {
         // Acción al hacer clic en el botón "Recoger recompensas"
@@ -79,7 +79,7 @@ public class ControllerBattleResult implements  Initializable{
     }
 
     public void setRun(boolean run) {
-        if (run) {
+        if (!run) {
             buttonContinue.setText("Recoger recompensas");
             this.run = run;
         } else {
@@ -125,7 +125,6 @@ public class ControllerBattleResult implements  Initializable{
      * @return Una lista con los dos Pokémon seleccionados.
      */
     public ArrayList<HashMap<String, Object>> unlockTwoRandomPokemons() {
-        if (run) return new ArrayList<>(); //No consigue nada si ha huido
 
         AppData db = AppData.getInstance();
         db.connect(selected_path);
@@ -177,7 +176,6 @@ public class ControllerBattleResult implements  Initializable{
          * @return El ítem desbloqueado.
          */
         public void unlockRandomItem() {
-            if (run) return; //No consigue nada si ha huido
 
             AppData db = AppData.getInstance();
             db.connect(selected_path);
@@ -231,22 +229,22 @@ public class ControllerBattleResult implements  Initializable{
         }        
 
         public void updateGameStatsWithRandomXP() {
-            
-            if (run){
-                xpLabel.setText("+ 0 XP");
-                return; //No consigue nada si ha huido
-            } 
 
+            if (run){
+                xpLabel.setText("Sin XP");
+                System.out.println(run);
+                return;
+            } //No consigue nada si ha huido
+
+            // Conectar a la base de datos
             AppData db = AppData.getInstance();
             db.connect(selected_path);
 
             // Generar un número aleatorio entre 500 y 1000
             Random random = new Random();
-            if (run) {
-                this.randomXP = 0;
-            } else {
-                this.randomXP = random.nextInt(501) + 500; // 501 para incluir 1000 como límite superior
-            }
+            
+            this.randomXP = random.nextInt(501) + 500; // 501 para incluir 1000 como límite superior
+            
              
             // Obtener el último resultado de la tabla Battle
             ArrayList<HashMap<String, Object>> battles = db.query(
@@ -333,6 +331,23 @@ public class ControllerBattleResult implements  Initializable{
             db.update(update);
 
             db.close();
+        }
+
+        public int getCurrentLevelFromDB() {
+            AppData db = AppData.getInstance();
+            db.connect(selected_path);
+
+            int level = 0;
+            ArrayList<HashMap<String, Object>> result = db.query(
+                "SELECT total_experience FROM GameStats WHERE id = 1"
+            );
+            if (!result.isEmpty()) {
+                int totalXP = ((Number) result.get(0).get("total_experience")).intValue();
+                level = totalXP / 1000; // Cada 1000 XP es un nivel
+            }
+
+            db.close();
+            return level;
         }
 
 }
