@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.event.ActionEvent;
@@ -35,16 +36,11 @@ public class ControllerBattleResult {
 
     private int round = -1;
     private String winner;
-    private int totalExperience;
-    private int battlesPlayed;
-    private int maxWinStreak;
-    private int pokemonsCaught;
-    private int level;
+    
     
     @FXML
     private void toContinue(ActionEvent event) {
         // Acción al hacer clic en el botón "Recoger recompensas"
-        loadGameStats();
         UtilsViews.setView("ViewMenu");
         ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
         ctrl.setBattleStatus(STATUS_BATTLE_ENDED, round);
@@ -93,7 +89,7 @@ public class ControllerBattleResult {
      */
     public ArrayList<HashMap<String, Object>> unlockTwoRandomPokemons() {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Consulta para obtener todos los Pokémon no desbloqueados
         ArrayList<java.util.HashMap<String, Object>> lockedPokemons = db.query(
@@ -143,7 +139,7 @@ public class ControllerBattleResult {
          */
         public void unlockRandomItem() {
             AppData db = AppData.getInstance();
-            db.connect("./data/pokemons.sqlite");
+            db.connect(selected_path);
         
             Random random = new Random();
         
@@ -195,7 +191,7 @@ public class ControllerBattleResult {
 
         public void updateGameStatsWithRandomXP() {
             AppData db = AppData.getInstance();
-            db.connect("./data/pokemons.sqlite");
+            db.connect(selected_path);
 
             // Generar un número aleatorio entre 500 y 1000
             Random random = new Random();
@@ -270,32 +266,6 @@ public class ControllerBattleResult {
 
             levelBar.setProgress(progress);
             levelLabel.setText("Nivel: " + level);            
-        }
-
-
-        public void loadGameStats() {
-            AppData db = AppData.getInstance();
-            db.connect("./data/pokemons.sqlite");
-
-            ArrayList<HashMap<String, Object>> stats = db.query(
-                "SELECT total_experience, battles_played, max_win_streak FROM GameStats WHERE id = 1"
-            );
-            ArrayList<HashMap<String, Object>> caught = db.query(
-                "SELECT COUNT(*) as total_caught FROM PlayerPokemon WHERE unlocked = 1"
-            );
-
-            if (!stats.isEmpty()) {
-                HashMap<String, Object> el = stats.get(0);
-                totalExperience = ((Number) el.get("total_experience")).intValue();
-                battlesPlayed = ((Number) el.get("battles_played")).intValue();
-                maxWinStreak = ((Number) el.get("max_win_streak")).intValue();
-                level = totalExperience / 1000;
-            }
-            if (!caught.isEmpty()) {
-                pokemonsCaught = ((Number) caught.get(0).get("total_caught")).intValue();
-            }
-
-            db.close();
         }
 
 }
