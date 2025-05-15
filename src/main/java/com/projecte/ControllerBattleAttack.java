@@ -1016,4 +1016,41 @@ public class ControllerBattleAttack {
         db.close();
     }
 
+    //Pruebas tipo efectividad
+    private List<String> getPokemonTypes(int pokemonId) {
+        AppData db = AppData.getInstance();
+        db.connect(selected_path);
+        ArrayList<HashMap<String, Object>> result = db.query(
+            "SELECT type FROM Pokemon WHERE id = " + pokemonId + ";"
+        );
+        db.close();
+        List<String> types = new ArrayList<>();
+        if (!result.isEmpty()) {
+            String typeStr = (String) result.get(0).get("type");
+            if (typeStr != null) {
+                for (String t : typeStr.split("/")) {
+                    types.add(t.trim());
+                }
+            }
+        }
+        return types;
+    }
+
+    private double getTypeEffectiveness(String attackType, String defenderType) {
+        AppData db = AppData.getInstance();
+        db.connect(selected_path);
+        String query = String.format(
+            "SELECT effectiveness FROM typeEffectiveness WHERE attack_type = '%s' AND defense_type = '%s';",
+            attackType, defenderType
+        );
+        ArrayList<HashMap<String, Object>> result = db.query(query);
+        db.close();
+        if (!result.isEmpty()) {
+            return ((Number) result.get(0).get("effectiveness")).doubleValue();
+        }
+        return 1.0; // Por defecto, normal
+    }
+
+    
+
 }
