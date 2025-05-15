@@ -55,7 +55,7 @@ public class ControllerAttackResult {
         this.finalBattle = finalBattle;
         if (finalBattle) {
             buttonContinue.setText("Finalizar");
-            System.out.println("Valor run " + run);
+            //System.out.println("Valor run " + run);
             UtilsViews.setView("ViewBattleResult");
             ControllerBattleResult ctrl = (ControllerBattleResult) UtilsViews.getController("ViewBattleResult");
             ctrl.setRound(this.round);
