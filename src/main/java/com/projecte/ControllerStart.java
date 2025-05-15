@@ -35,33 +35,11 @@ public class ControllerStart extends BuildDatabase implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //System.out.println("Pantalla de inicio cargada");
 
-        // Solo cargar imagen, nada de cargar vistas aquí
-        String imagePath = "data/pokemonstarts.png";
-        File file = new File(imagePath);
-        
-        rootPane.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-            double newHeight = newWidth.doubleValue() * 9 / 16;
-            if (rootPane.getPrefHeight() != newHeight) {
-                rootPane.setPrefHeight(newHeight);
-            }
-        });
+        URL imageURL = getClass().getResource("/assets/image/pokemonstart.png");
+        Image image = new Image(imageURL.toExternalForm());
+        pokemonImage.setImage(image);
 
-        rootPane.heightProperty().addListener((obs, oldHeight, newHeight) -> {
-            double newWidth = newHeight.doubleValue() * 16 / 9;
-            if (rootPane.getPrefWidth() != newWidth) {
-                rootPane.setPrefWidth(newWidth);
-            }
-        });
-
-
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            pokemonImage.setImage(image);
-        } else {
-            System.out.println("Imagen no encontrada");
-        }
     }
 
     @FXML

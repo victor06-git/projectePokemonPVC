@@ -18,26 +18,25 @@
       </children>
    </HBox>
 
-    <!-- Contenido sobre la imagen -->
-    <VBox fx:id="mainVBox" alignment="CENTER" prefHeight="540.0" prefWidth="960.0" spacing="25" StackPane.alignment="CENTER">
+     <!-- Botones con padding -->
+     <VBox alignment="CENTER_LEFT" fillWidth="true" spacing="15">
         
-        <!-- Título del juego -->
+           <!-- Título del juego -->
         <Label text="Pokémon PvC">
             <font>
                 <Font name="Arial Bold" size="40" />
             </font>
         </Label>
-
-        <!-- Botones con padding -->
-        <VBox alignment="CENTER" fillWidth="true" spacing="15">
-            <VBox.margin>
-                <Insets bottom="40" left="60" right="60" top="40" />
-            </VBox.margin>
-            
+   
+       <!-- Contenido sobre la imagen -->
+       <VBox fx:id="mainVBox" alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="376.0" spacing="25" />
+         
             <Button maxWidth="250" onAction="#newGame" text="Nueva Partida" />
-            <Button maxWidth="250" onAction="#openGame" text="Cargar Partida" />
-            <Button fx:id="continueButton" maxWidth="250" onAction="#continueGame" text="Continuar" visible="false" />
-            <Button maxWidth="250" onAction="#exitGame" text="Salir" />
-        </VBox>
-    </VBox>
+         <Button maxWidth="250" onAction="#openGame" text="Cargar Partida" />
+         <Button fx:id="continueButton" maxWidth="250" onAction="#continueGame" text="Continuar" visible="false" />
+         <Button maxWidth="250" onAction="#exitGame" text="Salir" />
+      <StackPane.margin>
+         <Insets bottom="35.0" left="35.0" right="35.0" top="35.0" />
+      </StackPane.margin>
+     </VBox>
 </StackPane>
