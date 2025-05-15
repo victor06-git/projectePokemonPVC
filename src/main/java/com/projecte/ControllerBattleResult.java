@@ -69,7 +69,7 @@ public class ControllerBattleResult implements  Initializable{
         ControllerBattleAttack ctrlAttack = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
         ctrl.setBattleStatus(STATUS_BATTLE_ENDED, round);
         ctrl.setBattleStatus(STATUS_BATTLE_PREP, round = 1);
-        updateBattleWinner(battleId, winner);
+        updateBattleWinner(winner);
         ctrl.resetBattleState();
         ctrlAttack.resetBattleAttackState();
         ctrl_2.setFinalBattle(false);
@@ -325,15 +325,20 @@ public class ControllerBattleResult implements  Initializable{
             levelLabel.setText("Nivel: " + level);            
         }
 
-        public void updateBattleWinner(int battleId, String winner) {
+        public void updateBattleWinner(String winner) {
             AppData db = AppData.getInstance();
             db.connect(selected_path);
 
-            String update = String.format(
-                "UPDATE Battle SET winner = '%s' WHERE id = %d;",
-                winner, battleId
-            );
-            db.update(update);
+            // Obtener el id de la última batalla registrada
+            ArrayList<HashMap<String, Object>> result = db.query("SELECT id FROM Battle ORDER BY id DESC LIMIT 1;");
+            if (!result.isEmpty()) {
+                int lastBattleId = ((Number) result.get(0).get("id")).intValue();
+                String update = String.format(
+                    "UPDATE Battle SET winner = '%s' WHERE id = %d;",
+                    winner, lastBattleId
+                );
+                db.update(update);
+            }
 
             db.close();
         }
