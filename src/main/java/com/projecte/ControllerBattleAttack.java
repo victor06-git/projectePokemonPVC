@@ -158,11 +158,10 @@ public class ControllerBattleAttack {
         System.out.println("Parsed types for Pokémon ID " + idPokemon + ": " + types); // Debugging output
         setPokemonTypes(types);
     }
-    
-    
 
     public void setPokemonTypes(List<String> types) {
         this.pokemonTypes = new ArrayList<>(types);
+        System.out.println("Tipos del Pokémon: " + this.pokemonTypes); // Debugging output
         loadAttacksFromDatabase();
     }
 
@@ -524,7 +523,7 @@ public class ControllerBattleAttack {
      * Para Pokémon con dos tipos: 2 ataques de cada tipo.
      * Para Pokémon con un tipo: 4 ataques de ese tipo.
      */
-    private void loadAttacksFromDatabase() {
+    public void loadAttacksFromDatabase() {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
@@ -537,13 +536,14 @@ public class ControllerBattleAttack {
                 FROM PokemonAttack pa
                 JOIN Attack a ON pa.attack_id = a.id
                 WHERE pa.pokemon_id = ?
-                """;
+            """;
             ArrayList<HashMap<String, Object>> definedAttacks = db.query(
                 query.replace("?", String.valueOf(idPokemon))
             );
 
             if (!definedAttacks.isEmpty()) {
                 allAttacks.addAll(definedAttacks);
+                System.out.println("Attacks defined in PokemonAttack: " + allAttacks);
             }
         }
 
@@ -592,12 +592,18 @@ public class ControllerBattleAttack {
             attackStaminaCosts[i] = String.valueOf(attack.get("stamina_cost"));
         }
 
+        setMove1(attackNames[0]);
+        setMove2(attackNames[1]);
+        setMove3(attackNames[2]);
+        setMove4(attackNames[3]);
+
         db.close();
 
         if (numAttacks > 0) setMove1(attackNames[0]);
         if (numAttacks > 1) setMove2(attackNames[1]);
         if (numAttacks > 2) setMove3(attackNames[2]);
         if (numAttacks > 3) setMove4(attackNames[3]);
+        System.out.println(numAttacks + " attacks loaded: " + attackNames[0] + ", " + attackNames[1] + ", " + attackNames[2] + ", " + attackNames[3]);
     }
         /**
          * Actualiza la información mostrada para el ataque seleccionado
