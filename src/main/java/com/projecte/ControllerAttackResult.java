@@ -22,7 +22,7 @@ public class ControllerAttackResult {
 
     private int battleId;
 
-    private boolean run = false;
+    private boolean run;
 
     @FXML
     private void initialize() {
@@ -55,13 +55,20 @@ public class ControllerAttackResult {
         this.finalBattle = finalBattle;
         if (finalBattle) {
             buttonContinue.setText("Finalizar");
+            //System.out.println("Valor run " + run);
             UtilsViews.setView("ViewBattleResult");
             ControllerBattleResult ctrl = (ControllerBattleResult) UtilsViews.getController("ViewBattleResult");
             ctrl.setRound(this.round);
-            ctrl.unlockTwoRandomPokemons();
-            ctrl.unlockRandomItem();
-            ctrl.updateGameStatsWithRandomXP();
-            ctrl.setRun(run);
+            ctrl.setRun(this.run);
+            if (!run) {
+                ctrl.unlockTwoRandomPokemons();
+                ctrl.unlockRandomItem();
+                ctrl.updateGameStatsWithRandomXP();
+            } else {
+                int level = ctrl.getCurrentLevelFromDB();
+                ctrl.setLevelProgressBar(level);
+            }
+            
         } else {
             buttonContinue.setText("Continuar");
         }

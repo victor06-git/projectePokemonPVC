@@ -35,8 +35,6 @@ public class ControllerMenu implements Initializable {
     public static final String STATUS_BATTLE_ENDED = "battle_ended";
     private int round = 1;
     
-    
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Path imagePath = null;
@@ -66,8 +64,11 @@ public class ControllerMenu implements Initializable {
     
     public void toViewNewBattle(ActionEvent event) {
         ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
+        ControllerBattleAttack ctrlAttacks = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
         ctrl.loadUnlockedPokemons();
         ctrl.setBattleStatus(STATUS_BATTLE_PREP, round = 1);
+        ctrlAttacks.resetBattleAttackState();
+        ctrl.resetBattleState();
         UtilsViews.setViewAnimating("ViewBattleOptions");
     }
 
