@@ -10,10 +10,10 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 
-    final int WINDOW_WIDTH = 600;
-    final int WINDOW_HEIGHT = 450;
-    final int MIN_WIDTH = 600;
-    final int MIN_HEIGHT = 450;
+    final int WINDOW_WIDTH = 1920;
+    final int WINDOW_HEIGHT = 1080;
+    final int MIN_WIDTH = 960;
+    final int MIN_HEIGHT = 540;
 
     @Override
     public void start(Stage stage) throws Exception {

@@ -4,20 +4,22 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerStart">
-
-    <!-- Imagen de fondo escalable -->
-    <ImageView fx:id="pokemonImage" pickOnBounds="true" preserveRatio="false" StackPane.alignment="CENTER">
-      <StackPane.margin>
-         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-      </StackPane.margin></ImageView>
+<StackPane fx:id="rootPane" minHeight="540.0" minWidth="960.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerStart">
+   <HBox maxHeight="1080.0" maxWidth="1920.0">
+      <children>
+      
+          <!-- Imagen de fondo escalable -->
+          <ImageView fx:id="pokemonImage" pickOnBounds="true" preserveRatio="true" />
+      </children>
+   </HBox>
 
     <!-- Contenido sobre la imagen -->
-    <VBox fx:id="mainVBox" alignment="CENTER" spacing="25" StackPane.alignment="CENTER">
+    <VBox fx:id="mainVBox" alignment="CENTER" prefHeight="540.0" prefWidth="960.0" spacing="25" StackPane.alignment="CENTER">
         
         <!-- Título del juego -->
         <Label text="Pokémon PvC">

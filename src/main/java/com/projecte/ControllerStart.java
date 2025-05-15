@@ -38,12 +38,24 @@ public class ControllerStart extends BuildDatabase implements Initializable {
         //System.out.println("Pantalla de inicio cargada");
 
         // Solo cargar imagen, nada de cargar vistas aquí
-        String imagePath = "data/pokemonstart.png";
+        String imagePath = "data/pokemonstarts.png";
         File file = new File(imagePath);
         
-       // pokemonImage.fitWidthProperty().bind(rootPane.widthProperty());
-       // pokemonImage.fitHeightProperty().bind(rootPane.heightProperty());
-        
+        rootPane.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            double newHeight = newWidth.doubleValue() * 9 / 16;
+            if (rootPane.getPrefHeight() != newHeight) {
+                rootPane.setPrefHeight(newHeight);
+            }
+        });
+
+        rootPane.heightProperty().addListener((obs, oldHeight, newHeight) -> {
+            double newWidth = newHeight.doubleValue() * 16 / 9;
+            if (rootPane.getPrefWidth() != newWidth) {
+                rootPane.setPrefWidth(newWidth);
+            }
+        });
+
+
         if (file.exists()) {
             Image image = new Image(file.toURI().toString());
             pokemonImage.setImage(image);
