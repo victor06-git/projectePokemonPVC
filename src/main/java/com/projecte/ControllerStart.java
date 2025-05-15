@@ -11,14 +11,20 @@ import com.utils.UtilsViews;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 
 public class ControllerStart extends BuildDatabase implements Initializable {
+
+    @FXML
+    private StackPane rootPane;
 
     @FXML
     private ImageView pokemonImage;
@@ -34,6 +40,9 @@ public class ControllerStart extends BuildDatabase implements Initializable {
         // Solo cargar imagen, nada de cargar vistas aquí
         String imagePath = "data/pokemonstart.png";
         File file = new File(imagePath);
+        
+       // pokemonImage.fitWidthProperty().bind(rootPane.widthProperty());
+       // pokemonImage.fitHeightProperty().bind(rootPane.heightProperty());
         
         if (file.exists()) {
             Image image = new Image(file.toURI().toString());
