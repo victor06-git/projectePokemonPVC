@@ -12,8 +12,8 @@ public class Main extends Application {
 
     final int WINDOW_WIDTH = 1920;
     final int WINDOW_HEIGHT = 1080;
-    final int MIN_WIDTH = 960;
-    final int MIN_HEIGHT = 540;
+    final int MIN_WIDTH = 600;
+    final int MIN_HEIGHT = 400;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -31,7 +31,7 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "ViewBattleResult", "/assets/viewBattleResult.fxml");
         UtilsViews.addView(getClass(), "ViewHistory", "/assets/viewHistory.fxml");
 
-        UtilsViews.setView("ViewBattleOptions"); // Vista inicial
+        UtilsViews.setView("ViewMenu"); // Vista inicial
 
         //ControllerManagement ctrl = (ControllerManagement) UtilsViews.getController("ViewManagement");
         //int number = 1; //Número del Pokemon a cargar

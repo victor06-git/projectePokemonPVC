@@ -13,13 +13,13 @@
    <HBox maxHeight="1080.0" maxWidth="1920.0">
       <children>
       
-          <!-- Imagen de fondo escalable -->
+                <!-- Imagen de fondo escalable -->
           <ImageView fx:id="pokemonImage" pickOnBounds="true" preserveRatio="true" />
       </children>
    </HBox>
 
      <!-- Botones con padding -->
-     <VBox alignment="CENTER_LEFT" fillWidth="true" spacing="15">
+     <VBox alignment="CENTER" fillWidth="true" spacing="15">
         
            <!-- Título del juego -->
         <Label text="Pokémon PvC">
@@ -36,7 +36,7 @@
          <Button fx:id="continueButton" maxWidth="250" onAction="#continueGame" text="Continuar" visible="false" />
          <Button maxWidth="250" onAction="#exitGame" text="Salir" />
       <StackPane.margin>
-         <Insets bottom="35.0" left="35.0" right="35.0" top="35.0" />
+         <Insets />
       </StackPane.margin>
      </VBox>
 </StackPane>
