@@ -48,6 +48,7 @@ public class ControllerBattleResult {
         UtilsViews.setView("ViewMenu");
         ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
         ctrl.setBattleStatus(STATUS_BATTLE_ENDED, round);
+        ctrl.setBattleStatus(STATUS_BATTLE_PREP, round = 1);
     }
 
     public void setRound(int round) {
