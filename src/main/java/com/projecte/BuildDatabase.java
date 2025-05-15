@@ -102,7 +102,7 @@ public class BuildDatabase {
                     int stamina = random.nextInt(100) + 1;
                     int unlocked = unlockedIds.contains(id) ? 1 : 0;
                     db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
-                            id + "', " + maxHp + ", " + attack + ", " + stamina + ", " + unlocked + ");");
+                            id + ", " + maxHp + ", " + attack + ", " + stamina + ", " + unlocked + ");");
                 }
             }
         }
