@@ -99,7 +99,7 @@ public class BuildDatabase {
                     usedIds.add(id);
                     int maxHp = random.nextInt(100) + 1;
                     int attack = random.nextInt(100) + 1;
-                    int stamina = random.nextInt(100) + 1;
+                    int stamina = random.nextInt(50) + 1;
                     int unlocked = unlockedIds.contains(id) ? 1 : 0;
                     db.update("INSERT INTO PlayerPokemon (pokemon_id, max_hp, attack, stamina, unlocked) VALUES (" +
                             id + ", " + maxHp + ", " + attack + ", " + stamina + ", " + unlocked + ");");
@@ -642,7 +642,8 @@ public class BuildDatabase {
         db.update("DELETE FROM PokemonAttack;");
         
         // Luego el resto de la lógica original
-        ArrayList<HashMap<String, Object>> pokeTypes = db.query("SELECT id, type FROM Pokemon");        ArrayList<HashMap<String, Object>> attackTypes = db.query("SELECT id, type FROM Attack");
+        ArrayList<HashMap<String, Object>> pokeTypes = db.query("SELECT id, type FROM Pokemon");        
+        ArrayList<HashMap<String, Object>> attackTypes = db.query("SELECT id, type FROM Attack");
         Random rand = new Random();
         
         for (HashMap<String, Object> pokeType : pokeTypes) {

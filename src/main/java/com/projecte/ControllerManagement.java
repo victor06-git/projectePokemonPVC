@@ -60,7 +60,8 @@ public class ControllerManagement implements Initializable {
     @FXML
     private ImageView imgBackArrow; //Imagen para retroceder de vista
 
-
+    @FXML
+    private ImageView imgPokeManagement;
     @FXML
     private ImageView imgPokemon;
 
@@ -81,7 +82,10 @@ public class ControllerManagement implements Initializable {
             Image image = new Image(imageURL.toExternalForm());
             imgBackArrow.setImage(image);
 
-            
+            URL backgroundUrl = getClass().getResource("/assets/image/pokemonmanagement.png");
+            Image img = new Image(backgroundUrl.toExternalForm());
+            imgPokeManagement.setImage(img);
+
 
 
         } catch (Exception e) {
