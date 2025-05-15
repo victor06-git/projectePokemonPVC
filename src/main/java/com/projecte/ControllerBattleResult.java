@@ -197,8 +197,7 @@ public class ControllerBattleResult implements  Initializable{
                     // Para cada item, 50% de probabilidad de desbloquearlo
                     if (random.nextBoolean()) {
                         // Actualizar el inventario de ítems
-                        db.update("INSERT INTO ItemInventory (item_id, quantity) VALUES (" + itemId + ", 1) " +
-                                "ON CONFLICT(item_id) DO UPDATE SET quantity = quantity + 1;");
+                        db.update("UPDATE ItemInventory SET quantity = quantity + 1 WHERE item_id = " + itemId + ";");
 
                         if (itemName.equalsIgnoreCase("X_Attack")) {
                             item1.setText("XAttack + 1");

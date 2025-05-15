@@ -67,6 +67,7 @@ public class ControllerBattleAttack {
     private String[] attackStaminaCosts;
     private int battleId; // ID de la batalla actual
     private boolean run; // Variable para indicar si el jugador ha huido
+    private Double typeEffectiveness = 1.0; // Variable para almacenar la efectividad del tipo
 
     @FXML
     public void initialize() {
@@ -632,10 +633,21 @@ public class ControllerBattleAttack {
 
         System.out.println("Using move: " + moves[selectedMove].getText());
         updateAttackInfo(selectedMove);
+
+        int enemyID = enemyPokemonIds.get(0);
+        String enemyType = getPokemonTypes(enemyID).get(0);
+        String attackType = attackTypes[selectedMove];
+
+        this.typeEffectiveness = getTypeEffectiveness(attackType, enemyType);
+        if (this.typeEffectiveness != null) {
+            System.out.println("Efectividad del ataque: " + this.typeEffectiveness);
+        } else {
+            System.out.println("No se pudo calcular la efectividad del ataque.");
+        }
         
         String damageStr = attackDamageLabel.getText().replace("Daño: ", "").trim();
         String staminaStr = estaminaLabel.getText().replace("Estamina: ", "").trim();
-        double damage = Double.parseDouble(damageStr);
+        double damage = Double.parseDouble(damageStr) * this.typeEffectiveness;
         double staminaConsumed = Double.parseDouble(staminaStr);
         
         double currentEnemyHp = enemyHpBar.getProgress();
@@ -880,20 +892,34 @@ public class ControllerBattleAttack {
 
         Random random = new Random();
 
-        // 20% de probabilidad de fallo
-        boolean attackFails = random.nextDouble() < 0.2;
+        // 40% de probabilidad de fallo
+        boolean attackFails = random.nextDouble() < 0.4;
         if (attackFails) {
             showAlert("¡El ataque del enemigo ha fallado!", AlertType.INFORMATION);
             return;
         }
 
+        int enemyID = enemyPokemonIds.get(0);
+        String enemyType = getPokemonTypes(enemyID).get(0); // Obtener el primer tipo del Pokémon enemigo
+        String attackType = getPokemonTypes(idPokemon).get(0); // Obtener el tipo del ataque
+        // Aquí puedes agregar lógica para calcular el daño basado en tipos
+
+        this.typeEffectiveness = getTypeEffectiveness(attackType, enemyType);
+        
+        if (this.typeEffectiveness != null) {
+            System.out.println("Efectividad del ataque: " + this.typeEffectiveness);
+        } else {
+            System.out.println("No se pudo calcular la efectividad del ataque.");
+        }
         // Daño aleatorio entre 50 y 100
         int damage = random.nextInt(51) + 50;
+        Double finalDamage = damage * this.typeEffectiveness;
+        System.out.println("Daño infligido: " + finalDamage);
         // Estamina consumida proporcional al daño (puedes ajustar la fórmula)
-        double staminaConsumed = damage / 2.0;
+        double staminaConsumed = damage / 2.5;
 
         double currentPlayerHp = playerHpBar.getProgress();
-        double newPlayerHp = currentPlayerHp - (damage / 100.0);
+        double newPlayerHp = currentPlayerHp - (finalDamage / 100.0);
         newPlayerHp = Math.max(newPlayerHp, 0);
         playerHpBar.setProgress(newPlayerHp);
         setHpPlayer((int)(newPlayerHp * 100) + "/ 100");
@@ -1040,17 +1066,15 @@ public class ControllerBattleAttack {
         AppData db = AppData.getInstance();
         db.connect(selected_path);
         String query = String.format(
-            "SELECT effectiveness FROM typeEffectiveness WHERE attack_type = '%s' AND defense_type = '%s';",
+            "SELECT multiplier FROM typeEffectiveness WHERE attack_type = '%s' AND target_type = '%s';",
             attackType, defenderType
         );
         ArrayList<HashMap<String, Object>> result = db.query(query);
         db.close();
         if (!result.isEmpty()) {
-            return ((Number) result.get(0).get("effectiveness")).doubleValue();
+            return ((Number) result.get(0).get("multiplier")).doubleValue();
         }
-        return 1.0; // Por defecto, normal
+        return 1.0; //Default effectiveness
     }
-
-    
 
 }
