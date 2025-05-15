@@ -20,6 +20,10 @@ public class ControllerAttackResult {
 
     private String winner;
 
+    private int battleId;
+
+    private boolean run;
+
     @FXML
     private void initialize() {
         
@@ -34,6 +38,14 @@ public class ControllerAttackResult {
         hpPlayer.setText(hp);
     }
 
+    public void setBattleId(int battleId) {
+        this.battleId = battleId;
+    }
+
+    public void setRun(boolean run) {
+        this.run = run;
+    }
+
     /**
      * Método para establecer si es la batalla final.
      * 
@@ -43,12 +55,20 @@ public class ControllerAttackResult {
         this.finalBattle = finalBattle;
         if (finalBattle) {
             buttonContinue.setText("Finalizar");
+            //System.out.println("Valor run " + run);
             UtilsViews.setView("ViewBattleResult");
             ControllerBattleResult ctrl = (ControllerBattleResult) UtilsViews.getController("ViewBattleResult");
             ctrl.setRound(this.round);
-            ctrl.unlockTwoRandomPokemons();
-            ctrl.unlockRandomItem();
-            ctrl.updateGameStatsWithRandomXP();
+            ctrl.setRun(this.run);
+            if (!run) {
+                ctrl.unlockTwoRandomPokemons();
+                ctrl.unlockRandomItem();
+                ctrl.updateGameStatsWithRandomXP();
+            } else {
+                int level = ctrl.getCurrentLevelFromDB();
+                ctrl.setLevelProgressBar(level);
+            }
+            
         } else {
             buttonContinue.setText("Continuar");
         }
@@ -63,6 +83,7 @@ public class ControllerAttackResult {
         } else {
             hpPlayer.setText("Perdedor: " + winner);
         }
+        ctrl.setBattleId(battleId);
     }
     
     public void setEstaminaPlayer(String estamina) {

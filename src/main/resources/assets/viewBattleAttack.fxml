@@ -4,219 +4,226 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.effect.InnerShadow?>
-<?import javafx.scene.effect.SepiaTone?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2b2b2b;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleAttack"> 
-   <Pane layoutX="-1.0" layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="405.0" prefWidth="606.0"> 
+<StackPane fx:id="rootPane" minHeight="540.0" minWidth="960.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerBattleAttack">
+<!-- Fondo -->
+<ImageView fx:id="backgroundImage" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+   <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="540.0" prefWidth="761.0" spacing="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-      <!-- Fondo -->
-      <ImageView fx:id="backgroundImage" fitHeight="405.0" fitWidth="606.0" layoutX="-2.0" pickOnBounds="true" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="82.0" layoutY="32.0" stroke="BLACK" strokeType="INSIDE" width="254.0">
-            <effect>
-               <InnerShadow>
-                  <input>
-                     <DropShadow>
-                        <input>
-                           <SepiaTone />
-                        </input>
-                     </DropShadow>
-                  </input>
-               </InnerShadow>
-            </effect></Rectangle>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="82.0" layoutX="370.0" layoutY="266.0" stroke="BLACK" strokeType="INSIDE" width="232.0">
-            <effect>
-               <InnerShadow>
-                  <input>
-                     <SepiaTone>
-                        <input>
-                           <DropShadow />
-                        </input>
-                     </SepiaTone>
-                  </input>
-               </InnerShadow>
-            </effect></Rectangle>
-
-  
-
-      <!-- Botones de acciones principales -->
-
-      <HBox alignment="CENTER" layoutX="394.0" layoutY="352.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="33.0" prefWidth="176.0" spacing="5.0">
-          <Button fx:id="fightButton" onAction="#fightButtonAction" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="ATACAR" />
-          <Button fx:id="runButton" onAction="#runButtonAction" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="RENDIRSE" />
-      </HBox>
-
-  
-
-  
-
-      <!-- Panel de movimientos del Pokémon (abajo a la derecha) -->
-
-      <VBox fx:id="movePanel" alignment="CENTER_RIGHT" layoutX="217.0" layoutY="268.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="115.0" prefWidth="144.0" spacing="1.0" style="-fx-background-color: #1a1a1a; -fx-border-color: white; -fx-border-width: 2;" visible="true">
-
-          <Label fx:id="move1" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="➤  Quick Attack">
-
-           <font>
-
-              <Font size="10.0" />
-
-           </font></Label>
-
-          <Label fx:id="move2" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Wing Slash">
-
-           <font>
-
-              <Font size="10.0" />
-
-           </font></Label>
-
-          <Label fx:id="move3" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Gust">
-
-           <font>
-
-              <Font size="10.0" />
-
-           </font></Label>
-
-          <Label fx:id="move4" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Focus Energy">
-
-           <font>
-
-              <Font size="10.0" />
-
-           </font></Label>
-
-        <padding>
-
-           <Insets left="7.0" right="7.0" />
-
-        </padding>
-
-      </VBox>
-
-  
-
-                  <!-- Panel de Pokémon Enemigo -->
-
-      <VBox alignment="CENTER" layoutX="38.0" layoutY="40.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="211.0" spacing="2.5">
-
-          <Label fx:id="computerPokemonLabel" style="-fx-text-fill: black; -fx-font-weight: bold;" text="Charizard Lv15" />
-
-          <HBox alignment="CENTER" spacing="5">
-
-              <Label style="-fx-text-fill: black;" text="HP:" />
-
-              <ProgressBar fx:id="enemyHpBar" prefWidth="100" progress="0.6" style="-fx-accent: green;" />
-
-           <Label fx:id="hpComputer" prefHeight="18.0" prefWidth="65.0" text="70/100" textFill="BLACK" />
-
-          </HBox>
-
-          <HBox alignment="CENTER" spacing="5">
-
-              <Label style="-fx-text-fill: black;" text="ST:" />
-
-              <ProgressBar fx:id="enemyStaminaBar" prefWidth="100" progress="0.5" style="-fx-accent: blue;" />
-
-           <Label fx:id="estamineComputer" prefHeight="18.0" prefWidth="62.0" text="55/100" textFill="BLACK" />
-
-          </HBox>
-
-      </VBox>
-
-  
-
-                    
-
-      <!-- Panel de Pokémon del Jugador -->
-
-      <VBox alignment="CENTER" layoutX="379.0" layoutY="275.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="211.0" spacing="2.5">
-
-          <Label fx:id="playerPokemonLabel" style="-fx-text-fill: black; -fx-font-weight: bold;" text="Moltres  Lv19" />
-
-          <HBox alignment="CENTER" spacing="5">
-
-              <Label style="-fx-text-fill: black;" text="HP:" />
-
-              <ProgressBar fx:id="playerHpBar" prefWidth="100" progress="1.0" style="-fx-accent: green;" />
-
-           <Label fx:id="hpPlayer" prefHeight="18.0" prefWidth="59.0" text="100/100" textFill="BLACK" />
-
-          </HBox>
-
-          <HBox alignment="CENTER" spacing="5">
-
-              <Label style="-fx-text-fill: black;" text="ST:" />
-
-              <ProgressBar fx:id="playerStaminaBar" prefWidth="100" progress="0.76" style="-fx-accent: blue;" />
-
-           <Label fx:id="estaminePlayer" prefHeight="18.0" prefWidth="59.0" text="100/100" textFill="BLACK" />
-
-          </HBox>
-
-      </VBox>
-
+         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+            <children>
+      
               
             
-                  <!-- Sección para información detallada del ataque seleccionado -->
-
-                  <VBox fx:id="attackInfoPanel" layoutX="14.0" layoutY="307.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="79.0" prefWidth="190.0" spacing="7.0" style="-fx-background-color: #1a1a1a; -fx-border-color: white; -fx-border-width: 2;" visible="true">
-                      <Label fx:id="attackNameLabel" style="-fx-text-fill: yellow; -fx-font-family: 'Courier New'; -fx-font-size: 14px;" text="Quick Attack" textFill="#d8eb09">
-                       <font>
-                          <Font size="10.0" />
-                       </font>
-                    </Label>
-                      <Label fx:id="attackTypeLabel" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 12px;" text="Tipo: Normal">
-                       <font>
-                          <Font size="10.0" />
-                       </font>
-                    </Label>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-               <children>
+                              <!-- Panel de Pokémon Enemigo -->
       
-                                  <Label fx:id="attackDamageLabel" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 12px;" text="Daño: 40">
+                  <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="211.0" spacing="5.0" style="-fx-border-radius: 5; -fx-background-color: #ede7ab; -fx-border-color: black;">
       
-                                   <font>
+                      <Label fx:id="computerPokemonLabel" style="-fx-text-fill: black; -fx-font-weight: bold;" text="Charizard Lv15" />
       
-                                      <Font size="10.0" />
+                      <HBox alignment="CENTER" spacing="5">
       
-                                   </font>
+                          <Label style="-fx-text-fill: black;" text="HP:" />
       
-                                </Label>
+                          <ProgressBar fx:id="enemyHpBar" prefWidth="100" progress="0.6" style="-fx-accent: green;" />
       
-                                  <Label fx:id="estaminaLabel" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 12px;" text="Estamina: 5" wrapText="true">
+                       <Label fx:id="hpComputer" prefHeight="18.0" prefWidth="65.0" text="70/100" textFill="BLACK" />
       
-                                   <font>
+                      </HBox>
       
-                                      <Font size="10.0" />
+                      <HBox alignment="CENTER" spacing="5">
       
-                                   </font>
+                          <Label style="-fx-text-fill: black;" text="ST:" />
       
-                                </Label>
-               </children>
-            </HBox>
-
-                    <padding>
-
-                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-
-                    </padding>
-
+                          <ProgressBar fx:id="enemyStaminaBar" prefWidth="100" progress="0.5" style="-fx-accent: blue;" />
+      
+                       <Label fx:id="estamineComputer" prefHeight="18.0" prefWidth="62.0" text="55/100" textFill="BLACK" />
+      
+                      </HBox>
+      
                   </VBox>
+            </children>
+            <padding>
+               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
+         </HBox>
+         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="250.0">
+            <children>
+               <VBox prefHeight="200.0" prefWidth="100.0">
+                  <children>
+                  
+                        <ImageView fx:id="playerPokemonImage" fitHeight="159.0" fitWidth="155.0" preserveRatio="true" />
+                  </children>
+               </VBox>
+               <VBox prefHeight="200.0" prefWidth="100.0">
+                  <children>
+                  
+                        <ImageView fx:id="enemyPokemonImage" fitHeight="101.0" fitWidth="111.0" preserveRatio="true" />
+                  </children>
+               </VBox>
+            </children>
+            <padding>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+         </HBox>
+         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+            <children>
+               <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="111.0" prefWidth="233.0" spacing="10.0">
+                  <children>
+            
+                    
+                  
+                                      
+            
+                        <!-- Panel de Pokémon del Jugador -->
+            
+                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="79.0" prefWidth="205.0" spacing="5.0" style="-fx-border-radius: 5; -fx-border-color: black; -fx-background-color: #ede7ab;">
+            
+                            <Label fx:id="playerPokemonLabel" style="-fx-text-fill: black; -fx-font-weight: bold;" text="Moltres  Lv19" />
+            
+                            <HBox alignment="CENTER" spacing="5">
+            
+                                <Label style="-fx-text-fill: black;" text="HP:" />
+            
+                                <ProgressBar fx:id="playerHpBar" prefWidth="100" progress="1.0" style="-fx-accent: green;" />
+            
+                             <Label fx:id="hpPlayer" prefHeight="18.0" prefWidth="59.0" text="100/100" textFill="BLACK" />
+            
+                            </HBox>
+            
+                            <HBox alignment="CENTER" spacing="5">
+            
+                                <Label style="-fx-text-fill: black;" text="ST:" />
+            
+                                <ProgressBar fx:id="playerStaminaBar" prefWidth="100" progress="0.76" style="-fx-accent: blue;" />
+            
+                             <Label fx:id="estaminePlayer" prefHeight="18.0" prefWidth="59.0" text="100/100" textFill="BLACK" />
+            
+                            </HBox>
+            
+                        </VBox>
+            
+                    
+                  
+                        <!-- Botones de acciones principales -->
+            
+                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="33.0" prefWidth="176.0" spacing="5.0">
+                      <Button fx:id="fightButton" onAction="#fightButtonAction" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="ATACAR" />
+                      <Button fx:id="runButton" onAction="#runButtonAction" style="-fx-background-color: #ffcc00; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0);" text="RENDIRSE" />
+                  </HBox>
+                  </children>
+               </VBox>
       
-      <ImageView fx:id="enemyPokemonImage" fitHeight="150.0" fitWidth="150.0" layoutX="361.0" layoutY="65.0" preserveRatio="true" />
+                          
+                        
+                        <!-- Sección para información detallada del ataque seleccionado -->
       
-      <ImageView fx:id="playerPokemonImage" fitHeight="150.0" fitWidth="150.0" layoutX="59.0" layoutY="146.0" preserveRatio="true" />
-
-  </children>
-
-</Pane> 
-</AnchorPane>
+                              <VBox fx:id="attackInfoPanel" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="79.0" prefWidth="199.0" spacing="7.0" style="-fx-background-color: #1a1a1a; -fx-border-color: white; -fx-border-width: 2;" visible="true">
+                            <Label fx:id="attackNameLabel" style="-fx-text-fill: yellow; -fx-font-family: 'Courier New'; -fx-font-size: 14px;" text="Quick Attack" textFill="#d8eb09">
+                             <font>
+                                <Font size="10.0" />
+                             </font>
+                          </Label>
+                            <Label fx:id="attackTypeLabel" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 12px;" text="Tipo: Normal">
+                             <font>
+                                <Font size="10.0" />
+                             </font>
+                          </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                     <children>
+            
+                                              <Label fx:id="attackDamageLabel" prefHeight="15.0" prefWidth="65.0" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 12px;" text="Daño: 40">
+            
+                                               <font>
+            
+                                                  <Font size="10.0" />
+            
+                                               </font>
+            
+                                            </Label>
+            
+                                              <Label fx:id="estaminaLabel" prefHeight="15.0" prefWidth="86.0" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 12px;" text="Estamina: 5" wrapText="true">
+            
+                                               <font>
+            
+                                                  <Font size="10.0" />
+            
+                                               </font>
+            
+                                            </Label>
+                     </children>
+                  </HBox>
+      
+                                <padding>
+      
+                                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      
+                                </padding>
+      
+                              </VBox>
+      
+              
+            
+              
+      
+                  <!-- Panel de movimientos del Pokémon (abajo a la derecha) -->
+      
+                  <VBox fx:id="movePanel" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="96.0" prefWidth="239.0" spacing="1.0" style="-fx-background-color: #1a1a1a; -fx-border-color: white; -fx-border-width: 2;" visible="true">
+      
+                      <Label fx:id="move1" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="➤  Quick Attack">
+      
+                       <font>
+      
+                          <Font size="10.0" />
+      
+                       </font>
+                  </Label>
+      
+                      <Label fx:id="move2" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Wing Slash">
+      
+                       <font>
+      
+                          <Font size="10.0" />
+      
+                       </font>
+                  </Label>
+      
+                      <Label fx:id="move3" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Gust">
+      
+                       <font>
+      
+                          <Font size="10.0" />
+      
+                       </font>
+                  </Label>
+      
+                      <Label fx:id="move4" style="-fx-text-fill: white; -fx-font-family: 'Courier New'; -fx-font-size: 16px;" text="   Focus Energy">
+      
+                       <font>
+      
+                          <Font size="10.0" />
+      
+                       </font>
+                  </Label>
+      
+                    <padding>
+      
+                       <Insets left="7.0" right="7.0" />
+      
+                    </padding>
+      
+                  </VBox>
+            </children>
+            <padding>
+               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
+         </HBox>
+      </children>
+   </VBox> 
+</StackPane>

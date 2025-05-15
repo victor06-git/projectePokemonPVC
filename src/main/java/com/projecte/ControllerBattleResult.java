@@ -1,22 +1,25 @@
 package com.projecte;
 
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class ControllerBattleResult {
+public class ControllerBattleResult implements  Initializable{
 
     public static final String STATUS_BATTLE_STARTED = "battle_started";
     public static final String STATUS_BATTLE_PREP = "battle_prep";
@@ -29,26 +32,66 @@ public class ControllerBattleResult {
     private Button buttonContinue;
 
     @FXML
-    private ImageView imgPokemon1, imgPokemon2;
+    private ImageView imgPokemon1, imgPokemon2, backgroundImage;
 
     @FXML
     private ProgressBar levelBar;
 
+    @FXML
+    private Label xpLabel;
+
     private int round = -1;
     private String winner;
-    
-    
+    private int battleId;
+    private boolean run;
+    private int randomXP = 0;
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        
+        URL imageURL = null;
+        try {
+            imageURL = getClass().getResource("/assets/result/finish.jpg");
+            Image image = new Image(imageURL.toExternalForm());
+            backgroundImage.setImage(image);
+        } catch (Exception e) {
+            System.err.println("Error loading image asset: " + imageURL);
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     private void toContinue(ActionEvent event) {
+        
         // Acción al hacer clic en el botón "Recoger recompensas"
-        UtilsViews.setView("ViewMenu");
+        ControllerAttackResult ctrl_2 = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
         ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
+        ControllerBattleAttack ctrlAttack = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
         ctrl.setBattleStatus(STATUS_BATTLE_ENDED, round);
         ctrl.setBattleStatus(STATUS_BATTLE_PREP, round = 1);
+        updateBattleWinner(winner);
+        ctrl.resetBattleState();
+        ctrlAttack.resetBattleAttackState();
+        ctrl_2.setFinalBattle(false);
+        UtilsViews.setView("ViewMenu");
     }
 
     public void setRound(int round) {
         this.round = round;
+    }
+
+    public void setBattleId(int battleId) {
+        this.battleId = battleId;
+    }
+
+    public void setRun(boolean run) {
+        if (!run) {
+            buttonContinue.setText("Recoger recompensas");
+            this.run = run;
+        } else {
+            buttonContinue.setText("Te quedas sin nada por huir");
+            this.run = run;
+        }
     }
 
     public void setWinner(String winner) {
@@ -88,6 +131,7 @@ public class ControllerBattleResult {
      * @return Una lista con los dos Pokémon seleccionados.
      */
     public ArrayList<HashMap<String, Object>> unlockTwoRandomPokemons() {
+
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
@@ -138,6 +182,7 @@ public class ControllerBattleResult {
          * @return El ítem desbloqueado.
          */
         public void unlockRandomItem() {
+
             AppData db = AppData.getInstance();
             db.connect(selected_path);
         
@@ -158,8 +203,7 @@ public class ControllerBattleResult {
                     // Para cada item, 50% de probabilidad de desbloquearlo
                     if (random.nextBoolean()) {
                         // Actualizar el inventario de ítems
-                        db.update("INSERT INTO ItemInventory (item_id, quantity) VALUES (" + itemId + ", 1) " +
-                                "ON CONFLICT(item_id) DO UPDATE SET quantity = quantity + 1;");
+                        db.update("UPDATE ItemInventory SET quantity = quantity + 1 WHERE item_id = " + itemId + ";");
 
                         if (itemName.equalsIgnoreCase("X_Attack")) {
                             item1.setText("XAttack + 1");
@@ -190,13 +234,23 @@ public class ControllerBattleResult {
         }        
 
         public void updateGameStatsWithRandomXP() {
+
+            if (run){
+                xpLabel.setText("Sin XP");
+                System.out.println(run);
+                return;
+            } //No consigue nada si ha huido
+
+            // Conectar a la base de datos
             AppData db = AppData.getInstance();
             db.connect(selected_path);
 
             // Generar un número aleatorio entre 500 y 1000
             Random random = new Random();
-            int randomXP = random.nextInt(501) + 500; // 501 para incluir 1000 como límite superior
-
+            
+            this.randomXP = random.nextInt(501) + 500; // 501 para incluir 1000 como límite superior
+            
+             
             // Obtener el último resultado de la tabla Battle
             ArrayList<HashMap<String, Object>> battles = db.query(
                 "SELECT winner FROM Battle ORDER BY id DESC LIMIT 2"
@@ -210,14 +264,17 @@ public class ControllerBattleResult {
             ArrayList<HashMap<String, Object>> exp = db.query(
                 "SELECT total_experience FROM GameStats WHERE id = 1"
             );
-            if (!stats.isEmpty()) {
+            if (!stats.isEmpty() && !run) {
+                int totalXP = ((Number) exp.get(0).get("total_experience")).intValue();
+                setLevelProgressBar(totalXP);
+            } else {
                 int totalXP = ((Number) exp.get(0).get("total_experience")).intValue();
                 setLevelProgressBar(totalXP);
             }
 
             int currentStreak = 0;
             int maxStreak = 0;
-            if (!stats.isEmpty()) {
+            if (!stats.isEmpty() && !run) {
                 currentStreak = ((Number) stats.get(0).get("current_win_streak")).intValue();
                 maxStreak = ((Number) stats.get(0).get("max_win_streak")).intValue();
             }
@@ -247,13 +304,13 @@ public class ControllerBattleResult {
 
             // Actualizar la tabla GameStats
             db.update("UPDATE GameStats " +
-                    "SET total_experience = total_experience + " + randomXP + ", " +
+                    "SET total_experience = total_experience + " + this.randomXP + ", " +
                     "battles_played = battles_played + 1, " +
                     "current_win_streak = " + currentStreak + ", " +
                     "max_win_streak = " + maxStreak + " " +
                     "WHERE id = 1;");
 
-            System.out.println("GameStats actualizado: +" + randomXP + " XP, +1 batalla jugada, racha actual: " + currentStreak + ", racha máxima: " + maxStreak);
+            System.out.println("GameStats actualizado: +" + this.randomXP + " XP, +1 batalla jugada, racha actual: " + currentStreak + ", racha máxima: " + maxStreak);
 
             db.close();
         }
@@ -266,6 +323,41 @@ public class ControllerBattleResult {
 
             levelBar.setProgress(progress);
             levelLabel.setText("Nivel: " + level);            
+        }
+
+        public void updateBattleWinner(String winner) {
+            AppData db = AppData.getInstance();
+            db.connect(selected_path);
+
+            // Obtener el id de la última batalla registrada
+            ArrayList<HashMap<String, Object>> result = db.query("SELECT id FROM Battle ORDER BY id DESC LIMIT 1;");
+            if (!result.isEmpty()) {
+                int lastBattleId = ((Number) result.get(0).get("id")).intValue();
+                String update = String.format(
+                    "UPDATE Battle SET winner = '%s' WHERE id = %d;",
+                    winner, lastBattleId
+                );
+                db.update(update);
+            }
+
+            db.close();
+        }
+
+        public int getCurrentLevelFromDB() {
+            AppData db = AppData.getInstance();
+            db.connect(selected_path);
+
+            int level = 0;
+            ArrayList<HashMap<String, Object>> result = db.query(
+                "SELECT total_experience FROM GameStats WHERE id = 1"
+            );
+            if (!result.isEmpty()) {
+                int totalXP = ((Number) result.get(0).get("total_experience")).intValue();
+                level = totalXP / 1000; // Cada 1000 XP es un nivel
+            }
+
+            db.close();
+            return level;
         }
 
 }

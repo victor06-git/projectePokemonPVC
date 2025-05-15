@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 public class ControllerHistory implements Initializable {
@@ -27,10 +28,15 @@ public class ControllerHistory implements Initializable {
     @FXML
     private ImageView imgBackArrow;
 
+    @FXML
+    private ImageView imgPokeHistory;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
         loadHistory();
+
+       
 
         try {
             
@@ -38,6 +44,10 @@ public class ControllerHistory implements Initializable {
             URL imageURL = getClass().getResource("/assets/image/arrow-back.gif");
             Image image = new Image(imageURL.toExternalForm());
             imgBackArrow.setImage(image);
+
+             URL backgroundUrl = getClass().getResource("/assets/image/pokemonhistory.png");
+            Image img = new Image(backgroundUrl.toExternalForm());
+            imgPokeHistory.setImage(img);
 
             
         } catch (Exception e) {
@@ -71,7 +81,7 @@ public class ControllerHistory implements Initializable {
             Integer battleId = (Integer) row.get("battle_id");
             String date = (String) row.get("date");
             String map = (String) row.get("map");
-            String winner = (String) row.get("winner");
+            String winner = (String) row.get("winner") == null ? "Desconocido" : (String) row.get("winner");
             String iconPath = (String) row.get("icon_path");
             Integer isPlayer = (Integer) row.get("is_player");
 
@@ -96,7 +106,7 @@ public class ControllerHistory implements Initializable {
 
         for (BattleRecord battle : battleMap.values()) {
             FXMLLoader loader = new FXMLLoader(resource);
-            Parent itemTemplate = null;
+            Parent itemTemplate = null; 
             try {
                 itemTemplate = loader.load();
             } catch (IOException e) {
@@ -132,7 +142,8 @@ public class ControllerHistory implements Initializable {
         db.close();
     }
 
-    public void toViewMenu() {
+    public void toViewMenu(MouseEvent event) {
+
         UtilsViews.setViewAnimating("ViewMenu");
     }
 
