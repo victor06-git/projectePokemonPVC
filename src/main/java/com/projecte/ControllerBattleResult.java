@@ -125,6 +125,8 @@ public class ControllerBattleResult implements  Initializable{
      * @return Una lista con los dos Pokémon seleccionados.
      */
     public ArrayList<HashMap<String, Object>> unlockTwoRandomPokemons() {
+        if (run) return new ArrayList<>(); //No consigue nada si ha huido
+
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
@@ -175,6 +177,8 @@ public class ControllerBattleResult implements  Initializable{
          * @return El ítem desbloqueado.
          */
         public void unlockRandomItem() {
+            if (run) return; //No consigue nada si ha huido
+
             AppData db = AppData.getInstance();
             db.connect(selected_path);
         
@@ -227,6 +231,12 @@ public class ControllerBattleResult implements  Initializable{
         }        
 
         public void updateGameStatsWithRandomXP() {
+            
+            if (run){
+                xpLabel.setText("+ 0 XP");
+                return; //No consigue nada si ha huido
+            } 
+
             AppData db = AppData.getInstance();
             db.connect(selected_path);
 
@@ -254,11 +264,9 @@ public class ControllerBattleResult implements  Initializable{
             if (!stats.isEmpty() && !run) {
                 int totalXP = ((Number) exp.get(0).get("total_experience")).intValue();
                 setLevelProgressBar(totalXP);
-                xpLabel.setText("+ " + totalXP + " XP");
             } else {
-                int totalXP  = 0;
+                int totalXP = ((Number) exp.get(0).get("total_experience")).intValue();
                 setLevelProgressBar(totalXP);
-                xpLabel.setText("+ " + totalXP + " XP");
             }
 
             int currentStreak = 0;
