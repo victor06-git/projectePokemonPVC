@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.event.ActionEvent;
@@ -123,7 +124,7 @@ public class ControllerManagement implements Initializable {
      */
     private void loadAllPokemons() {
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         // Determinar si se deben mostrar solo los desbloqueados
         boolean showOnlyUnlocked = showUnlockedOnly.isSelected();
@@ -202,7 +203,7 @@ public class ControllerManagement implements Initializable {
         this.number = number;
 
         AppData db = AppData.getInstance();
-        db.connect("./data/pokemons.sqlite");
+        db.connect(selected_path);
 
         ArrayList<HashMap<String, Object>> llistaPokemons = db.query(String.format("SELECT p.id, p.name, p.type, p.icon_path, pp.stamina, pp.max_hp, pp.unlocked FROM Pokemon p LEFT JOIN PlayerPokemon pp ON p.id = pp.pokemon_id WHERE p.id = '%d';", this.number));
         if (llistaPokemons.size() == 1) {
@@ -275,8 +276,6 @@ public class ControllerManagement implements Initializable {
             this.nextNumber = -1;
             this.buttonNext.setDisable(true);
         }
-
-        // --- Ahora sí, cierra la conexión ---
         db.close();
     }
 
@@ -298,33 +297,35 @@ public class ControllerManagement implements Initializable {
     }
 
 
-    // Button previous
     @FXML
     public void previous(ActionEvent event) {
         if (this.number != -1) {
             boolean showOnlyUnlocked = showUnlockedOnly.isSelected();
 
-            if (showOnlyUnlocked) {
-                AppData db = AppData.getInstance();
-                db.connect("./data/pokemons.sqlite");
-                ArrayList<HashMap<String, Object>> llistaPrevious = db.query(
-                    String.format("SELECT p.id FROM Pokemon p INNER JOIN PlayerPokemon pp ON p.id = pp.pokemon_id WHERE pp.unlocked = 1 AND p.id < '%d' ORDER BY p.id DESC LIMIT 1;", this.number)
-                );
-                db.close();
+            AppData db = AppData.getInstance();
+            db.connect(selected_path);
 
-                if (llistaPrevious.size() == 1) {
-                    HashMap<String, Object> pokemon_pr = llistaPrevious.get(0);
-                    this.number = (int) pokemon_pr.get("id");
-                    loadPokemon(this.number);
-                    updateChoiceBox(this.number);
-                } else {
-                    this.buttonPrevious.setDisable(true);
-                }
+            String query;
+            if (showOnlyUnlocked) {
+                query = String.format(
+                    "SELECT p.id FROM Pokemon p INNER JOIN PlayerPokemon pp ON p.id = pp.pokemon_id WHERE pp.unlocked = 1 AND p.id < '%d' ORDER BY p.id DESC LIMIT 1;", this.number
+                );
             } else {
-                if (previousNumber != -1) {
-                    loadPokemon(previousNumber);
-                    updateChoiceBox(previousNumber);
-                }
+                query = String.format(
+                    "SELECT id FROM Pokemon WHERE id < %d ORDER BY id DESC LIMIT 1;", this.number
+                );
+            }
+
+            ArrayList<HashMap<String, Object>> llistaPrevious = db.query(query);
+            db.close();
+
+            if (llistaPrevious.size() == 1) {
+                HashMap<String, Object> pokemon_pr = llistaPrevious.get(0);
+                int prevId = (int) pokemon_pr.get("id");
+                loadPokemon(prevId);
+                updateChoiceBox(prevId);
+            } else {
+                this.buttonPrevious.setDisable(true);
             }
         }
     }
@@ -334,27 +335,30 @@ public class ControllerManagement implements Initializable {
         if (this.number != -1) {
             boolean showOnlyUnlocked = showUnlockedOnly.isSelected();
 
-            if (showOnlyUnlocked) {
-                AppData db = AppData.getInstance();
-                db.connect("./data/pokemons.sqlite");
-                ArrayList<HashMap<String, Object>> llistaNext = db.query(
-                    String.format("SELECT p.id FROM Pokemon p INNER JOIN PlayerPokemon pp ON p.id = pp.pokemon_id WHERE pp.unlocked = 1 AND p.id > '%d' ORDER BY p.id ASC LIMIT 1;", this.number)
-                );
-                db.close();
+            AppData db = AppData.getInstance();
+            db.connect(selected_path);
 
-                if (llistaNext.size() == 1) {
-                    HashMap<String, Object> pokemon_nxt = llistaNext.get(0);
-                    this.number = (int) pokemon_nxt.get("id");
-                    loadPokemon(this.number);
-                    updateChoiceBox(this.number);
-                } else {
-                    this.buttonNext.setDisable(true);
-                }
+            String query;
+            if (showOnlyUnlocked) {
+                query = String.format(
+                    "SELECT p.id FROM Pokemon p INNER JOIN PlayerPokemon pp ON p.id = pp.pokemon_id WHERE pp.unlocked = 1 AND p.id > '%d' ORDER BY p.id ASC LIMIT 1;", this.number
+                );
             } else {
-                if (nextNumber != -1) {
-                    loadPokemon(nextNumber);
-                    updateChoiceBox(nextNumber);
-                }
+                query = String.format(
+                    "SELECT id FROM Pokemon WHERE id > %d ORDER BY id ASC LIMIT 1;", this.number
+                );
+            }
+
+            ArrayList<HashMap<String, Object>> llistaNext = db.query(query);
+            db.close();
+
+            if (llistaNext.size() == 1) {
+                HashMap<String, Object> pokemon_nxt = llistaNext.get(0);
+                int nextId = (int) pokemon_nxt.get("id");
+                loadPokemon(nextId);
+                updateChoiceBox(nextId);
+            } else {
+                this.buttonNext.setDisable(true);
             }
         }
     }
