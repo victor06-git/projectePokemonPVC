@@ -48,6 +48,9 @@ public class ControllerBattleOptions implements Initializable {
     private ImageView imgArrowBack;
 
     @FXML
+    private ImageView imgPokeOptions;
+
+    @FXML
     private Button startButton, continueButton;
     
     @FXML
@@ -86,6 +89,10 @@ public class ControllerBattleOptions implements Initializable {
             URL imageURL = getClass().getResource("/assets/image/arrow-back.gif");
             Image image = new Image(imageURL.toExternalForm());
             imgArrowBack.setImage(image);
+
+            URL pokeOptionsUrl = getClass().getResource("/assets/image/pokemonoptions.png");
+            Image pokeOptionsImage = new Image(pokeOptionsUrl.toExternalForm());
+            imgPokeOptions.setImage(pokeOptionsImage);   
         } catch (Exception e) {
             System.err.println("Error loading image asset: " + imagePath);
             e.printStackTrace();

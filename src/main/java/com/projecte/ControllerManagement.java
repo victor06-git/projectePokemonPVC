@@ -59,7 +59,8 @@ public class ControllerManagement implements Initializable {
 
     @FXML
     private ImageView imgBackArrow; //Imagen para retroceder de vista
-    
+
+
     @FXML
     private ImageView imgPokemon;
 
@@ -79,6 +80,10 @@ public class ControllerManagement implements Initializable {
             URL imageURL = getClass().getResource("/assets/image/arrow-back.gif");
             Image image = new Image(imageURL.toExternalForm());
             imgBackArrow.setImage(image);
+
+            
+
+
         } catch (Exception e) {
             System.err.println("Error loading image asset: " + imagePath);
             e.printStackTrace();

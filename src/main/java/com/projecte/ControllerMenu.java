@@ -42,7 +42,7 @@ public class ControllerMenu implements Initializable {
 
         try {            
 
-            URL imageURL = getClass().getResource("/assets/image/background.jpg");
+            URL imageURL = getClass().getResource("/assets/image/pokemonmenu.jpg");
             Image image = new Image(imageURL.toExternalForm());
             imgBackground.setImage(image);
 
