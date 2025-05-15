@@ -29,23 +29,24 @@ public class ControllerMenu implements Initializable {
 
     @FXML
     private ImageView imgBackground;
-    
+
     public static final String STATUS_BATTLE_STARTED = "battle_started";
     public static final String STATUS_BATTLE_PREP = "battle_prep";
     public static final String STATUS_BATTLE_ENDED = "battle_ended";
     private int round = 1;
+    
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Path imagePath = null;
+        loadGameStats();
 
+        try {            
 
-        try {
             URL imageURL = getClass().getResource("/assets/image/background.jpg");
             Image image = new Image(imageURL.toExternalForm());
             imgBackground.setImage(image);
-
-            loadGameStats();
 
         } catch (Exception e) {
             System.err.println("Error loading image asset: " + imagePath);
@@ -58,13 +59,12 @@ public class ControllerMenu implements Initializable {
     }
 
     public void toViewBattleHistory(ActionEvent event) {
+        ControllerHistory ctrl = (ControllerHistory) UtilsViews.getController("ViewHistory");
+        ctrl.loadHistory();
         UtilsViews.setViewAnimating("ViewHistory");
     }
     
     public void toViewNewBattle(ActionEvent event) {
-        ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
-        ctrl.resetBattleState();
-        ctrl.setBattleStatus(STATUS_BATTLE_PREP, round=1);
         UtilsViews.setViewAnimating("ViewBattleOptions");
     }
 

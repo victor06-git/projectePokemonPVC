@@ -673,6 +673,7 @@ public class ControllerBattleOptions implements Initializable {
                     startButton.setDisable(false);
                     continueButton.setDisable(true);
                     disablePokemonSelection(false); // Habilitar selección de Pokémon
+                    loadUnlockedPokemons(); // Recargar Pokémon desbloqueados
                     break;
                 case STATUS_BATTLE_ENDED:
                     imgArrowBack.setDisable(false);

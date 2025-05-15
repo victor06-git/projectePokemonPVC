@@ -4,22 +4,23 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.ResourceBundle;
-import java.util.Map;
-import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 
+import static com.projecte.BuildDatabase.selected_path;
 import com.utils.UtilsViews;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.fxml.Initializable;
 
-public class ControllerHistory extends BuildDatabase implements Initializable {
+public class ControllerHistory implements Initializable {
     @FXML
     private VBox historyList;
 
@@ -28,14 +29,17 @@ public class ControllerHistory extends BuildDatabase implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         
+        loadHistory();
+
         try {
+            
+            
             URL imageURL = getClass().getResource("/assets/image/arrow-back.gif");
             Image image = new Image(imageURL.toExternalForm());
             imgBackArrow.setImage(image);
 
-            //loadHistory();
+            
         } catch (Exception e) {
             System.err.println("Error loading image asset.");
             e.printStackTrace();
@@ -44,7 +48,7 @@ public class ControllerHistory extends BuildDatabase implements Initializable {
     }
 
     @FXML
-    private void loadHistory() throws IOException {
+    public void loadHistory(){
         AppData db = AppData.getInstance();
         db.connect(selected_path);
 
@@ -92,7 +96,14 @@ public class ControllerHistory extends BuildDatabase implements Initializable {
 
         for (BattleRecord battle : battleMap.values()) {
             FXMLLoader loader = new FXMLLoader(resource);
-            Parent itemTemplate = loader.load();
+            Parent itemTemplate = null;
+            try {
+                itemTemplate = loader.load();
+            } catch (IOException e) {
+                System.err.println("Error loading miniHistoryView.fxml for battle: " + battle.date);
+                e.printStackTrace();
+                continue;
+            }
             ControllerMiniHistory ctrl = loader.getController();
 
             ctrl.setBattleInfo(battle.date, battle.map, battle.winner);
