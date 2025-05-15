@@ -65,6 +65,7 @@ public class ControllerBattleAttack {
     private String[] attackTypes;
     private String[] attackDamages;
     private String[] attackStaminaCosts;
+    private int battleId; // ID de la batalla actual
 
     @FXML
     public void initialize() {
@@ -114,6 +115,10 @@ public class ControllerBattleAttack {
 
     public void setPlayerPokemonLabel(String text) {
         this.playerPokemonLabel.setText(text);
+    }
+
+    public void setBattleId(int battleId) {
+        this.battleId = battleId;
     }
 
     /**
@@ -699,6 +704,7 @@ public class ControllerBattleAttack {
             updatePlayerStatus(); // Cambiar la vista después de que la vida llegue a 0
             ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
             ctrl.setRound(round);
+            ctrl.setBattleId(battleId);
             UtilsViews.setViewAnimating("ViewAttackResult");
             round += 1;
         });
@@ -717,6 +723,20 @@ public class ControllerBattleAttack {
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
         pause.setOnFinished(event2 -> {
             runButton.setStyle("-fx-background-color: #ffcc00; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0); -fx-font-weight: bold;");
+            
+            ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+            ctrl.setWinner("Computer");
+            ctrl.setBattleId(battleId);
+            ctrl.setFinalBattle(true); // Esto hará que se muestre BattleResult y no se sume XP
+            boolean run = true;
+            if (run) {
+                showAlert("¡Has huido de la batalla!", AlertType.INFORMATION);
+            } else {
+                showAlert("¡No has podido huir de la batalla!", AlertType.INFORMATION);
+            }
+            // Cambiar a la vista de resultados de batalla
+            ctrl.setRun(run);
+            UtilsViews.setView("ViewBattleResult");
         });
         pause.play();
     }

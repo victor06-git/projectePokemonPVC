@@ -20,6 +20,10 @@ public class ControllerAttackResult {
 
     private String winner;
 
+    private int battleId;
+
+    private boolean run = false;
+
     @FXML
     private void initialize() {
         
@@ -32,6 +36,14 @@ public class ControllerAttackResult {
 
     public void setHpPlayer(String hp) {
         hpPlayer.setText(hp);
+    }
+
+    public void setBattleId(int battleId) {
+        this.battleId = battleId;
+    }
+
+    public void setRun(boolean run) {
+        this.run = run;
     }
 
     /**
@@ -49,6 +61,7 @@ public class ControllerAttackResult {
             ctrl.unlockTwoRandomPokemons();
             ctrl.unlockRandomItem();
             ctrl.updateGameStatsWithRandomXP();
+            ctrl.setRun(run);
         } else {
             buttonContinue.setText("Continuar");
         }
@@ -63,6 +76,7 @@ public class ControllerAttackResult {
         } else {
             hpPlayer.setText("Perdedor: " + winner);
         }
+        ctrl.setBattleId(battleId);
     }
     
     public void setEstaminaPlayer(String estamina) {
