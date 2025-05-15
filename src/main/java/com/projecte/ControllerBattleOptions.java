@@ -258,21 +258,21 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setMap(mapPaths.get(currentMapIndex));
         ctrl.setIdPokemon(idPokemon);
         ctrl.setRound(round);
+        ctrl.loadAttacksFromDatabase();
 
         String mapName = mapPaths.get(currentMapIndex);
         mapName = mapName.substring(mapName.lastIndexOf("/") + 1, mapName.lastIndexOf(".")); // Solo el nombre del mapa
         this.battleId = insertBattleWithoutWinner(mapName);
         ctrl.setBattleId(battleId);
         
-
         selectedPokemonIds.clear();
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon1));
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon2));
         selectedPokemonIds.add(getPokemonIdFromChoiceBox(choicePokemon3));
 
         ctrl.setPlayerPokemons(selectedPokemonIds);
-        ctrl.applyItemEffectsToPlayerPokemons(selectedPokemonIds);
-        ctrl.putOutEffectsToPlayerPokemons(selectedPokemonIds);
+        //ctrl.applyItemEffectsToPlayerPokemons(selectedPokemonIds);
+        //ctrl.putOutEffectsToPlayerPokemons(selectedPokemonIds);
         
         // Generar Pokémon enemigos aleatorios solo si no hay Pokémon enemigos existentes
         if (enemyPokemonIds.isEmpty()) {
@@ -383,6 +383,7 @@ public class ControllerBattleOptions implements Initializable {
         ctrl.setMap(mapPaths.get(currentMapIndex));
         ctrl.setIdPokemon(idPokemon);
         ctrl.setRound(round);
+        ctrl.loadAttacksFromDatabase();
         
 
         // Obtener nombres desde la BD
@@ -629,6 +630,8 @@ public class ControllerBattleOptions implements Initializable {
                 enableButton(pokemon3);
                 this.idPokemon = selectedId; // Actualiza el idPokemon al seleccionado
                 pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+                ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
+                ctrl.setIdPokemon(this.idPokemon); // Esto recargará los ataques correctos
             } else {
                 // Si el Pokémon está muerto, mostrar un mensaje
                 Alert alert = new Alert(AlertType.WARNING);
@@ -651,6 +654,8 @@ public class ControllerBattleOptions implements Initializable {
                 enableButton(pokemon2);
                 this.idPokemon = selectedId; // Actualiza el idPokemon al seleccionado
                 pickPokemon.setText("Has elegido como pokemon activo: " + selectedPokemon.substring(selectedPokemon.indexOf(' ') + 1));
+                ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
+                ctrl.setIdPokemon(this.idPokemon); // Esto recargará los ataques correctos
             } else {
                 // Si el Pokémon está muerto, mostrar un mensaje
                 Alert alert = new Alert(AlertType.WARNING);
@@ -660,9 +665,8 @@ public class ControllerBattleOptions implements Initializable {
                 alert.showAndWait();
                 imgPokemon3.setEffect(new javafx.scene.effect.Shadow(10, javafx.scene.paint.Color.BLACK));
             }
+            
         }
-
-
         
         private void disableButton(Button button) {
             button.setDisable(true);

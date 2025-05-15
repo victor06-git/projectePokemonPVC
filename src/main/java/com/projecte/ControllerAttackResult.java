@@ -128,6 +128,7 @@ public class ControllerAttackResult {
         if (ctrlAttack.getPlayerHpBar() == 0.0 || ctrlAttack.getPlayerStaminaBar() == 0.0 || finalBattle) {
             this.round += 1;
             ctrl.setRound(this.round);
+            ctrlAttack.loadAttacksFromDatabase();
             if (finalBattle) {
                 UtilsViews.setView("ViewBattleResult");
 
