@@ -197,14 +197,14 @@ public class ControllerPokeSettings {
     alert.setHeaderText(null);
     alert.setContentText(message);
     alert.showAndWait();
-    }
-
-    
+    }    
 
     @FXML
     private void setAttack(ActionEvent event) {
         // Lógica para manejar el uso del ítem de ataque
         int quantity = getItemQuantityByName("X_Attack");
+        System.out.println("Cantidad de X_Attack: " + quantity);
+        System.out.println("ID del Pokémon actual: " + currentPokemonId);
         if (quantity > 0) {
             System.out.println("Usando X_Attack. Cantidad restante: " + (quantity - 1));
             updateItemQuantity("X_Attack", quantity - 1);
@@ -219,6 +219,8 @@ public class ControllerPokeSettings {
     private void setDeffense(ActionEvent event) {
         // Lógica para manejar el uso del ítem de defensa
         int quantity = getItemQuantityByName("X_Defense");
+        System.out.println("Cantidad de X_Defense: " + quantity);
+        System.out.println("ID del Pokémon actual: " + currentPokemonId);
         if (quantity > 0) {
             System.out.println("Usando X_Defense. Cantidad restante: " + (quantity - 1));
             updateItemQuantity("X_Defense", quantity - 1);
@@ -233,6 +235,8 @@ public class ControllerPokeSettings {
     private void setBottle(ActionEvent event) {
         // Lógica para manejar el uso del ítem Bottle Cap
         int quantity = getItemQuantityByName("Bottle_Cap");
+        System.out.println("Cantidad de Bottle_Cap: " + quantity);
+        System.out.println("ID del Pokémon actual: " + currentPokemonId);
         if (quantity > 0) {
             System.out.println("Usando Bottle_Cap. Cantidad restante: " + (quantity - 1));
             updateItemQuantity("Bottle_Cap", quantity - 1);
