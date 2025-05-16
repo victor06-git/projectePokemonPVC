@@ -67,9 +67,9 @@
                            <children>
                               <Label prefHeight="20.0" prefWidth="89.0" style="-fx-text-fill: black;" text="STATS:" />
                               <Label prefHeight="20.0" prefWidth="52.0" text="HP:" />
-                              <Label fx:id="hpPlayer" prefHeight="20.0" prefWidth="59.0" text="100" />
+                              <Label fx:id="hpPlayer" prefHeight="20.0" prefWidth="99.0" text="100" />
                               <Label prefHeight="20.0" prefWidth="79.0" text="STMN:" />
-                              <Label fx:id="estaminaPlayer" prefHeight="20.0" prefWidth="50.0" text="50" />
+                              <Label fx:id="estaminaPlayer" prefHeight="20.0" prefWidth="80.0" text="50" />
                            </children>
                         </HBox>
                      </children>

@@ -11,7 +11,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="135.0" prefWidth="808.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerMiniHistory">
    <children>
       <ImageView fx:id="imgWin" fitHeight="82.0" fitWidth="121.0" layoutX="19.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="dateLabel" layoutX="152.0" layoutY="13.0" prefHeight="20.0" prefWidth="234.0" text="Data / Hora" />
+      <Label fx:id="dateLabel" layoutX="155.0" layoutY="33.0" prefHeight="20.0" prefWidth="234.0" text="Data / Hora" />
       <Label layoutX="404.0" layoutY="33.0" prefHeight="20.0" prefWidth="144.0" text="Your Team:" />
       <Label layoutX="404.0" layoutY="80.0" prefHeight="20.0" prefWidth="137.0" text="CPU Team:" />
       <HBox alignment="CENTER" layoutX="554.0" layoutY="66.0" prefHeight="26.0" prefWidth="156.0">
@@ -53,8 +53,8 @@
          </children>
       </HBox>
       <Pane layoutX="14.0" layoutY="117.0" prefHeight="7.0" prefWidth="781.0" style="-fx-background-color: black;" />
-      <Label layoutX="152.0" layoutY="66.0" prefHeight="20.0" prefWidth="70.0" text="Map:" />
-      <Label fx:id="mapLabel" contentDisplay="RIGHT" layoutX="222.0" layoutY="66.0" prefHeight="20.0" prefWidth="155.0" text="Map" textAlignment="RIGHT" textFill="#797777">
+      <Label layoutX="155.0" layoutY="80.0" prefHeight="20.0" prefWidth="70.0" text="Map:" />
+      <Label fx:id="mapLabel" contentDisplay="RIGHT" layoutX="225.0" layoutY="80.0" prefHeight="20.0" prefWidth="155.0" text="Map" textAlignment="RIGHT" textFill="#797777">
          <font>
             <Font name="DejaVu Serif Bold" size="13.0" />
          </font>
