@@ -1,0 +1,68 @@
+
+                           +----------------------+
+                           |      GameStats       |
+                           +----------------------+
+                           | id (PK = 1)          |
+                           | total_experience     |
+                           | battles_played       |
+                           | max_win_streak       |
+                           | current_win_streak   |
+                           +----------------------+
+
++-----------+           +----------------------+          +------------+
+|  Pokemon  |<--------+ |     PlayerPokemon     | +------->|  Attack    |
++-----------+         | +----------------------+ |        +------------+
+| id (PK)   |         | | id (PK)               | |        | id (PK)    |
+| name      |         | | pokemon_id (FK)      | |        | name       |
+| type      |         | | nickname             | |        | type       |
+| img_path  |         | | max_hp               | |        | damage     |
+| icon_path |         | | attack               | |        | stamina    |
++-----------+         | | stamina              | |        +------------+
+                      | | unlocked             | |
+                      | +----------------------+ |
+                      |                          |
+                      |                          |
+                      v                          v
+               +---------------------+     +--------------------+
+               |   PokemonAttack     |     |    ItemEffect      |
+               +---------------------+     +--------------------+
+               | pokemon_id (FK)     |     | player_pokemon_id  |
+               | attack_id (FK)      |     | item_id (FK)       |
+               +---------------------+     | active             |
+                                           +--------------------+
+
++---------+        +--------------------+      
+|  Item   |<------+|   ItemInventory    |<---------------------+
++---------+        +--------------------+                      |
+| id (PK) |        | item_id (FK, PK)   |                      |
+| name    |        | quantity           |                      |
+| effect  |        +--------------------+                      |
++---------+                                               +-------------------+
+       ^                                                  |    ItemReward     |
+       |                                                  +-------------------+
+       +-----------------------------+                    | battle_id (FK)    |
+                                     |                    | item_id (FK)      |
+                                     |                    | quantity          |
+                                     |                    +-------------------+
+                                     |
+                               +-------------+             +--------------+
+                               |   Battle    |<----------->| BattlePokemon |
+                               +-------------+             +--------------+
+                               | id (PK)     |             | battle_id     |
+                               | date        |             | is_player     |
+                               | map         |             | pokemon_id    |
+                               | winner      |             +--------------+
+                               +-------------+
+                                     ^
+                                     |
+                               +------------------+
+                               |  PlayerPokemon   |
+                               +------------------+
+
++---------------------+
+| TypeEffectiveness   |
++---------------------+
+| attack_type (PK)    |
+| target_type (PK)    |
+| multiplier          |
++---------------------+
