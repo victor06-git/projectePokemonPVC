@@ -31,7 +31,7 @@ public class ControllerBattleAttack {
     private Label move1, move2, move3, move4, moveDescriptionLabel, computerPokemonLabel, playerPokemonLabel;
 
     @FXML
-    private VBox movePanel;
+    private VBox movePanel, attackInfoPanel;
 
     @FXML
     private Button fightButton, runButton;
