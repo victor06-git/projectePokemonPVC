@@ -13,7 +13,7 @@
 <StackPane fx:id="rootPane" minHeight="540.0" minWidth="960.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerAttackResult">
    <children>
       <ImageView fx:id="imgPokeAttackResult" pickOnBounds="true" preserveRatio="true" />
-      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="478.0" prefWidth="854.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="roundLabel" text="Round 2" textFill="RED">
                <font>
@@ -25,11 +25,11 @@
                   <Font size="46.0" />
                </font>
             </Label>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="ALWAYS">
+            <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="190.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="100.0">
                      <children>
-                        <Label prefHeight="20.0" prefWidth="107.0" text="Primer Atac: ">
+                        <Label prefWidth="80.0" text="Primer Atac: ">
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
@@ -45,9 +45,9 @@
                         </HBox>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="120.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="100.0">
                      <children>
-                        <Label prefHeight="20.0" prefWidth="168.0" text="Resultat atac:">
+                        <Label prefWidth="80.0" text="Resultat atac:">
                            <HBox.margin>
                               <Insets left="97.0" />
                            </HBox.margin></Label>
@@ -57,13 +57,13 @@
                            </HBox.margin></Label>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="100.0">
                      <children>
-                        <Label prefHeight="20.0" prefWidth="177.0" text="Stats noves: ">
+                        <Label prefHeight="17.0" prefWidth="86.0" text="Stats noves: ">
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
-                        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="273.0" spacing="10.0">
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="188.0" spacing="10.0">
                            <children>
                               <Label prefHeight="20.0" prefWidth="29.0" style="-fx-text-fill: black;" text="HP:" />
                               <Label fx:id="hpPlayer" prefHeight="20.0" prefWidth="38.0" text="100" />
@@ -73,9 +73,9 @@
                         </HBox>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="100.0">
                      <children>
-                        <Label text="HP rival:">
+                        <Label prefHeight="17.0" prefWidth="47.0" text="HP rival:">
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
@@ -85,9 +85,9 @@
                            </HBox.margin></Label>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="100.0">
                      <children>
-                        <Label text="Stamina rival:">
+                        <Label prefHeight="17.0" prefWidth="82.0" text="Stamina rival:">
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
@@ -109,9 +109,6 @@
                </children>
             </VBox>
          </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
       </VBox>
    </children>
 </StackPane>

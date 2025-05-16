@@ -1,17 +1,25 @@
 package com.projecte;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.utils.UtilsViews;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-public class ControllerAttackResult {
+public class ControllerAttackResult implements Initializable{
 
     @FXML
     private Label roundLabel, equipLabel, pokemonLabel, statsLabel, hpLabel, estaminaLabel, hpPlayer, estaminaPlayer;
     
-    
+    @FXML
+    private ImageView imgPokeAttackResult;
+
     @FXML
     private Button buttonContinue;
 
@@ -25,8 +33,12 @@ public class ControllerAttackResult {
 
     private boolean run;
 
-    @FXML
-    private void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // Inicializar la vista
+        URL imageURL = getClass().getResource("/assets/image/pokemonattackresult.png");
+        Image image = new Image(imageURL.toExternalForm());
+        imgPokeAttackResult.setImage(image);
         
     }
 
