@@ -20,7 +20,7 @@
 <StackPane fx:id="rootPane" minHeight="540.0" minWidth="960.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerManagement">
    <children>
       <ImageView fx:id="imgPokeManagement" pickOnBounds="true" preserveRatio="true" />
-      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="361.0" prefWidth="690.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" prefHeight="365.0" prefWidth="562.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="460.0">
                <children>
@@ -166,7 +166,7 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="176.0" spacing="10.0">
                                  <children>
-                                    <Label prefHeight="21.0" prefWidth="32.0" text="HP:" textFill="WHITE">
+                                    <Label prefHeight="21.0" prefWidth="18.0" text="HP:" textFill="WHITE">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
