@@ -24,7 +24,7 @@
             </Label>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="190.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
                      <children>
                         <Label prefHeight="20.0" prefWidth="107.0" text="Primer Atac: ">
                            <HBox.margin>
@@ -42,13 +42,13 @@
                         </HBox>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="120.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
                      <children>
-                        <Label prefHeight="20.0" prefWidth="168.0" text="Resultat atac:">
+                        <Label prefHeight="20.0" prefWidth="221.0" text="Resultat atac:">
                            <HBox.margin>
                               <Insets left="97.0" />
                            </HBox.margin></Label>
-                        <Label fx:id="statsLabel" prefHeight="20.0" prefWidth="166.0" style="-fx-text-fill: black;" text="Label">
+                        <Label fx:id="statsLabel" prefHeight="20.0" prefWidth="279.0" style="-fx-text-fill: black;" text="Label">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin></Label>
