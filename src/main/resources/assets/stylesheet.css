@@ -1,0 +1,105 @@
+/* Importar fuente pixelada desde Google Fonts - Press Start 2P */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* Fuente base */
+.root {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-background-color: transparent;
+}
+
+/* Labels */
+.label, .label.title, .label.subtitle, .label-pokemon-name, .label-stats {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-weight: 900;
+}
+
+/* Label default */
+.label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 2, 0, 0, 1);
+}
+
+/* Titles */
+.label.title {
+    -fx-font-size: 32px;
+    -fx-text-fill: #ffcc00;
+    -fx-effect: dropshadow(three-pass-box, #2a599a, 5, 0, 0, 2);
+}
+
+.label.subtitle {
+    -fx-font-size: 24px;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(three-pass-box, #2a599a, 3, 0, 0, 1);
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #ffcc00;
+    -fx-text-fill: #2a599a;
+    -fx-font-weight: 900;
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 14px;
+    -fx-border-color: #2a599a;
+    -fx-border-width: 2px;
+    -fx-padding: 8px 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 1);
+}
+
+.button:hover {
+    -fx-background-color: #ffde00;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 8, 0, 0, 2);
+}
+
+.button:pressed {
+    -fx-background-color: #e6b800;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 1);
+}
+
+/* Special Buttons */
+.button.special {
+    -fx-background-color: #2a599a;
+    -fx-text-fill: #ffcc00;
+    -fx-font-size: 16px;
+    -fx-padding: 8px 15px;
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-weight: 900;
+}
+
+.button.special:hover {
+    -fx-background-color: #3a6aba;
+}
+
+.button.special:pressed {
+    -fx-background-color: #1a499a;
+}
+
+/* Otros estilos con la fuente Press Start 2P similar... */
+
+/* Checkboxes */
+.check-box {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 14px;
+    -fx-font-weight: 900;
+}
+
+/* Text fields */
+.text-field {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-weight: 900;
+    -fx-font-size: 14px;
+    -fx-border-color: #2a599a;
+    -fx-border-width: 2px;
+    -fx-background-color: #ffffff;
+    -fx-padding: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 3, 0, 0, 1);
+}
+
+/* Label especial con brillo amarillo */
+.label-yellow-glow {
+    -fx-text-fill: #ffcc00;
+    -fx-font-weight: 900;
+    -fx-effect:
+        dropshadow(three-pass-box, #ffcc00, 10, 0, 0, 3);
+}

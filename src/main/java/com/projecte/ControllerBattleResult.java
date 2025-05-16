@@ -67,13 +67,16 @@ public class ControllerBattleResult implements  Initializable{
         ControllerAttackResult ctrl_2 = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
         ControllerBattleOptions ctrl = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
         ControllerBattleAttack ctrlAttack = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
+        ControllerMenu ctrlMenu = (ControllerMenu) UtilsViews.getController("ViewMenu");
         ctrl.setBattleStatus(STATUS_BATTLE_ENDED, round);
         ctrl.setBattleStatus(STATUS_BATTLE_PREP, round = 1);
-        updateBattleWinner(winner);
+        //updateBattleWinner(winner);
         ctrl.resetBattleState();
         ctrlAttack.resetBattleAttackState();
         ctrl_2.setFinalBattle(false);
         UtilsViews.setView("ViewMenu");
+        ctrlMenu.loadGameStats();
+
     }
 
     public void setRound(int round) {
@@ -95,7 +98,18 @@ public class ControllerBattleResult implements  Initializable{
     }
 
     public void setWinner(String winner) {
-        this.winner = winner;
+        //COnseguir el nombre del ganador desde la tabla Battle
+        AppData db = AppData.getInstance();
+        db.connect(selected_path);
+        ArrayList<HashMap<String, Object>> result = db.query(
+            "SELECT winner FROM Battle WHERE id = " + this.battleId + ";"
+        );
+        if (!result.isEmpty()) {
+            this.winner = (String) result.get(0).get("winner");
+        } else {
+            System.err.println("No se encontró el ganador en la tabla Battle.");
+        }
+        db.close();
         labelWinner.setText(winner); // Mostrar el ganador en la etiqueta
     }
 
@@ -302,10 +316,23 @@ public class ControllerBattleResult implements  Initializable{
                 currentStreak = 0; // Si pierde, se resetea la racha
             }
 
+            //Conseguir el valor de battles_played con un count en Battle
+            ArrayList<HashMap<String, Object>> battlesPlayed = db.query(
+                "SELECT COUNT(*) AS battles_played FROM Battle;"
+            );
+            int battlesCount = 0;
+            if (!battlesPlayed.isEmpty()) {
+                battlesCount = ((Number) battlesPlayed.get(0).get("battles_played")).intValue();
+            }
+            // Si no hay batallas, se inicializa a 0
+            if (battlesCount == 0) {
+                battlesCount = 0;
+            }
+
             // Actualizar la tabla GameStats
             db.update("UPDATE GameStats " +
                     "SET total_experience = total_experience + " + this.randomXP + ", " +
-                    "battles_played = battles_played + 1, " +
+                    "battles_played = " + (battlesCount + 1) + ", " +
                     "current_win_streak = " + currentStreak + ", " +
                     "max_win_streak = " + maxStreak + " " +
                     "WHERE id = 1;");
@@ -325,23 +352,23 @@ public class ControllerBattleResult implements  Initializable{
             levelLabel.setText("Nivel: " + level);            
         }
 
-        public void updateBattleWinner(String winner) {
-            AppData db = AppData.getInstance();
-            db.connect(selected_path);
+        // public void updateBattleWinner(String winner) {
+        //     AppData db = AppData.getInstance();
+        //     db.connect(selected_path);
 
-            // Obtener el id de la última batalla registrada
-            ArrayList<HashMap<String, Object>> result = db.query("SELECT id FROM Battle ORDER BY id DESC LIMIT 1;");
-            if (!result.isEmpty()) {
-                int lastBattleId = ((Number) result.get(0).get("id")).intValue();
-                String update = String.format(
-                    "UPDATE Battle SET winner = '%s' WHERE id = %d;",
-                    winner, lastBattleId
-                );
-                db.update(update);
-            }
+        //     // Obtener el id de la última batalla registrada
+        //     ArrayList<HashMap<String, Object>> result = db.query("SELECT id FROM Battle ORDER BY id DESC LIMIT 1;");
+        //     if (!result.isEmpty()) {
+        //         int lastBattleId = ((Number) result.get(0).get("id")).intValue();
+        //         String update = String.format(
+        //             "UPDATE Battle SET winner = '%s' WHERE id = %d;",
+        //             winner, lastBattleId
+        //         );
+        //         db.update(update);
+        //     }
 
-            db.close();
-        }
+        //     db.close();
+        // }
 
         public int getCurrentLevelFromDB() {
             AppData db = AppData.getInstance();
