@@ -115,6 +115,11 @@ public class ControllerBattleAttack {
         
     }
 
+    /**
+     * Método para mostrar una alerta.
+     * @param message Mensaje a mostrar en la alerta.
+     * @param type Tipo de alerta (INFORMATION, WARNING, etc.).
+     */
     public void setComputerPokemonLabel(String text) {
         this.computerPokemonLabel.setText(text);
     }

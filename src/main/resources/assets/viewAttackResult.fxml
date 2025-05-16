@@ -51,7 +51,7 @@
                            <HBox.margin>
                               <Insets left="97.0" />
                            </HBox.margin></Label>
-                        <Label fx:id="statsLabel" prefHeight="20.0" prefWidth="441.0" style="-fx-text-fill: black;" text="Label">
+                        <Label fx:id="statsLabel" prefHeight="20.0" prefWidth="441.0" style="-fx-text-fill: black;" text="None">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin></Label>
@@ -80,7 +80,7 @@
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
-                        <Label fx:id="hpLabel" style="-fx-text-fill: black;" text="Label">
+                        <Label fx:id="hpLabel" style="-fx-text-fill: black;" text="None">
                            <HBox.margin>
                               <Insets left="40.0" />
                            </HBox.margin></Label>
@@ -92,7 +92,7 @@
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
-                        <Label fx:id="estaminaLabel" prefHeight="15.0" prefWidth="84.0" style="-fx-text-fill: black;" text="Label">
+                        <Label fx:id="estaminaLabel" prefHeight="15.0" prefWidth="84.0" style="-fx-text-fill: black;" text="None">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin></Label>
