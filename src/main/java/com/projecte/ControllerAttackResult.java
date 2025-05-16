@@ -11,6 +11,7 @@ public class ControllerAttackResult {
     @FXML
     private Label roundLabel, equipLabel, pokemonLabel, statsLabel, hpLabel, estaminaLabel, hpPlayer, estaminaPlayer;
     
+    
     @FXML
     private Button buttonContinue;
 
