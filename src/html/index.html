@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon PvC - Tutorial</title>
+    <style>
+        /* RESET & VARIABLES */
+        :root {
+            --primary: #e60012; /* Authentic Pokémon red */
+            --secondary: #2a2a2a; /* Softer black */
+            --white: #ffffff;
+            --light-gray: #f8f8f8;
+            --dark-gray: #333333;
+            --hover-red: #cc0011;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 3rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: var(--light-gray);
+            transform: skewY(-2deg);
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--white);
+            position: relative;
+            z-index: 2;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--primary);
+            background: var(--white);
+            padding: 0 0.5rem;
+            border-radius: 8px;
+        }
+
+        /* NAVIGATION */
+        nav {
+            background: var(--secondary);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            transition: var(--transition);
+        }
+
+        nav a.active, nav a:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(230, 0, 18, 0.3);
+        }
+
+        /* MAIN CONTENT */
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: none;
+        }
+
+        section.active {
+            display: block;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h1, h2, h3 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            border-bottom: 4px solid var(--primary);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        h2 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin-top: 2rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 6px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* REUSABLE COMPONENTS */
+        .button {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 12px rgba(230, 0, 18, 0.2);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .button:hover {
+            background: var(--hover-red);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(230, 0, 18, 0.3);
+        }
+
+        .card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .flex-center {
+            display: flex;
+            align-items: center;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* IMPROVED FOOTER */
+        footer {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 4rem 0 2rem;
+            position: relative;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-columns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-col h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--white);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-col a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--white);
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--white);
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            section {
+                padding: 1.5rem;
+            }
+
+            .footer-columns {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            header::after {
+                bottom: -30px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="logo">POKÉ<span>MON</span> PVC</div>
+        <p>The ultimate Pokémon fighting game</p>
+    </header>
+
+    <!-- NAVIGATION MENU -->
+    <nav>
+        <ul>
+            <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+            <li><a href="#guide" class="nav-link" data-section="guide">Guide</a></li>
+            <li><a href="#battles" class="nav-link" data-section="battles">Battles</a></li>
+            <li><a href="#team" class="nav-link" data-section="team">Team</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <div class="container">
+            <!-- HOME -->
+            <section id="home" class="active">
+                <h1>Welcome to Pokémon PvC</h1>
+                <p>Pokémon PvP is a fighting game inspired by the Pokémon franchise, where you can battle against the computer in exciting strategic combat with a modern and intuitive design.</p>
+                
+                <div style="text-align: center; margin: 3rem 0;">
+                    <img src="start.png" 
+                         alt="Game screenshot" 
+                         style="max-width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);">
+                </div>
+                
+                <div style="text-align: center;">
+                    <a href="#guide" class="button pulse" data-section="guide">Get Started</a>
+                </div>
+
+                <h2>Key Features</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Battle System</h3>
+                        <p>Turn-based combat with updated and balanced mechanics, with over 251 available Pokémon.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Auto-Save</h3>
+                        <p>Your progress is automatically saved in an SQLite database so you can continue anytime.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Artificial Intelligence</h3>
+                        <p>Smart opponents that adapt to your moves and strategies.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GUIDE -->
+            <section id="guide">
+                <h1>Game Guide</h1>
+                <p>This guide will help you understand all the features of Pokémon PvP and how to make the most of them.</p>
+                
+                <h2>Main Interface</h2>
+                <p>The game features an intuitive interface divided into different sections:</p>
+                
+                <div style="margin: 2rem 0;">
+                    <h3>Main Menu</h3>
+                    <p>From here you can access all the basic game functionalities:</p>
+                    
+                </div>
+                
+                <div style="text-align: center; margin: 2rem 0;">
+                    <img src="menu.png" 
+                         alt="Game main interface" 
+                         style="max-width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);">
+                </div>
+
+                <div style="margin: 2rem 0;">
+                    <h3>Management</h3>
+                    <p>Here you can view your team, check each Pokémon's stats, change their order, and upgrade Pokémon as needed.</p>
+                    
+                </div>
+                <div style="text-align: center; margin: 2rem 0;">
+                    <img src="management.png" 
+                         alt="Game main interface" 
+                         style="max-width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);">
+                </div>
+
+                <div style="margin: 2rem 0;">
+                    <h3>History</h3>
+                    <p>In this section, you can review a detailed log of all your previous battles, including Pokémon used, maps, and dates.</p>
+                    
+                </div>
+
+                <div style="text-align: center; margin: 2rem 0;">
+                    <img src="history.png" 
+                         alt="Game main interface" 
+                         style="max-width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);">
+                </div>
+
+                <h2>Game Sections</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Pokémon Management</h3>
+                        <p>Organize your team, view each Pokémon’s stats, and optimize your lineup for upcoming battles.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Pokémon Settings</h3>
+                        <p>Use items you’ve collected to heal, boost stats, or evolve your Pokémon at key moments.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>History</h3>
+                        <p>Review a complete log of your past battles, including Pokémon used, outcomes, and dates.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BATTLES -->
+            <section id="battles">
+                <h1>Battle System</h1>
+                <p>Learn how battles work in Pokémon PvP and master the strategies to become a true Pokémon master.</p>
+
+                <h2>Basic Combat</h2>
+                <p>Battles are turn-based. Each turn you can select one of the following actions:</p>
+                
+                <div class="flex-center" style="margin-bottom: 2rem; background: var(--white); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow);">
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary); margin-right: 1.5rem; min-width: 50px; text-align: center;">1</div>
+                    <div>
+                        <h3>Attack</h3>
+                        <p>Select one of your Pokémon's moves to attack the opponent. Each move has different type, power and accuracy.</p>
+                    </div>
+                </div>
+                
+                
+                <div class="flex-center" style="margin-bottom: 2rem; background: var(--white); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow);">
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary); margin-right: 1.5rem; min-width: 50px; text-align: center;">2</div>
+                    <div>
+                        <h3>Surrender</h3>
+                        <p>Give up the current battle if you think you can't win. Your progress will be saved and you can try again later.</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 2rem 0;">
+                    <img src="battleattack.png" 
+                         alt="Game main interface" 
+                         style="max-width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);">
+                </div>
+                <h2>Types and Effectiveness</h2>
+                <p>Each move has an associated type that may be more or less effective depending on the opponent Pokémon's type. This table shows some key relationships:</p>
+                
+                <div style="overflow-x: auto; margin: 2rem 0;">
+                    <table style="width: 100%; border-collapse: collapse; box-shadow: var(--shadow);">
+                        <tr style="background: var(--primary); color: var(--white);">
+                            <th style="padding: 0.8rem; border: 1px solid rgba(255,255,255,0.1); text-align: center;">Type</th>
+                            <th style="padding: 0.8rem; border: 1px solid rgba(255,255,255,0.1); text-align: center;">Strong against</th>
+                            <th style="padding: 0.8rem; border: 1px solid rgba(255,255,255,0.1); text-align: center;">Weak against</th>
+                        </tr>
+                        <tr style="background: var(--white);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Normal</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">—</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Rock, Steel, Ghost (immune)</td>
+                        </tr>
+                        <tr style="background: var(--light-gray);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fire</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Grass, Ice, Bug, Steel</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Water, Rock, Fire, Dragon</td>
+                        </tr>
+                        <tr style="background: var(--white);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Water</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fire, Ground, Rock</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Water, Grass, Dragon</td>
+                        </tr>
+                        <tr style="background: var(--light-gray);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Electric</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Water, Flying</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Electric, Grass, Dragon, Ground (immune)</td>
+                        </tr>
+                        <tr style="background: var(--white);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Grass</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Water, Ground, Rock</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fire, Grass, Poison, Flying, Bug, Dragon, Steel</td>
+                        </tr>
+                        <tr style="background: var(--light-gray);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Ice</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Grass, Ground, Flying, Dragon</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fire, Water, Ice, Steel</td>
+                        </tr>
+                        <tr style="background: var(--white);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fighting</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Normal, Ice, Rock, Dark, Steel</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Poison, Flying, Psychic, Bug, Fairy, Ghost (immune)</td>
+                        </tr>
+                        <tr style="background: var(--light-gray);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Poison</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Grass, Fairy</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Poison, Ground, Rock, Ghost, Steel (immune)</td>
+                        </tr>
+                        <tr style="background: var(--white);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Ground</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fire, Electric, Poison, Rock, Steel</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Grass, Ice, Bug, Flying (immune)</td>
+                        </tr>
+                        <tr style="background: var(--light-gray);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Flying</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Grass, Fighting, Bug</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Electric, Rock, Steel</td>
+                        </tr>
+                        <tr style="background: var(--white);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Psychic</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fighting, Poison</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Psychic, Steel, Dark (immune)</td>
+                        </tr>
+                        <tr style="background: var(--light-gray);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Bug</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Grass, Psychic, Dark</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fire, Fighting, Poison, Flying, Ghost, Steel, Fairy</td>
+                        </tr>
+                        <tr style="background: var(--white);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Rock</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fire, Ice, Flying, Bug</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fighting, Ground, Steel</td>
+                        </tr>
+                        <tr style="background: var(--light-gray);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Ghost</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Psychic, Ghost</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Dark, Normal (immune)</td>
+                        </tr>
+                        <tr style="background: var(--white);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Dragon</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Dragon</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Steel, Fairy (immune)</td>
+                        </tr>
+                        <tr style="background: var(--light-gray);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Dark</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Psychic, Ghost</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fighting, Dark, Fairy</td>
+                        </tr>
+                        <tr style="background: var(--white);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Steel</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Ice, Rock, Fairy</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fire, Water, Electric, Steel</td>
+                        </tr>
+                        <tr style="background: var(--light-gray);">
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fairy</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fighting, Dragon, Dark</td>
+                            <td style="padding: 0.8rem; border: 1px solid var(--light-gray); text-align: center;">Fire, Poison, Steel</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div style="text-align: center; margin: 2rem 0;">
+                    <img src="types.png" 
+                         alt="Battle example" 
+                         style="max-width: 100%; border-radius: var(--radius);">
+                </div>
+
+                <div style="margin: 2rem 0; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 2rem;">
+                    <h2>Attack Result</h2>
+                    <p>When a Pokémon runs out of HP or stamina, what is shown in the image happens: the Pokémon can no longer continue and the battle ends for it. At this point, you must choose another Pokémon from your team to continue the battle.</p>
+                    <div style="text-align: center; margin: 2rem 0;">
+                        <img src="attackresult.png" 
+                             alt="Battle example" 
+                             style="max-width: 100%; border-radius: var(--radius);">
+                    </div>
+                </div>
+
+                <div style="margin: 2rem 0; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 2rem;">
+                    <h2>Battle Result</h2>
+                    <p>When one of the teams runs out of Pokémon able to battle, the results screen appears showing the winner and the rewards earned. Here you can see which team won, which Pokémon fainted, the experience gained, and any items or progress unlocked as a result of the match.</p>
+                    <div style="text-align: center; margin: 2rem 0;">
+                        <img src="battleresult.png" 
+                             alt="Battle example" 
+                             style="max-width: 100%; border-radius: var(--radius);">
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEAM -->
+            <section id="team">
+                <h1>Development Team</h1>
+                <p>Meet the members who made this project possible and the process we followed to create it.</p>
+
+                <h2>Our Team</h2>
+                <div class="grid">
+                    <div style="background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); text-align: center; border-top: 6px solid var(--primary);">
+                        <a href="victora.png">
+                            <img src="victora.png" alt="16-may-2025-12-41-56" border="0" style="border-radius: var(--radius); max-width:200px; max-height:200px; object-fit:cover; display:block; margin:0 auto;">
+                        </a>
+                        <h3>Victor Asensio</h3>
+                        <div style="color: var(--primary); font-weight: bold; margin: 0.5rem 0;">Lead Programmer</div>
+                        <p>Responsible for developing the battle system, game logic and SQLite database integration.</p>
+                        <p>Also contributed to the design of the user interface, documentation, and overall project coordination to ensure a cohesive and functional game experience.</p>
+                    </div>
+                    
+                    <div style="background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); text-align: center; border-top: 6px solid var(--primary);">
+                        <a href="victorp.png">
+                            <img src="victorp.png" alt="16-may-2025-12-41-56" border="0" style="border-radius: var(--radius); max-width:200px; max-height:200px; object-fit:cover; display:block; margin:0 auto;">
+                        </a></a>
+                        <h3>Victor Prieto</h3>
+                        <div style="color: var(--primary); font-weight: bold; margin: 0.5rem 0;">UI & DB Programmer</div>
+                        <p>Responsible for designing the graphical interface, enhancing user experience, and creating all visual elements of the game.</p>
+                        <p>Also contributed to the design and structure of the SQLite database used for saving game progress.</p>
+                    </div>
+                    
+                </div>
+
+                <h2>Our Process</h2>
+                <div style="margin: 2rem 0;">
+                    <h3>Planning</h3>
+                    <p>Initial phase where we defined game requirements, core mechanics and distributed tasks among team members using agile methodologies.</p>
+                </div>
+                <div style="margin: 2rem 0;">
+                    <h3>Development</h3>
+                    <p>Implementation of different game features in weekly iterations, with constant reviews to ensure product quality.</p>
+                </div>
+                <div style="margin: 2rem 0;">
+                    <h3>Testing</h3>
+                    <p>Intensive testing phase to detect and fix bugs, balance the game and ensure all features work correctly.</p>
+                </div>
+                <div style="margin: 2rem 0;">
+                    <h3>Release</h3>
+                    <p>Game publication and user feedback collection for future updates and improvements.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- IMPROVED FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-columns">
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home" data-section="home">Home</a></li>
+                        <li><a href="#guide" data-section="guide">Guide</a></li>
+                        <li><a href="#battles" data-section="battles">Battles</a></li>
+                        <li><a href="#team" data-section="team">Team</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Documentation</h4>
+                    <ul>
+                        <li><a href="#">User Manual</a></li>
+                        <li><a href="#">Game API</a></li>
+                        <li><a href="#">Style Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookies</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <p>pokemonpvp@example.com</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="GitHub">💻</a>
+                        <a href="#" aria-label="Discord">🎮</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2023 Pokémon PvP. Educational project developed as part of an academic project.</p>
+                <p>Not affiliated with The Pokémon Company. All character rights belong to their respective owners.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Show/hide sections
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove 'active' from all links and sections
+                document.querySelectorAll('.nav-link, section').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // Mark current link as active
+                this.classList.add('active');
+                
+                // Show corresponding section
+                const sectionId = this.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+                
+                // Smooth scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Show home by default on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('home').classList.add('active');
+        });
+
+        // Improve navigation with history
+        window.addEventListener('popstate', function() {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                document.querySelectorAll('.nav-link, section').forEach(el => {
+                    el.classList.remove('active');
+                });
+                document.querySelector(`[data-section="${hash}"]`).classList.add('active');
+                document.getElementById(hash).classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

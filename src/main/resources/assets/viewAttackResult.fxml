@@ -3,14 +3,17 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@viewResultAttack.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerAttackResult">
+<StackPane fx:id="rootPane" minHeight="540.0" minWidth="960.0" prefHeight="548.0" prefWidth="1036.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerAttackResult">
    <children>
-      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ImageView fx:id="imgPokeAttackResult" pickOnBounds="true" preserveRatio="true" />
+      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="481.0" prefWidth="958.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="roundLabel" text="Round 2" textFill="RED">
                <font>
@@ -24,13 +27,13 @@
             </Label>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="25.0">
                      <children>
-                        <Label prefHeight="20.0" prefWidth="107.0" text="Primer Atac: ">
+                        <Label prefHeight="15.0" prefWidth="274.0" text="Primer Atac: ">
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="385.0" spacing="10.0">
                            <children>
                               <Label fx:id="equipLabel" style="-fx-text-fill: black;" text="Computer:">
                                  <HBox.margin>
@@ -42,37 +45,38 @@
                         </HBox>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="25.0">
                      <children>
-                        <Label prefHeight="20.0" prefWidth="221.0" text="Resultat atac:">
+                        <Label prefHeight="15.0" prefWidth="273.0" text="Resultat atac:">
                            <HBox.margin>
                               <Insets left="97.0" />
                            </HBox.margin></Label>
-                        <Label fx:id="statsLabel" prefHeight="20.0" prefWidth="279.0" style="-fx-text-fill: black;" text="Label">
+                        <Label fx:id="statsLabel" prefHeight="20.0" prefWidth="441.0" style="-fx-text-fill: black;" text="Label">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin></Label>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="25.0">
                      <children>
-                        <Label prefHeight="20.0" prefWidth="177.0" text="Stats noves: ">
+                        <Label prefHeight="17.0" prefWidth="280.0" text="Stats noves: ">
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
-                        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="273.0" spacing="10.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="421.0" spacing="10.0">
                            <children>
-                              <Label prefHeight="20.0" prefWidth="29.0" style="-fx-text-fill: black;" text="HP:" />
-                              <Label fx:id="hpPlayer" prefHeight="20.0" prefWidth="38.0" text="100" />
-                              <Label prefHeight="20.0" prefWidth="51.0" text="STMN:" />
-                              <Label fx:id="estaminaPlayer" prefHeight="20.0" prefWidth="35.0" text="50" />
+                              <Label prefHeight="20.0" prefWidth="89.0" style="-fx-text-fill: black;" text="STATS:" />
+                              <Label prefHeight="20.0" prefWidth="52.0" text="HP:" />
+                              <Label fx:id="hpPlayer" prefHeight="20.0" prefWidth="99.0" text="100" />
+                              <Label prefHeight="20.0" prefWidth="79.0" text="STMN:" />
+                              <Label fx:id="estaminaPlayer" prefHeight="20.0" prefWidth="80.0" text="50" />
                            </children>
                         </HBox>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="25.0">
                      <children>
-                        <Label text="HP rival:">
+                        <Label prefHeight="17.0" prefWidth="238.0" text="HP rival:">
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
@@ -82,13 +86,13 @@
                            </HBox.margin></Label>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="200.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="25.0">
                      <children>
-                        <Label text="Stamina rival:">
+                        <Label prefHeight="17.0" prefWidth="274.0" text="Stamina rival:">
                            <HBox.margin>
                               <Insets left="100.0" />
                            </HBox.margin></Label>
-                        <Label fx:id="estaminaLabel" style="-fx-text-fill: black;" text="Label">
+                        <Label fx:id="estaminaLabel" prefHeight="15.0" prefWidth="84.0" style="-fx-text-fill: black;" text="Label">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin></Label>
@@ -106,9 +110,6 @@
                </children>
             </VBox>
          </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
       </VBox>
    </children>
-</AnchorPane>
+</StackPane>
