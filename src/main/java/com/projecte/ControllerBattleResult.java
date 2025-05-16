@@ -49,6 +49,8 @@ public class ControllerBattleResult implements  Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        //updateBattleWinner(winner);
+        
         URL imageURL = null;
         try {
             imageURL = getClass().getResource("/assets/result/finish.jpg");
@@ -62,6 +64,19 @@ public class ControllerBattleResult implements  Initializable{
 
     @FXML
     private void toContinue(ActionEvent event) {
+
+        // Limpiar imágenes
+        imgPokemon1.setImage(null);
+        imgPokemon2.setImage(null);
+
+        // Limpiar labels
+        labelRewards.setText("");
+        labelWinner.setText("");
+        item1.setText("");
+        item2.setText("");
+        item3.setText("");
+        levelLabel.setText("");
+        xpLabel.setText("");
         
         // Acción al hacer clic en el botón "Recoger recompensas"
         ControllerAttackResult ctrl_2 = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
@@ -70,9 +85,9 @@ public class ControllerBattleResult implements  Initializable{
         ControllerMenu ctrlMenu = (ControllerMenu) UtilsViews.getController("ViewMenu");
         ctrl.setBattleStatus(STATUS_BATTLE_ENDED, round);
         ctrl.setBattleStatus(STATUS_BATTLE_PREP, round = 1);
-        //updateBattleWinner(winner);
         ctrl.resetBattleState();
         ctrlAttack.resetBattleAttackState();
+        setRun(false);
         ctrl_2.setFinalBattle(false);
         UtilsViews.setView("ViewMenu");
         ctrlMenu.loadGameStats();
@@ -91,25 +106,15 @@ public class ControllerBattleResult implements  Initializable{
         if (!run) {
             buttonContinue.setText("Recoger recompensas");
             this.run = run;
-        } else {
+        } else if (run && winner.equals("Computer")) {
             buttonContinue.setText("Te quedas sin nada por huir");
             this.run = run;
         }
     }
 
     public void setWinner(String winner) {
-        //COnseguir el nombre del ganador desde la tabla Battle
-        AppData db = AppData.getInstance();
-        db.connect(selected_path);
-        ArrayList<HashMap<String, Object>> result = db.query(
-            "SELECT winner FROM Battle WHERE id = " + this.battleId + ";"
-        );
-        if (!result.isEmpty()) {
-            this.winner = (String) result.get(0).get("winner");
-        } else {
-            System.err.println("No se encontró el ganador en la tabla Battle.");
-        }
-        db.close();
+        this.winner = winner;
+        updateBattleWinner(winner); // <-- Actualiza el ganador en la tabla
         labelWinner.setText(winner); // Mostrar el ganador en la etiqueta
     }
 
@@ -250,6 +255,17 @@ public class ControllerBattleResult implements  Initializable{
         public void updateGameStatsWithRandomXP() {
 
             if (run){
+                //Hazme la query de la tabla GameStats para conseguir el nivel actual
+                AppData db = AppData.getInstance();
+                db.connect(selected_path);
+                ArrayList<HashMap<String, Object>> stats = db.query(
+                    "SELECT total_experience FROM GameStats WHERE id = 1"
+                );
+                if (!stats.isEmpty()) {
+                    int totalXP = ((Number) stats.get(0).get("total_experience")).intValue();
+                    setLevelProgressBar(totalXP);
+                }
+
                 xpLabel.setText("Sin XP");
                 System.out.println(run);
                 return;
@@ -352,23 +368,28 @@ public class ControllerBattleResult implements  Initializable{
             levelLabel.setText("Nivel: " + level);            
         }
 
-        // public void updateBattleWinner(String winner) {
-        //     AppData db = AppData.getInstance();
-        //     db.connect(selected_path);
+        public void updateBattleWinner(String winner) {
+            AppData db = AppData.getInstance();
+            db.connect(selected_path);
 
-        //     // Obtener el id de la última batalla registrada
-        //     ArrayList<HashMap<String, Object>> result = db.query("SELECT id FROM Battle ORDER BY id DESC LIMIT 1;");
-        //     if (!result.isEmpty()) {
-        //         int lastBattleId = ((Number) result.get(0).get("id")).intValue();
-        //         String update = String.format(
-        //             "UPDATE Battle SET winner = '%s' WHERE id = %d;",
-        //             winner, lastBattleId
-        //         );
-        //         db.update(update);
-        //     }
+            // Obtener el id de la última batalla registrada
+            // if (run){
+            //     winner = "Computer";
+            // } else {
+            //     winner = "Player";
+            // }
+            ArrayList<HashMap<String, Object>> result = db.query("SELECT id FROM Battle ORDER BY id DESC LIMIT 1;");
+            if (!result.isEmpty()) {
+                int lastBattleId = ((Number) result.get(0).get("id")).intValue();
+                String update = String.format(
+                    "UPDATE Battle SET winner = '%s' WHERE id = %d;",
+                    winner, lastBattleId
+                );
+                db.update(update);
+            }
 
-        //     db.close();
-        // }
+            db.close();
+        }
 
         public int getCurrentLevelFromDB() {
             AppData db = AppData.getInstance();

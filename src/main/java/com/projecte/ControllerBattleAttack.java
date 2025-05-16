@@ -692,8 +692,18 @@ public class ControllerBattleAttack {
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(event -> {
                 switchToNextEnemyPokemon();
-                // Solo atacar si el nuevo Pokémon no está debilitado
-                if (!computerPokemonDead() && !computerPokemonOutOfStamina()) {
+                // Si ya no quedan enemigos, termina la batalla
+                if (enemyPokemonIds.isEmpty()) {
+                    // Aquí termina la batalla, no vuelvas a llamar a handleAttack
+                    return;
+                }
+                // Si el nuevo enemigo tampoco puede combatir, vuelve a cambiar
+                if (computerPokemonDead() || computerPokemonOutOfStamina()) {
+                    // Cambia al siguiente sin recursión infinita
+                    switchToNextEnemyPokemon();
+                    // Si después de cambiar ya no quedan enemigos, termina la batalla
+                    if (enemyPokemonIds.isEmpty()) return;
+                } else {
                     computerAttack();
                 }
             });
@@ -707,6 +717,8 @@ public class ControllerBattleAttack {
     public void fightButtonAction(ActionEvent event) {
 
         fightButton.setStyle("-fx-background-color: red;");
+        ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
+        ctrl.setRun(false); // Reiniciar la variable run al hacer clic en el botón de ataque
 
         handleAttack(currentSelection); // Mostrar el ataque seleccionado
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
@@ -721,7 +733,6 @@ public class ControllerBattleAttack {
         // Durante el cooldown, reducir gradualmente la barra de vida del jugador
         cooldown.setOnFinished(event1 -> {
             updatePlayerStatus(); // Cambiar la vista después de que la vida llegue a 0
-            ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
             ctrl.setRound(round);
             ctrl.setBattleId(battleId);
             UtilsViews.setViewAnimating("ViewAttackResult");
@@ -733,6 +744,10 @@ public class ControllerBattleAttack {
 
     }
 
+    public void setRun(boolean run) {
+        this.run = run;
+    }
+
     @FXML
     public void runButtonAction(ActionEvent event) {
         // Cambiar el estilo del botón al hacer clic
@@ -742,15 +757,14 @@ public class ControllerBattleAttack {
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
         pause.setOnFinished(event2 -> {
             runButton.setStyle("-fx-background-color: #ffcc00; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0); -fx-font-weight: bold;");
-            
+             this.run = true;
             ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
             ControllerBattleOptions ctrl2 = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
             ctrl2.setBattleStatus(STATUS_BATTLE_ENDED, round);
             
-            this.run = true;
-            ctrl.setRun(this.run);
+            ctrl.setRun(true);
 
-            ctrl2.setWinner("Computer");
+            ctrl.setWinner("Computer");
             ctrl.setBattleId(battleId);
             ctrl.setFinalBattle(true); // Esto hará que se muestre BattleResult y no se sume XP
             System.out.println("Valor run: " + this.run);
