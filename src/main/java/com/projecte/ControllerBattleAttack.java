@@ -750,7 +750,7 @@ public class ControllerBattleAttack {
             this.run = true;
             ctrl.setRun(this.run);
 
-            ctrl.setWinner("Computer");
+            ctrl2.setWinner("Computer");
             ctrl.setBattleId(battleId);
             ctrl.setFinalBattle(true); // Esto hará que se muestre BattleResult y no se sume XP
             System.out.println("Valor run: " + this.run);
@@ -1086,7 +1086,11 @@ public class ControllerBattleAttack {
         }
         return 1.0; //Default effectiveness
     }
-
+    
+    /**
+     * Método para reiniciar el estado de la batalla.
+     * Este método se llama al finalizar la batalla o al iniciar una nueva.
+     */
     public void resetBattleAttackState() {
             round = 0;
             idPokemon = -1;
@@ -1103,7 +1107,10 @@ public class ControllerBattleAttack {
             if (enemyStaminaBar != null) enemyStaminaBar.setProgress(1.0);
     }
 
-    //Función para obtener de la tabla ItemEffect si hay Pokemons con objetos
+    /**
+     * Method to apply item effects to player Pokémon.
+     * @param playerPokemonIds
+     */
     public void applyItemEffectsToPlayerPokemons(List<Integer> playerPokemonIds) {
        AppData db = AppData.getInstance();
         db.connect(selected_path);
@@ -1152,6 +1159,11 @@ public class ControllerBattleAttack {
     db.close();
     }
 
+    /**
+     * Method to remove effects from player Pokémon.
+     * This method is called when the battle ends.
+     * @param playerPokemonIds
+     */
     public void putOutEffectsToPlayerPokemons(List<Integer> playerPokemonIds) {
         AppData db = AppData.getInstance();
         db.connect(selected_path);

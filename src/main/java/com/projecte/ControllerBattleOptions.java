@@ -328,8 +328,8 @@ public class ControllerBattleOptions implements Initializable {
         
         // Configurar estamina y HP
         ctrl.setEstaminaComputer("30/30");
-        ctrl.setEstaminaPlayer(stamina + "/30");
-        ctrl.setHpPlayer(maxHp + "/100");
+        ctrl.setEstaminaPlayer(stamina + "/" + stamina);
+        ctrl.setHpPlayer(maxHp + "/" + maxHp);
         ctrl.setHpComputer("100/100");
         ctrl.setEnemyHpBar(1.0);
         ctrl.setEnemyStaminaBar(1.0);
@@ -753,7 +753,7 @@ public class ControllerBattleOptions implements Initializable {
 
             // Reiniciar las variables de la batalla
             round = 1;
-            winner = null;
+            //winner = null;
             loadUnlockedPokemons(); // Recargar los Pokémon desbloqueados
         }
         
@@ -837,10 +837,8 @@ public class ControllerBattleOptions implements Initializable {
                     winner = "Player"; // El jugador ganó
                 }
 
-                ControllerAttackResult ctrlResult = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
-                
-                
-                ctrlResult.setWinner(winner); // Establecer el ganador en el controlador de resultados
+                ControllerAttackResult ctrlResult = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");                
+                //ctrlResult.setWinner(winner); // Establecer el ganador en el controlador de resultados
                 ctrlResult.setRound(round);
                 ctrlResult.setFinalBattle(true);
                 ctrlResult.setEquipLabel("Player"); // Indica que el jugador ganó
@@ -848,14 +846,19 @@ public class ControllerBattleOptions implements Initializable {
                 ctrlResult.setEstaminaLabel(ctrl.getEstaminaComputer());
                 ctrlResult.setHpPlayer(ctrl.getHpPlayer());
                 ctrlResult.setEstaminaPlayer(ctrl.getEstaminaPlayer());
-                //ctrlResult.setStatsLabel("Ataque: " + moves[currentSelection].getText().replace("➤", "").trim());
-                //ctrlResult.setPokemonLabel(playerPokemonLabel.getText());
-
                 // Cambiar a la vista de resultados
                 UtilsViews.setViewAnimating("ViewAttackResult");
             });
         } 
         
+        /**
+         * Method to set the winner of the battle.
+         * @param winner The winner of the battle, either "Player" or "Computer".
+         */
+        public void setWinner(String winner) {
+            this.winner = winner;
+        }
+
         /**
          * Inserta una nueva batalla en la tabla Battle con el mapa y la fecha/hora actual.
          * El campo winner se deja vacío (NULL) para actualizarlo después.
@@ -872,8 +875,8 @@ public class ControllerBattleOptions implements Initializable {
 
             // Insertar la batalla sin winner
             String insertBattle = String.format(
-                "INSERT INTO Battle (date, map, winner) VALUES ('%s', '%s', NULL);",
-                dateTime, mapName
+                "INSERT INTO Battle (date, map, winner) VALUES ('%s', '%s', '%s');",
+                dateTime, mapName, winner
             );
             db.update(insertBattle);
 
