@@ -9,16 +9,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerMenu">
+<AnchorPane prefHeight="493.0" prefWidth="769.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.ControllerMenu">
    <children>
       <ImageView fx:id="imgBackground" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <HBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" prefHeight="493.0" prefWidth="769.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="236.0">
+            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="387.0">
                <children>
-                  <VBox alignment="CENTER" prefHeight="313.0" prefWidth="245.0">
+                  <VBox alignment="CENTER_LEFT" prefHeight="400.0" prefWidth="334.0">
                      <children>
-                        <Button fx:id="managementButton" mnemonicParsing="false" onAction="#toViewManagement" prefHeight="36.0" prefWidth="174.0" style="-fx-background-color: #FFD700;" text="Team Management" textFill="BLUE">
+                        <Button fx:id="managementButton" mnemonicParsing="false" onAction="#toViewManagement" prefHeight="36.0" prefWidth="285.0" style="-fx-background-color: #FFD700;" text="Team Management" textFill="BLUE">
                            <VBox.margin>
                               <Insets left="35.0" top="50.0" />
                            </VBox.margin>
@@ -26,7 +26,7 @@
                               <Font name="Noto Serif Lao Bold" size="15.0" />
                            </font>
                         </Button>
-                        <Button fx:id="battleHistoryButton" mnemonicParsing="false" onAction="#toViewBattleHistory" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="Battle History" textFill="BLUE">
+                        <Button fx:id="battleHistoryButton" mnemonicParsing="false" onAction="#toViewBattleHistory" prefHeight="36.0" prefWidth="285.0" style="-fx-background-color: #FFD700;" text="Battle History" textFill="BLUE">
                            <VBox.margin>
                               <Insets left="35.0" top="25.0" />
                            </VBox.margin>
@@ -34,7 +34,7 @@
                               <Font name="Noto Serif Lao Bold" size="15.0" />
                            </font>
                         </Button>
-                        <Button fx:id="newBattleButton" mnemonicParsing="false" onAction="#toViewNewBattle" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="New Battle" textFill="BLUE">
+                        <Button fx:id="newBattleButton" mnemonicParsing="false" onAction="#toViewNewBattle" prefHeight="36.0" prefWidth="285.0" style="-fx-background-color: #FFD700;" text="New Battle" textFill="BLUE">
                            <VBox.margin>
                               <Insets left="35.0" top="25.0" />
                            </VBox.margin>
@@ -42,7 +42,7 @@
                               <Font name="Noto Serif Lao Bold" size="15.0" />
                            </font>
                         </Button>
-                        <Button fx:id="exitButton" mnemonicParsing="false" onAction="#toViewStart" prefHeight="36.0" prefWidth="171.0" style="-fx-background-color: #FFD700;" text="Exit Game " textFill="BLUE">
+                        <Button fx:id="exitButton" mnemonicParsing="false" onAction="#toViewStart" prefHeight="36.0" prefWidth="285.0" style="-fx-background-color: #FFD700;" text="Exit Game " textFill="BLUE">
                            <VBox.margin>
                               <Insets left="35.0" top="70.0" />
                            </VBox.margin>
@@ -54,13 +54,13 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="402.0" prefWidth="365.0">
+            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="358.0">
                <children>
-                  <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="400.0">
+                  <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="350.0">
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="33.0" prefWidth="271.0" text="Game Stats">
                            <font>
-                              <Font name="System Bold" size="18.0" />
+                              <Font name="Pokemon Pixel Font Regular" size="18.0" />
                            </font>
                            <padding>
                               <Insets left="25.0" />
@@ -72,7 +72,7 @@
                         <HBox prefHeight="335.0" prefWidth="364.0">
                            <children>
                               <VBox prefHeight="335.0" prefWidth="131.0" />
-                              <VBox alignment="CENTER" prefHeight="340.0" prefWidth="267.0">
+                              <VBox alignment="CENTER" prefHeight="335.0" prefWidth="451.0">
                                  <children>
                                     <HBox prefHeight="50.0" prefWidth="201.0">
                                        <children>
@@ -151,7 +151,7 @@
                                     </HBox>
                                     <HBox prefHeight="50.0" prefWidth="201.0">
                                        <children>
-                                          <Label prefHeight="36.0" prefWidth="115.0" text="Max win streak:">
+                                          <Label prefHeight="36.0" prefWidth="227.0" text="Max win streak:">
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin>
@@ -162,7 +162,7 @@
                                                 <Font name="Corbel Bold" size="16.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="maxConsecutiveWinsInfoLabel" prefHeight="38.0" prefWidth="75.0" text="McwInfo">
+                                          <Label fx:id="maxConsecutiveWinsInfoLabel" prefHeight="38.0" prefWidth="103.0" text="McwInfo">
                                              <HBox.margin>
                                                 <Insets left="5.0" />
                                              </HBox.margin>
@@ -177,7 +177,7 @@
                                     </HBox>
                                     <HBox prefHeight="50.0" prefWidth="201.0">
                                        <children>
-                                          <Label text="Pokemons caught:">
+                                          <Label prefHeight="30.0" prefWidth="232.0" text="Pokemons caught:">
                                              <padding>
                                                 <Insets top="15.0" />
                                              </padding>
