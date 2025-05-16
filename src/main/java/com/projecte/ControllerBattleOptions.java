@@ -251,18 +251,19 @@ public class ControllerBattleOptions implements Initializable {
             alert.showAndWait();
             return; // Salir del método si no son diferentes
         }
+
+        ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
+        ctrl.setRun(false); // <-- Añade esto
         // Cambiar a la vista de batalla
         setBattleStatus(STATUS_BATTLE_STARTED, round);
 
-        ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
         ctrl.setMap(mapPaths.get(currentMapIndex));
         ctrl.setIdPokemon(idPokemon);
         ctrl.setRound(round);
         ctrl.loadAttacksFromDatabase();
-
         String mapName = mapPaths.get(currentMapIndex);
         mapName = mapName.substring(mapName.lastIndexOf("/") + 1, mapName.lastIndexOf(".")); // Solo el nombre del mapa
-        this.battleId = insertBattleWithoutWinner(mapName);
+        this.battleId = insertBattle(mapName);
         ctrl.setBattleId(battleId);
         
         selectedPokemonIds.clear();
@@ -418,8 +419,8 @@ public class ControllerBattleOptions implements Initializable {
         String computerHp = ctrl.getHpComputer();
         String computerStamina = ctrl.getEstaminaComputer();
         ctrl.setEstaminaComputer(computerStamina);
-        ctrl.setEstaminaPlayer(stamina + "/30");
-        ctrl.setHpPlayer(maxHp + "/100");
+        ctrl.setEstaminaPlayer(stamina + "/" + stamina);
+        ctrl.setHpPlayer(maxHp + "/" + maxHp);
         ctrl.setHpComputer(computerHp);
         ctrl.setEnemyHpBar(enemyHp);
         ctrl.setEnemyStaminaBar(enemyStamina);
@@ -753,6 +754,7 @@ public class ControllerBattleOptions implements Initializable {
 
             // Reiniciar las variables de la batalla
             round = 1;
+            winner = "Computer";
             //winner = null;
             loadUnlockedPokemons(); // Recargar los Pokémon desbloqueados
         }
@@ -832,16 +834,17 @@ public class ControllerBattleOptions implements Initializable {
                 
                 ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
                 if (areAllPokemonsDead()) {
-                    winner = "Computer"; // El jugador perdió
+                    this.winner = "Computer"; // El jugador perdió
                 } else if (!ctrl.hasMoreEnemyPokemons()) {
-                    winner = "Player"; // El jugador ganó
+                    this.winner = "Player"; // El jugador ganó
                 }
+                
 
                 ControllerAttackResult ctrlResult = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");                
-                //ctrlResult.setWinner(winner); // Establecer el ganador en el controlador de resultados
+                ctrlResult.setWinner(winner); // Establecer el ganador en el controlador de resultados
                 ctrlResult.setRound(round);
                 ctrlResult.setFinalBattle(true);
-                ctrlResult.setEquipLabel("Player"); // Indica que el jugador ganó
+                ctrlResult.setEquipLabel(winner); // Indica que el jugador ganó
                 ctrlResult.setHpLabel(ctrl.getHpComputer());
                 ctrlResult.setEstaminaLabel(ctrl.getEstaminaComputer());
                 ctrlResult.setHpPlayer(ctrl.getHpPlayer());
@@ -864,7 +867,7 @@ public class ControllerBattleOptions implements Initializable {
          * El campo winner se deja vacío (NULL) para actualizarlo después.
          * Devuelve el id de la batalla insertada.
          */
-        public int insertBattleWithoutWinner(String mapName) {
+        public int insertBattle(String mapName) {
             AppData db = AppData.getInstance();
             db.connect(selected_path);
 
@@ -874,9 +877,10 @@ public class ControllerBattleOptions implements Initializable {
             String dateTime = now.format(formatter);
 
             // Insertar la batalla sin winner
+            //String winnerValue = (this.winner == null) ? "NULL" : this.winner;
             String insertBattle = String.format(
-                "INSERT INTO Battle (date, map, winner) VALUES ('%s', '%s', '%s');",
-                dateTime, mapName, winner
+                "INSERT INTO Battle (date, map, winner) VALUES ('%s', '%s', NULL);",
+                dateTime, mapName
             );
             db.update(insertBattle);
 

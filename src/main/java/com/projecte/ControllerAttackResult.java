@@ -87,18 +87,18 @@ public class ControllerAttackResult implements Initializable{
         }
     }
 
-    // public void setWinner(String winner) {
+    public void setWinner(String winner) {
 
-    //     //this.winner = winner;
-    //     ControllerBattleResult ctrl = (ControllerBattleResult) UtilsViews.getController("ViewBattleResult");
-    //     //ctrl.setWinner(winner);
-    //     if (winner.equals("Player")) {
-    //         hpPlayer.setText("Ganador: " + winner);
-    //     } else {
-    //         hpPlayer.setText("Perdedor: " + winner);
-    //     }
-    //     ctrl.setBattleId(battleId);
-    // }
+        this.winner = winner;
+        ControllerBattleResult ctrl = (ControllerBattleResult) UtilsViews.getController("ViewBattleResult");
+        ctrl.setWinner(winner);
+        if (winner.equals("Player")) {
+            hpPlayer.setText("Ganador: " + winner);
+        } else {
+            hpPlayer.setText("Perdedor: " + winner);
+        }
+        ctrl.setBattleId(battleId);
+    }
     
     public void setEstaminaPlayer(String estamina) {
         estaminaPlayer.setText(estamina);
