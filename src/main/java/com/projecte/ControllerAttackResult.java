@@ -55,9 +55,9 @@ public class ControllerAttackResult implements Initializable{
         this.battleId = battleId;
     }
 
-    public void setRun(boolean run) {
-        this.run = run;
-    }
+    // public void setRun(boolean run) {
+    //     this.run = run;
+    // }
 
     /**
      * Método para establecer si es la batalla final.
@@ -72,7 +72,9 @@ public class ControllerAttackResult implements Initializable{
             UtilsViews.setView("ViewBattleResult");
             ControllerBattleResult ctrl = (ControllerBattleResult) UtilsViews.getController("ViewBattleResult");
             ctrl.setRound(this.round);
-            ctrl.setRun(this.run);
+            //ctrl.setRun(this.run);
+            AppData appData = AppData.getInstance();
+            run = appData.isRun();
             if (!run) {
                 ctrl.unlockTwoRandomPokemons();
                 ctrl.unlockRandomItem();

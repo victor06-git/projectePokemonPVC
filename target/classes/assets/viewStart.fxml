@@ -22,9 +22,9 @@
      <VBox alignment="CENTER" fillWidth="true" spacing="15">
         
            <!-- Título del juego -->
-        <Label text="Pokémon PvC">
+        <Label prefWidth="369.0" text="Pokémon: Rivalidad Virtual">
             <font>
-                <Font name="Arial Bold" size="40" />
+                <Font size="51.0" />
             </font>
         </Label>
    

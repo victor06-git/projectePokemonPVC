@@ -727,8 +727,9 @@ public class ControllerBattleAttack {
 
         fightButton.setStyle("-fx-background-color: red;");
         ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
-        ctrl.setRun(false); // Reiniciar la variable run al hacer clic en el botón de ataque
-
+        //ctrl.setRun(false); // Reiniciar la variable run al hacer clic en el botón de ataque
+        // AppData db = AppData.getInstance();
+        // db.setRun(false);
         handleAttack(currentSelection); // Mostrar el ataque seleccionado
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
         pause.setOnFinished(event2 -> {
@@ -753,9 +754,9 @@ public class ControllerBattleAttack {
 
     }
 
-    public void setRun(boolean run) {
-        this.run = run;
-    }
+    // public void setRun(boolean run) {
+    //     this.run = run;
+    // }
 
     @FXML
     public void runButtonAction(ActionEvent event) {
@@ -766,12 +767,13 @@ public class ControllerBattleAttack {
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
         pause.setOnFinished(event2 -> {
             runButton.setStyle("-fx-background-color: #ffcc00; -fx-effect: dropshadow(gaussian, #ffffff, 2, 0.5, 0.0, 0.0); -fx-font-weight: bold;");
-             this.run = true;
+
             ControllerAttackResult ctrl = (ControllerAttackResult) UtilsViews.getController("ViewAttackResult");
             ControllerBattleOptions ctrl2 = (ControllerBattleOptions) UtilsViews.getController("ViewBattleOptions");
             ctrl2.setBattleStatus(STATUS_BATTLE_ENDED, round);
-            
-            ctrl.setRun(true);
+            AppData db = AppData.getInstance();
+            db.setRun(true);
+            this.run = db.isRun();
 
             ctrl.setWinner("Computer");
             ctrl.setBattleId(battleId);
@@ -1122,7 +1124,9 @@ public class ControllerBattleAttack {
             enemyPokemons = new HashMap<>();
             enemyPokemonIds = new ArrayList<>();
             typeEffectiveness = 1.0;
-            run = false;
+            AppData db = AppData.getInstance();
+            db.setRun(false);
+            //run = false;
             // Resetea barras y labels si es necesario
             if (playerHpBar != null) playerHpBar.setProgress(1.0);
             if (playerStaminaBar != null) playerStaminaBar.setProgress(1.0);

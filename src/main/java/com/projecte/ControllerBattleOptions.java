@@ -253,7 +253,7 @@ public class ControllerBattleOptions implements Initializable {
         }
 
         ControllerBattleAttack ctrl = (ControllerBattleAttack) UtilsViews.getController("ViewBattleAttack");
-        ctrl.setRun(false); // <-- Añade esto
+        //ctrl.setRun(false); // <-- Añade esto
         // Cambiar a la vista de batalla
         setBattleStatus(STATUS_BATTLE_STARTED, round);
 

@@ -17,11 +17,19 @@ import java.util.HashMap;
 public class AppData {
     private static AppData instance;
     private Connection conn;
+    private boolean run;
 
     /**
      * Constructor privat que crea la connexió a la base de dades.
      */
     private AppData() { }
+
+    public boolean isRun() {
+        return run;
+    }
+    public void setRun(boolean run) {
+        this.run = run;
+    }
 
     /**
      * Obté la instància única de AppData (Singleton).

@@ -40,7 +40,7 @@ public class Main extends Application {
         // Mostrar la finestra
         Scene scene = new Scene(UtilsViews.parentContainer);
         stage.setScene(scene);
-        stage.setTitle("Pokémons PvC");
+        stage.setTitle("Pokémon: Rivalidad Virtual");
         stage.setMinWidth(MIN_WIDTH);
         stage.setMinHeight(MIN_HEIGHT);
         stage.setWidth(WINDOW_WIDTH);

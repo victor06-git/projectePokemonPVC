@@ -49,8 +49,6 @@ public class ControllerBattleResult implements  Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        //updateBattleWinner(winner);
-        
         URL imageURL = null;
         try {
             imageURL = getClass().getResource("/assets/result/finish.jpg");
@@ -87,7 +85,10 @@ public class ControllerBattleResult implements  Initializable{
         ctrl.setBattleStatus(STATUS_BATTLE_PREP, round = 1);
         ctrl.resetBattleState();
         ctrlAttack.resetBattleAttackState();
-        setRun(false);
+        AppData db = AppData.getInstance();
+        db.setRun(false);
+        run = db.isRun();
+        //setRun(false);
         ctrl_2.setFinalBattle(false);
         UtilsViews.setView("ViewMenu");
         ctrlMenu.loadGameStats();
@@ -102,15 +103,15 @@ public class ControllerBattleResult implements  Initializable{
         this.battleId = battleId;
     }
 
-    public void setRun(boolean run) {
-        if (!run) {
-            buttonContinue.setText("Recoger recompensas");
-            this.run = run;
-        } else if (run && winner.equals("Computer")) {
-            buttonContinue.setText("Te quedas sin nada por huir");
-            this.run = run;
-        }
-    }
+    // public void setRun(boolean run) {
+    //     if (!run) {
+    //         buttonContinue.setText("Recoger recompensas");
+    //         this.run = run;
+    //     } else if (run && winner.equals("Computer")) {
+    //         buttonContinue.setText("Te quedas sin nada por huir");
+    //         this.run = run;
+    //     }
+    // }
 
     public void setWinner(String winner) {
         this.winner = winner;
@@ -372,12 +373,13 @@ public class ControllerBattleResult implements  Initializable{
             AppData db = AppData.getInstance();
             db.connect(selected_path);
 
-            // Obtener el id de la última batalla registrada
-            // if (run){
-            //     winner = "Computer";
-            // } else {
-            //     winner = "Player";
-            // }
+            if (!run) {
+                buttonContinue.setText("Recoger recompensas");
+                this.run = run;
+            } else if (run && winner.equals("Computer")) {
+                buttonContinue.setText("Te quedas sin nada por huir");
+                this.run = run;
+            }
             ArrayList<HashMap<String, Object>> result = db.query("SELECT id FROM Battle ORDER BY id DESC LIMIT 1;");
             if (!result.isEmpty()) {
                 int lastBattleId = ((Number) result.get(0).get("id")).intValue();
