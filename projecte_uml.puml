@@ -1,0 +1,93 @@
+@startuml
+package com.projecte; {
+class AppData {
+}
+
+class BuildDatabase {
+}
+
+class ControllerAttackResult {
+}
+
+class ControllerBattleAttack {
+}
+
+class ControllerBattleOptions {
+}
+
+class ControllerBattleResult {
+}
+
+class ControllerHistory {
+}
+
+class ControllerManagement {
+}
+
+class ControllerMenu {
+}
+
+class ControllerMiniHistory {
+}
+
+class ControllerPokeSettings {
+}
+
+class ControllerStart {
+}
+
+class Main {
+}
+
+}
+
+package com.utils; {
+class UtilsViews {
+}
+
+}
+
+BuildDatabase -- AppData
+ControllerAttackResult -- AppData
+ControllerAttackResult -- ControllerBattleAttack
+ControllerAttackResult -- ControllerBattleOptions
+ControllerAttackResult -- ControllerBattleResult
+ControllerAttackResult -- UtilsViews
+ControllerBattleAttack -- AppData
+ControllerBattleAttack -- BuildDatabase
+ControllerBattleAttack -- ControllerBattleOptions
+ControllerBattleAttack -- UtilsViews
+ControllerBattleOptions -- AppData
+ControllerBattleOptions -- BuildDatabase
+ControllerBattleOptions -- UtilsViews
+ControllerBattleResult -- AppData
+ControllerBattleResult -- BuildDatabase
+ControllerBattleResult -- ControllerBattleAttack
+ControllerBattleResult -- ControllerBattleOptions
+ControllerBattleResult -- ControllerMenu
+ControllerBattleResult -- UtilsViews
+ControllerHistory -- AppData
+ControllerHistory -- BuildDatabase
+ControllerHistory -- ControllerMiniHistory
+ControllerHistory -- UtilsViews
+ControllerManagement -- AppData
+ControllerManagement -- BuildDatabase
+ControllerManagement -- ControllerPokeSettings
+ControllerManagement -- UtilsViews
+ControllerMenu -- AppData
+ControllerMenu -- BuildDatabase
+ControllerMenu -- ControllerBattleAttack
+ControllerMenu -- ControllerBattleOptions
+ControllerMenu -- ControllerHistory
+ControllerMenu -- ControllerStart
+ControllerMenu -- UtilsViews
+ControllerMiniHistory -- BuildDatabase
+ControllerPokeSettings -- AppData
+ControllerPokeSettings -- BuildDatabase
+ControllerPokeSettings -- UtilsViews
+ControllerStart -- BuildDatabase
+ControllerStart -- UtilsViews
+Main -- AppData
+Main -- ControllerManagement
+Main -- UtilsViews
+@enduml
